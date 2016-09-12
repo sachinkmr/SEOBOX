@@ -11,10 +11,6 @@ import sachin.seobox.reporter.ExtentReporterNG;
 public class EntryPoint {
 
 	public static void main(String[] args) {
-		System.out.println(System.getProperty("JOB_NAME"));
-		System.out.println(System.getProperty("JENKINS_URL"));
-		System.out.println(System.getenv("JOB_NAME"));
-		System.out.println(System.getenv("JENKINS_URL"));
 		try {
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));

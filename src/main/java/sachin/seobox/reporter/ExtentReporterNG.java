@@ -32,7 +32,9 @@ public class ExtentReporterNG implements IReporter {
 			}
 		}
 		ComplexReportFactory.closeReport();
-		System.out.println("Report Generated: " + CrawlerConfig.reportPath);
+		String path = System.getenv("JENKINS_URL") + "/"
+				+ CrawlerConfig.reportPath.substring(CrawlerConfig.reportPath.indexOf("workspace"));
+		System.out.println("Report Generated: " + path);
 	}
 
 	private void buildTestNodes(IResultMap tests, LogStatus status) {
