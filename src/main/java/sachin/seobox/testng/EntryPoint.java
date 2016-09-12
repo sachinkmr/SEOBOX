@@ -11,6 +11,7 @@ import sachin.seobox.reporter.ExtentReporterNG;
 public class EntryPoint {
 
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("BUILD_NUMBER"));
 		try {
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));

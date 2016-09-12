@@ -21,7 +21,8 @@ public class SEOConfig {
 	public static final int MAXIMUM_RESPONSE_TIME;
 	public static final int MAXIMUM_IMAGE_SIZE;
 	public static final boolean MULTI_LINGUAL;
-	public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)");
+	public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp)))",
+			Pattern.CASE_INSENSITIVE);
 
 	static {
 		URL_CHARACTERS_LIMIT = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("page.url.word.count", "115"));

@@ -39,6 +39,7 @@ import edu.uci.ics.crawler4j.parser.Parser;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 import edu.uci.ics.crawler4j.util.Util;
+import sachin.seobox.seo.SEOConfig;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
 import uk.org.lidalia.slf4jext.LoggerFactory;
@@ -406,7 +407,11 @@ public class WebCrawler implements Runnable {
 				}
 
 			} else { // if status code is 200
-				if (!curURL.isInternalLink()) { // skipping external link
+				if (!curURL.isInternalLink() && (!SEOConfig.IMAGE_PATTERN.matcher(curURL.getURL()).find()
+						|| !curURL.getURL().toLowerCase().contains(".css")
+						|| !curURL.getURL().toLowerCase().contains(".js"))) { // skipping
+					// external
+					// link except css image and js
 					throw new ExternalLinkException(Level.INFO, "Skipping parsing of External Link: " + curURL);
 				}
 				if (!curURL.getURL().equals(fetchResult.getFetchedUrl())) {
