@@ -13,30 +13,30 @@ import java.util.Calendar;
 import com.relevantcodes.extentreports.utils.DateTimeUtil;
 
 public class SuiteTimeInfo {
-    private long startedAt;
-    private long endedAt;
-    
-    public void setSuiteStartTimestamp(long startedAt) {
-        this.startedAt = startedAt;
-    }
-    
-    public long getSuiteStartTimestamp() {
-        return startedAt;
-    }
-    
-    public void setSuiteEndTimestamp(long endedAt) {
-        this.endedAt = endedAt;
-    }
-    
-    public long getSuiteEndTimestamp() {
-        return endedAt;
-    }
-    
-    public String getTimeDiff() {
-        return DateTimeUtil.getDiff(endedAt, startedAt);
-    }
-    
-    public SuiteTimeInfo() { 
-        startedAt = Calendar.getInstance().getTime().getTime();
-    } 
+	private long startedAt;
+	private long endedAt;
+
+	public void setSuiteStartTimestamp(long startedAt) {
+		this.startedAt = startedAt;
+	}
+
+	public long getSuiteStartTimestamp() {
+		return startedAt;
+	}
+
+	public void setSuiteEndTimestamp(long endedAt) {
+		this.endedAt = endedAt;
+	}
+
+	public long getSuiteEndTimestamp() {
+		return endedAt;
+	}
+
+	public String getTimeDiff() {
+		return DateTimeUtil.getDiff(endedAt, startedAt);
+	}
+
+	public SuiteTimeInfo() {
+		startedAt = Calendar.getInstance().getTime().getTime();
+	}
 }

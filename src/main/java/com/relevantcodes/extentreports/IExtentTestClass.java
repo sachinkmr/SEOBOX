@@ -14,24 +14,26 @@ public interface IExtentTestClass {
 	void log(LogStatus logStatus, Throwable t);
 
 	void setDescription(String description);
-	
+
 	String getDescription();
-	
+
 	void setStartedTime(Date startedTime);
-	
+
 	Date getStartedTime();
-	
+
 	void setEndedTime(Date endedTime);
-	
+
 	Date getEndedTime();
-	
+
 	String addScreenCapture(String imgPath);
 
-    /**
-     * Adds the base64 screenshot into the report
-     * @param base64 The base64 string
-     * @return The image tag html with base64 image as src
-     */
+	/**
+	 * Adds the base64 screenshot into the report
+	 * 
+	 * @param base64
+	 *            The base64 string
+	 * @return The image tag html with base64 image as src
+	 */
 	String addBase64ScreenShot(String base64);
 
 	String addScreencast(String screencastPath);

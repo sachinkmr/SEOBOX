@@ -25,9 +25,9 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class HtmlParseData implements ParseData {
 
 	/**
-     * 
-     */
-    private static final long serialVersionUID = 6241799588291170985L;
+	 * 
+	 */
+	private static final long serialVersionUID = 6241799588291170985L;
 	private String html;
 	private String text;
 	private String title;

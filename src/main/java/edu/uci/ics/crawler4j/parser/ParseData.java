@@ -22,7 +22,7 @@ import java.util.Set;
 
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public interface ParseData extends Serializable{
+public interface ParseData extends Serializable {
 
 	Set<WebURL> getOutgoingUrls();
 

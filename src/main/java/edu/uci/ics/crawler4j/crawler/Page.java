@@ -33,12 +33,12 @@ import edu.uci.ics.crawler4j.url.WebURL;
  *
  * @author Yasser Ganjisaffar
  */
-public class Page implements Serializable{
+public class Page implements Serializable {
 
 	/**
-     * 
-     */
-    private static final long serialVersionUID = -7415595710483746953L;
+	 * 
+	 */
+	private static final long serialVersionUID = -7415595710483746953L;
 
 	/**
 	 * The URL of this page.
@@ -95,14 +95,13 @@ public class Page implements Serializable{
 	 */
 	protected ParseData parseData;
 	private int responseTime;
-	
-	
+
 	public int getResponseTime() {
-	    return this.responseTime;
+		return this.responseTime;
 	}
 
 	public void setResponseTime(int responseTime) {
-	    this.responseTime = responseTime;
+		this.responseTime = responseTime;
 	}
 
 	public Page(WebURL url) {

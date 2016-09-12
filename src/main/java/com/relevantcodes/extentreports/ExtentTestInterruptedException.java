@@ -12,6 +12,6 @@ public class ExtentTestInterruptedException extends RuntimeException {
 
 	public ExtentTestInterruptedException(String string, Throwable t) {
 		super(string, t);
-	}   
+	}
 
 }

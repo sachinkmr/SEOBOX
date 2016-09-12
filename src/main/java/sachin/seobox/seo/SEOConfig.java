@@ -1,5 +1,7 @@
 package sachin.seobox.seo;
 
+import java.util.regex.Pattern;
+
 import sachin.seobox.crawler.CrawlerConfig;
 
 public class SEOConfig {
@@ -17,7 +19,9 @@ public class SEOConfig {
 	public static final int MAXIMUM_EXTERNAL_LINKS_COUNTS;
 	public static final byte CONTENT_HTML_RATIO;
 	public static final int MAXIMUM_RESPONSE_TIME;
+	public static final int MAXIMUM_IMAGE_SIZE;
 	public static final boolean MULTI_LINGUAL;
+	public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)");
 
 	static {
 		URL_CHARACTERS_LIMIT = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("page.url.word.count", "115"));
@@ -39,6 +43,7 @@ public class SEOConfig {
 		MAXIMUM_EXTERNAL_LINKS_COUNTS = Integer
 				.parseInt(CrawlerConfig.PROPERTIES.getProperty("page.maximum.externalLink.count", "100"));
 		MAXIMUM_RESPONSE_TIME = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("link.maximumLoadTime", "2000"));
+		MAXIMUM_IMAGE_SIZE = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("link.image.maxSize", "2000"));
 		CONTENT_HTML_RATIO = Byte.parseByte(CrawlerConfig.PROPERTIES.getProperty("page.contentAndHTML.ratio", "80"));
 		MULTI_LINGUAL = Boolean.parseBoolean(CrawlerConfig.PROPERTIES.getProperty("site.multilingual", "false"));
 	}

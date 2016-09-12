@@ -45,9 +45,9 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class BinaryParseData implements ParseData {
 
 	/**
-     * 
-     */
-    private static final long serialVersionUID = 5119991474459340796L;
+	 * 
+	 */
+	private static final long serialVersionUID = 5119991474459340796L;
 	private static final Logger logger = LoggerFactory.getLogger(BinaryParseData.class);
 	private static final String DEFAULT_ENCODING = "UTF-8";
 	private static final String DEFAULT_OUTPUT_FORMAT = "html";

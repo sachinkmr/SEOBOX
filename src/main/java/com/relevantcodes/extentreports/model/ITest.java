@@ -7,49 +7,49 @@ import java.util.UUID;
 import com.relevantcodes.extentreports.LogStatus;
 
 public interface ITest {
-    void setStartedTime(Date startedTime);
-    
-    Date getStartedTime();
-    
-    String getRunDuration();
-    
-    void setEndedTime(Date endedTime);
-    
-    Date getEndedTime();
+	void setStartedTime(Date startedTime);
 
-    LogStatus getStatus();
+	Date getStartedTime();
 
-    void setStatus(LogStatus logStatus);
-    
-    void setDescription(String description);
-    
-    String getDescription();
-    
-    void setName(String name);
-    
-    String getName();
-    
-    UUID getId();
+	String getRunDuration();
 
-    void setCategory(TestAttribute category);
-    
-    List<TestAttribute> getCategoryList();
+	void setEndedTime(Date endedTime);
 
-    void setAuthor(TestAttribute author);
-    
-    List<TestAttribute> getAuthorsList();
+	Date getEndedTime();
 
-    List<Log> getLogList();
-    
-    void setLog(List<Log> logList);
-    
-    void hasChildNodes(boolean val);
-    
-    List<Test> getNodeList();
-    
-    void setNodeList(List<Test> nodeList);
+	LogStatus getStatus();
 
-    void setException(ExceptionInfo exceptionInfo);
+	void setStatus(LogStatus logStatus);
 
-    void setUUID(UUID id);
+	void setDescription(String description);
+
+	String getDescription();
+
+	void setName(String name);
+
+	String getName();
+
+	UUID getId();
+
+	void setCategory(TestAttribute category);
+
+	List<TestAttribute> getCategoryList();
+
+	void setAuthor(TestAttribute author);
+
+	List<TestAttribute> getAuthorsList();
+
+	List<Log> getLogList();
+
+	void setLog(List<Log> logList);
+
+	void hasChildNodes(boolean val);
+
+	List<Test> getNodeList();
+
+	void setNodeList(List<Test> nodeList);
+
+	void setException(ExceptionInfo exceptionInfo);
+
+	void setUUID(UUID id);
 }

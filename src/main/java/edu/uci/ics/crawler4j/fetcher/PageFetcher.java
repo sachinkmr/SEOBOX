@@ -236,11 +236,11 @@ public class PageFetcher extends Configurable {
 				lastFetchTime = (new Date()).getTime();
 			}
 			long start = System.currentTimeMillis();
-			CloseableHttpResponse response = httpClient.execute(request);			
+			CloseableHttpResponse response = httpClient.execute(request);
 			webUrl.setInternalLink(Util.getUrlHost(webUrl.getURL()).contains(config.getSiteHost()));
 			fetchResult.setEntity(response.getEntity());
 			fetchResult.setResponseHeaders(response.getAllHeaders());
-			fetchResult.setResponseTime((int)(System.currentTimeMillis() - start));
+			fetchResult.setResponseTime((int) (System.currentTimeMillis() - start));
 			// Setting HttpStatus
 			int statusCode = response.getStatusLine().getStatusCode();
 

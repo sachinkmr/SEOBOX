@@ -12,22 +12,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CategoryList {
-    private ArrayList<String> categoryList;
-    
-    public void setCategoryList(ArrayList<String> categoryList) {
-    	this.categoryList = categoryList;
-    }
-    
-    public void setCategory(String category) {
-    	categoryList.add(category);
-    	Collections.sort(categoryList);
-    }
-    
-    public ArrayList<String> getCategoryList() {
-    	return categoryList;
-    }
-    
-    public CategoryList() {
-        categoryList = new ArrayList<String>();
-    }
+	private ArrayList<String> categoryList;
+
+	public void setCategoryList(ArrayList<String> categoryList) {
+		this.categoryList = categoryList;
+	}
+
+	public void setCategory(String category) {
+		categoryList.add(category);
+		Collections.sort(categoryList);
+	}
+
+	public ArrayList<String> getCategoryList() {
+		return categoryList;
+	}
+
+	public CategoryList() {
+		categoryList = new ArrayList<String>();
+	}
 }

@@ -11,17 +11,17 @@ package com.relevantcodes.extentreports.model;
 import java.io.Serializable;
 
 public abstract class TestAttribute implements Serializable {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8574995780295912718L;
 	protected String name;
-    
-    public String getName() {
-        return name;
-    }
-    
-    protected TestAttribute(String name) {
-        this.name = name;
-    }
+
+	public String getName() {
+		return name;
+	}
+
+	protected TestAttribute(String name) {
+		this.name = name;
+	}
 }
