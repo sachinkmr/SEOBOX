@@ -1,10 +1,13 @@
 package sachin.seobox.reporter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.jsoup.Jsoup;
 import org.testng.IReporter;
 import org.testng.IResultMap;
 import org.testng.ISuite;
@@ -32,6 +35,12 @@ public class ExtentReporterNG implements IReporter {
 			}
 		}
 		ComplexReportFactory.closeReport();
+		try {
+			Jsoup.parse(new File(CrawlerConfig.reportPath), "UTF-8").select("div.report-name").val(CrawlerConfig.site);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		String path = System.getenv("JENKINS_URL") + "/"
 				+ CrawlerConfig.reportPath.substring(CrawlerConfig.reportPath.indexOf("workspace"));
 		System.out.println("Report Generated: " + path);

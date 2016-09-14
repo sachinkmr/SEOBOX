@@ -20,7 +20,7 @@
 		<reportName>asdasdasdas</reportName>
 
 		<!-- report headline - displayed at top-nav, after reportHeadline -->
-		<reportHeadline>This is report headLines</reportHeadline>
+		<reportHeadline>SEO and Site Performance Report</reportHeadline>
 
 		<!-- global date format override -->
 		<!-- defaults to yyyy-MM-dd -->
