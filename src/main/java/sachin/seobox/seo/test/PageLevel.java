@@ -74,7 +74,7 @@ public class PageLevel extends BaseReporting {
 	}
 
 	@Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" })
-	public void verifyNOODP_NOYDIRTags() {
+	public void verifyNOODPTags() {
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {

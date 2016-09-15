@@ -12,6 +12,7 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 		try {
+			// System.setProperty("SiteAddress", "http://liptontea.com");
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));
 			TestNG testng = new TestNG();

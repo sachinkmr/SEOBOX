@@ -156,7 +156,7 @@ public class SiteLevel extends BaseReporting {
 	}
 
 	@Test(description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" })
+			"SiteMap.xml" })
 	public void missingLinksInSitemapXML() {
 		try {
 			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConfig.site,
@@ -179,7 +179,8 @@ public class SiteLevel extends BaseReporting {
 		}
 	}
 
-	@Test(description = "Verify that site has custom error pages enabled", groups = { "Custom Error Pages" })
+	@Test(description = "Verify that site has custom error pages enabled", groups = {
+			"Custom Error Pages" }, enabled = false)
 	public void verifyCutomErrorPages() {
 		test.log(LogStatus.INFO, "Not implemented yet");
 	}
