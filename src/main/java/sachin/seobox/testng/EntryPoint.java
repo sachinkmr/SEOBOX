@@ -3,12 +3,15 @@ package sachin.seobox.testng;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.TestNG;
 
 import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.reporter.ExtentReporterNG;
 
 public class EntryPoint {
+	private static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
 		try {
@@ -24,7 +27,7 @@ public class EntryPoint {
 			testng.setVerbose(0);
 			testng.run();
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Error occured:  " + e);
 			System.exit(1);
 		}
 	}
