@@ -27,7 +27,7 @@ public class EntryPoint {
 			testng.setVerbose(0);
 			testng.run();
 		} catch (Exception e) {
-			logger.error("Error occured:  " + e);
+			logger.error("\n\n\nError occured:  " + e + "\n\n");
 			System.exit(1);
 		}
 	}
