@@ -657,7 +657,9 @@
 				</div>
 			</#if>
 			<!-- /testrunner logs -->
-			
+			<footer id='report-footer'>
+				Created By <a href='https://github.com/sachinkmr'>Sachin Kumar</a>. Suite uses <a href='http://extentreports.relevantcodes.com/'>Extent Reports</a> and <a href='https://github.com/yasserg/crawler4j'>Crawler4j</a>.
+			</footer>
 		</div>
 		<!-- /container -->
 		
@@ -724,7 +726,9 @@
 		
 		<script src='https://cdn.rawgit.com/sachinkmr/Content/ab0f4299b133bfa234cec0b1e0ac08a692a7640a/SEOBOX/js/extent.js' type='text/javascript'></script>
 		<script>		
-			
+			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
+				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
+			}
 			
 			<#if report.configurationMap??>
 				${report.configurationMap["scripts"]}
