@@ -31,7 +31,7 @@
 		
 		<link href='${protocol}://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
-		<link href='https://cdn.rawgit.com/sachinkmr/Content/9d4e20a4b4dca506559ab5c5191e5a068f778b8d/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
+		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
 			
 		<style>
 			<#if report.configurationMap??>
