@@ -18,10 +18,10 @@
 	</Appenders>
 	<Loggers>
 		<Logger name="log4j2" level="debug" additivity="false">
-			<appender-ref ref="file-log" level="warn"/>
-			<appender-ref ref="console-log" level="error"/>
+			<appender-ref ref="file-log" level="info"/>
+			<appender-ref ref="console-log" level="warn"/>
 		</Logger>
-		<Root level="warn" additivity="false">
+		<Root level="info" additivity="false">
 			<AppenderRef ref="file-log"/>
 		</Root>
 	</Loggers>
