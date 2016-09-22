@@ -32,7 +32,13 @@ public class Crawler extends WebCrawler {
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 		Matcher m = CrawlerConfig.pattern.matcher(url.getURL());
+
 		return !CrawlerConfig.SKIPPED_URLS.contains(url.getModifiedHost()) && m.find();
+	}
+
+	@Override
+	public void handlePageStatusCode(WebURL webUrl, int statusCode, String statusDescription) {
+		System.out.println("Processing: " + webUrl.getURL());
 	}
 
 	@Override
