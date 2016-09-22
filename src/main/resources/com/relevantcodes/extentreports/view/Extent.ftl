@@ -48,7 +48,7 @@
 	<body class='extent default ${theme} hide-overflow' onload="_updateCurrentStage(-1)">
 		<header>
 			<div class='logo-container left'>
-				<img src="https://cdn.rawgit.com/sachinkmr/Content/master/SEOBOX/Images/logo.png" alt='SEOBOX' title="SEOBOX">
+				<img src="https://cdn.rawgit.com/sachinkmr/Content/master/SEOBOX/Images/logo.png" alt='SEOBOX' title="SEOBOX" class="responsive-img">
 				<a href='#' data-activates='slide-out' class='button-collapse hide-on-large-only'><i class='mdi-navigation-apps'></i></a>
 			</div>
 			<div class="blue darken-2 report-info">
