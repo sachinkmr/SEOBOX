@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.HttpResponse;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.ParseException;
+import org.apache.http.client.fluent.Response;
 import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -48,17 +48,19 @@ public class SiteLevel extends BaseReporting {
 			"Robots.txt" }, enabled = true)
 	public void verifyRobotsTXT() {
 		try {
-			HttpResponse response = HelperUtils
-					.getRobotFileResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass).returnResponse();
-			if (response.getStatusLine().getStatusCode() == 200) {
+			Response response = HelperUtils.getRobotFileResponse(CrawlerConfig.site, CrawlerConfig.user,
+					CrawlerConfig.pass);
+			String str = IOUtils.toString(response.returnContent().asStream()).toLowerCase();
+			if (response.returnResponse().getStatusLine().getStatusCode() == 200 && null != str
+					&& str.contains("user-agent")) {
 				test.log(LogStatus.PASS, "Robots.txt file found.");
 			} else {
 				test.log(LogStatus.FAIL, "Robots.txt file not found.");
 			}
 			// Content-Encoding
-			if (response.containsHeader("Content-Encoding")) {
+			if (response.returnResponse().containsHeader("Content-Encoding")) {
 				test.log(LogStatus.PASS, "Content-Encoding header is present in response.");
-				if (response.getFirstHeader("Content-Encoding").getValue().contains("gzip")) {
+				if (response.returnResponse().getFirstHeader("Content-Encoding").getValue().contains("gzip")) {
 					test.log(LogStatus.PASS, "Content-Encoding header value is gzip.");
 				} else {
 					test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.");
@@ -76,16 +78,15 @@ public class SiteLevel extends BaseReporting {
 			"SiteMap.xml" }, enabled = true)
 	public void verifySitemapXML() {
 		try {
-			HttpResponse response = SiteMapUtils
-					.getSiteMapXMLResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass).returnResponse();
-			Assert.assertEquals(response.getStatusLine().getStatusCode(), 200,
-					"Sitemap.xml file not found. Status code, ");
-			test.log(LogStatus.PASS, "Sitemap.xml file found.");
-			// if (response.getStatusLine().getStatusCode() == 200) {
-			// test.log(LogStatus.PASS, "Sitemap.xml file found.");
-			// } else {
-			// test.log(LogStatus.FAIL, "Sitemap.xml file not found.");
-			// }
+			Response response = SiteMapUtils.getSiteMapXMLResponse(CrawlerConfig.site, CrawlerConfig.user,
+					CrawlerConfig.pass);
+			String str = IOUtils.toString(response.returnContent().asStream());
+			if (response.returnResponse().getStatusLine().getStatusCode() == 200 && null != str
+					&& str.contains("<urlset")) {
+				test.log(LogStatus.PASS, "Sitemap.xml file found.");
+			} else {
+				test.log(LogStatus.FAIL, "Sitemap.xml file not found.");
+			}
 			// // Content-Encoding
 			// if (response.containsHeader("Content-Encoding")) {
 			// test.log(LogStatus.PASS, "Content-Encoding header is present in
@@ -110,7 +111,7 @@ public class SiteLevel extends BaseReporting {
 	}
 
 	@Test(description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = false)
+			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
 	public void brokenLinksSitemapXML() {
 		StreamUtils stream = new StreamUtils();
 		Set<String> urls = null;
