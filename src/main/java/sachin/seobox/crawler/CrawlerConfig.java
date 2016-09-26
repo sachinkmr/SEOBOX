@@ -28,7 +28,10 @@ public class CrawlerConfig {
 	public static final boolean caseSensitive;
 	public static String PROPERTIES_LOC = "";
 	public static String reportPath;
-
+	public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp)))",
+			Pattern.CASE_INSENSITIVE);
+	public static final Pattern ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|png|gif|bmp|js|css)))",
+			Pattern.CASE_INSENSITIVE);
 	static {
 		PROPERTIES = new Properties();
 		SKIPPED_URLS = new ArrayList<>();
@@ -92,6 +95,9 @@ public class CrawlerConfig {
 		config.setPolitenessDelay(Integer.parseInt(PROPERTIES.getProperty("crawler.URLHitDelay", "200")));
 		config.setProcessBinaryContentInCrawling(
 				Boolean.parseBoolean(PROPERTIES.getProperty("crawler.binaryContent", "true")));
+		config.setIncludeBinaryContentInCrawling(
+				Boolean.parseBoolean(PROPERTIES.getProperty("crawler.binaryContent", "true")));
+		config.setIncludeHttpsPages(true);
 		config.setMaxDownloadSize(Integer
 				.parseInt(PROPERTIES.getProperty("crawler.maxDownloadSize", Integer.toString(Integer.MAX_VALUE))));
 		// config.setResumableCrawling(true);

@@ -32,7 +32,6 @@ public class Crawler extends WebCrawler {
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 		Matcher m = CrawlerConfig.pattern.matcher(url.getURL());
-
 		return !CrawlerConfig.SKIPPED_URLS.contains(url.getModifiedHost()) && m.find();
 	}
 
@@ -43,15 +42,12 @@ public class Crawler extends WebCrawler {
 
 	@Override
 	public void visit(Page page) {
-		if (page.getWebURL().isInternalLink()) {
-			File file = new File(CrawlerConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
-			try {
-				SEOPage seoPage = new SEOPage(page);
-				stream.writeFile(file, seoPage);
-			} catch (IOException e) {
-				LoggerFactory.getLogger(Crawler.class).debug("Unable to write data for " + page.getWebURL().getURL(),
-						e);
-			}
+		File file = new File(CrawlerConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
+		try {
+			SEOPage seoPage = new SEOPage(page);
+			stream.writeFile(file, seoPage);
+		} catch (IOException e) {
+			LoggerFactory.getLogger(Crawler.class).debug("Unable to write data for " + page.getWebURL().getURL(), e);
 		}
 	}
 

@@ -14,6 +14,7 @@ public class EntryPoint {
 	private static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
+		// System.setProperty("SiteAddress", "http://liptontea.com");
 		try {
 			if (System.getProperty("SiteAddress").isEmpty()) {
 				throw new Exception("Site url is missing");

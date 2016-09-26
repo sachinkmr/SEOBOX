@@ -77,7 +77,8 @@ public class LinkLevel extends BaseReporting {
 			try {
 				SEOPage page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
-				if (page.getPage().getStatusCode() == 200 && SEOConfig.IMAGE_PATTERN.matcher(webUrl.getURL()).find()) {
+				if (page.getPage().getStatusCode() == 200
+						&& CrawlerConfig.IMAGE_PATTERN.matcher(webUrl.getURL()).find()) {
 					int size = page.getPage().getContentData().length;
 					if (size <= SEOConfig.MAXIMUM_IMAGE_SIZE) {
 						test.log(LogStatus.PASS,
