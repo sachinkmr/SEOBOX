@@ -36,12 +36,8 @@ public class Crawler extends WebCrawler {
 	}
 
 	@Override
-	public void handlePageStatusCode(WebURL webUrl, int statusCode, String statusDescription) {
-		System.out.println("Processing: " + webUrl.getURL());
-	}
-
-	@Override
 	public void visit(Page page) {
+		System.out.println("Processing: " + page.getWebURL().getURL());
 		File file = new File(CrawlerConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
 		try {
 			SEOPage seoPage = new SEOPage(page);

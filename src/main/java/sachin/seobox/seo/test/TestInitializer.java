@@ -2,6 +2,8 @@ package sachin.seobox.seo.test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.ParseException;
@@ -18,10 +20,12 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import sachin.seobox.crawler.Crawler;
 import sachin.seobox.crawler.CrawlerConfig;
 import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.seo.SEOPage;
 
 public class TestInitializer {
+	public static List<SEOPage> internalPages = new ArrayList<>();
 
-	@BeforeSuite(enabled = true)
+	@BeforeSuite(enabled = false)
 	public void init() {
 		try {
 			int code = HelperUtils.getUrlResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass)
@@ -55,7 +59,7 @@ public class TestInitializer {
 		}
 	}
 
-	@AfterSuite(enabled = true)
+	@AfterSuite(enabled = false)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File(CrawlerConfig.crawlStorageFolder));
 	}

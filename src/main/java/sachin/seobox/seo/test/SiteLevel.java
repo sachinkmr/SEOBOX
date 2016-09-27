@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.fluent.Response;
+import org.apache.http.util.EntityUtils;
 import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,6 @@ import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.LogStatus;
 
-import edu.uci.ics.crawler4j.crawler.Page;
 import sachin.seobox.crawler.CrawlerConfig;
 import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.helpers.SiteMapUtils;
@@ -50,19 +51,24 @@ public class SiteLevel extends BaseReporting {
 		try {
 			Response response = HelperUtils.getRobotFileResponse(CrawlerConfig.site, CrawlerConfig.user,
 					CrawlerConfig.pass);
-			String str = IOUtils.toString(response.returnContent().asStream()).toLowerCase();
-			if (response.returnResponse().getStatusLine().getStatusCode() == 200 && null != str
-					&& str.contains("user-agent")) {
+			HttpResponse res = response.returnResponse();
+			int code = res.getStatusLine().getStatusCode();
+			Header[] headers = res.getAllHeaders();
+			boolean head = res.containsHeader("Content-Encoding");
+			String str = EntityUtils.toString(res.getEntity()).toLowerCase();
+			if (code == 200 && null != str && str.contains("user-agent")) {
 				test.log(LogStatus.PASS, "Robots.txt file found.");
 			} else {
 				test.log(LogStatus.FAIL, "Robots.txt file not found.");
 			}
 			// Content-Encoding
-			if (response.returnResponse().containsHeader("Content-Encoding")) {
+			if (head) {
 				test.log(LogStatus.PASS, "Content-Encoding header is present in response.");
-				if (response.returnResponse().getFirstHeader("Content-Encoding").getValue().contains("gzip")) {
-					test.log(LogStatus.PASS, "Content-Encoding header value is gzip.");
-				} else {
+				try {
+					if (this.getFirstHeader(headers, "Content-Encoding").getValue().contains("gzip")) {
+						test.log(LogStatus.PASS, "Content-Encoding header value is gzip.");
+					}
+				} catch (Exception ex) {
 					test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.");
 				}
 			} else {
@@ -71,7 +77,19 @@ public class SiteLevel extends BaseReporting {
 		} catch (ParseException | IOException e) {
 			logger.debug("Error in fatching response. " + e);
 			test.log(LogStatus.FAIL, "Unable to read robots.txt");
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed");
 		}
+	}
+
+	private Header getFirstHeader(Header[] headers, String string) {
+		for (Header header : headers) {
+			if (header.getName().equals(string)) {
+				return header;
+			}
+		}
+		return null;
 	}
 
 	@Test(priority = 0, description = "Verify that site does have Sitemap.xml file", groups = {
@@ -80,9 +98,10 @@ public class SiteLevel extends BaseReporting {
 		try {
 			Response response = SiteMapUtils.getSiteMapXMLResponse(CrawlerConfig.site, CrawlerConfig.user,
 					CrawlerConfig.pass);
-			String str = IOUtils.toString(response.returnContent().asStream());
-			if (response.returnResponse().getStatusLine().getStatusCode() == 200 && null != str
-					&& str.contains("<urlset")) {
+			HttpResponse res = response.returnResponse();
+			int code = res.getStatusLine().getStatusCode();
+			String str = EntityUtils.toString(res.getEntity());
+			if (code == 200 && null != str && str.contains("<urlset")) {
 				test.log(LogStatus.PASS, "Sitemap.xml file found.");
 			} else {
 				test.log(LogStatus.FAIL, "Sitemap.xml file not found.");
@@ -107,6 +126,9 @@ public class SiteLevel extends BaseReporting {
 		} catch (ParseException | IOException e) {
 			logger.debug("Error in fatching response. " + e);
 			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml");
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed");
 		}
 	}
 
@@ -115,44 +137,52 @@ public class SiteLevel extends BaseReporting {
 	public void brokenLinksSitemapXML() {
 		StreamUtils stream = new StreamUtils();
 		Set<String> urls = null;
-		;
 		try {
-			urls = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConfig.site, CrawlerConfig.user,
-					CrawlerConfig.pass);
-		} catch (ParseException | IOException | JDOMException e1) {
-			logger.debug("Error in fatching response. " + e1);
-			test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
-		}
-		File urlsDirectory = new File(CrawlerConfig.dataLocation);
-
-		for (String url : urls) {
-			int responseCode = 0;
-			File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
-			if (file.exists()) {
-				try {
-					responseCode = stream.readFile(file).getPage().getStatusCode();
-					if (responseCode == 200) {
-						test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
-					} else {
-						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+			try {
+				urls = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConfig.site, CrawlerConfig.user,
+						CrawlerConfig.pass);
+			} catch (Exception e1) {
+				logger.debug("Error " + e1);
+				test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
+			}
+			File urlsDirectory = new File(CrawlerConfig.dataLocation);
+			SEOPage page = null;
+			for (String url : urls) {
+				int responseCode = 0;
+				File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
+				if (file.exists()) {
+					try {
+						page = stream.readFile(file);
+						responseCode = page.getPage().getStatusCode();
+						if (responseCode == 200) {
+							test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+						} else {
+							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+						}
+					} catch (ClassNotFoundException | IOException e) {
+						logger.debug("Error in fetching response from file. " + e);
+						test.log(LogStatus.FAIL, "Unable to fetch response from saved location");
+					} catch (Exception e) {
+						logger.debug("Error " + e);
+						test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 					}
-				} catch (ClassNotFoundException | IOException e) {
-					logger.debug("Error in fetching response from file. " + e);
-					test.log(LogStatus.FAIL, "Unable to fetch response from saved location");
-				}
-			} else {
-				try {
-					responseCode = HelperUtils.getUrlResponse(url, CrawlerConfig.user, CrawlerConfig.pass)
-							.returnResponse().getStatusLine().getStatusCode();
-					if (responseCode == 200) {
-						test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
-					} else {
-						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+				} else {
+					try {
+						responseCode = HelperUtils.getUrlResponse(url, CrawlerConfig.user, CrawlerConfig.pass)
+								.returnResponse().getStatusLine().getStatusCode();
+						if (responseCode == 200) {
+							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
+						} else {
+							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+						}
+					} catch (Exception e) {
+						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "Unable to fetch response");
 					}
-				} catch (Exception e) {
-					test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "Unable to fetch response");
 				}
 			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed");
 		}
 	}
 
@@ -163,20 +193,31 @@ public class SiteLevel extends BaseReporting {
 			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConfig.site,
 					CrawlerConfig.user, CrawlerConfig.pass);
 			File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
+			SEOPage page = null;
 			for (File file : urlFiles) {
-				Page page = stream.readFile(file).getPage();
-				if (page.getStatusCode() == 200 && page.getContentType().contains("text/html")) {
-					String url = page.getWebURL().getURL();
-					if (urlsInSiteMap.contains(url)) {
-						test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
-					} else {
-						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
+				try {
+					page = stream.readFile(file);
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+							&& page.getPage().getContentType().contains("text/html")) {
+						String url = page.getPage().getWebURL().getURL();
+						if (urlsInSiteMap.contains(url)) {
+							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
+						} else {
+							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
+						}
 					}
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 				}
 			}
-		} catch (ParseException | IOException | JDOMException | ClassNotFoundException e) {
+		} catch (ParseException | IOException | JDOMException e) {
 			logger.error("error in reading URLs from sitemap xml", e);
 			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed");
 		}
 	}
 
@@ -189,66 +230,88 @@ public class SiteLevel extends BaseReporting {
 	@Test(description = "Verify that site does not have duplicate meta description values", groups = {
 			"Meta Description" })
 	public void verifyDuplicateDescription() {
-		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
-		Map<String, String> map = new HashMap<>();
-		boolean flag = true;
-		for (File file : urlFiles) {
-			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
-					String key = page.getMetaDescription().get(0).attr("content");
-					String value = page.getPage().getWebURL().getURL();
-					if (map.containsKey(key)) {
-						map.put(key, map.get(key) + "<br/>" + value);
-						flag = false;
-					} else {
-						map.put(key, value);
+		try {
+			File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			SEOPage page = null;
+			for (File file : urlFiles) {
+				try {
+					page = stream.readFile(file);
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+							&& page.getPage().getContentType().contains("text/html")) {
+						String key = page.getMetaDescription().get(0).attr("content");
+						String value = page.getPage().getWebURL().getURL();
+						if (map.containsKey(key)) {
+							map.put(key, map.get(key) + "<br/>" + value);
+							flag = false;
+						} else {
+							map.put(key, value);
+						}
 					}
+				} catch (ClassNotFoundException | IOException e) {
+					logger.error("error in reading file", e);
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 				}
-			} catch (ClassNotFoundException | IOException e) {
-				logger.error("error in reading file", e);
 			}
-		}
-		for (String key : map.keySet()) {
-			if (map.get(key).split("<br/>").length > 2) {
-				test.log(LogStatus.FAIL, map.get(key), "<b>Description: </b>" + key);
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(LogStatus.FAIL, map.get(key), "<b>Description: </b>" + key);
+				}
 			}
-		}
-		if (flag) {
-			test.log(LogStatus.PASS, "No duplicate descriptions found,");
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate descriptions found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed");
 		}
 	}
 
 	@Test(description = "Verify that site does not have duplicate title values", groups = { "Title Tag" })
 	public void verifyDuplicateTitle() {
-		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
-		Map<String, String> map = new HashMap<>();
-		boolean flag = true;
-		for (File file : urlFiles) {
-			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
-					String key = page.getTitle().get(0).text();
-					String value = page.getPage().getWebURL().getURL();
-					if (map.containsKey(key)) {
-						map.put(key, map.get(key) + "<br/>" + value);
-						flag = false;
-					} else {
-						map.put(key, value);
+		try {
+			File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			SEOPage page = null;
+			for (File file : urlFiles) {
+				try {
+					page = stream.readFile(file);
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+							&& page.getPage().getContentType().contains("text/html")) {
+						String key = page.getTitle().get(0).text();
+						String value = page.getPage().getWebURL().getURL();
+						if (map.containsKey(key)) {
+							map.put(key, map.get(key) + "<br/>" + value);
+							flag = false;
+						} else {
+							map.put(key, value);
+						}
 					}
+				} catch (ClassNotFoundException | IOException e) {
+					logger.error("error in reading file", e);
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 				}
-			} catch (ClassNotFoundException | IOException e) {
-				logger.error("error in reading file", e);
 			}
-		}
-		for (String key : map.keySet()) {
-			if (map.get(key).split("<br/>").length > 2) {
-				test.log(LogStatus.FAIL, map.get(key), "<b>Title: </b>" + key);
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(LogStatus.FAIL, map.get(key), "<b>Title: </b>" + key);
+				}
 			}
-		}
 
-		if (flag) {
-			test.log(LogStatus.PASS, "No duplicate titles found,");
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate titles found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test case failed", e);
 		}
 	}
 }

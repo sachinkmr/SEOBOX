@@ -43,11 +43,13 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" })
 	public void verifyOGTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getOgTags();
 					boolean flag = true;
 					for (Element element : list) {
@@ -69,17 +71,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOODPTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
 					for (Element e : list) {
 						if (e.attr("content").isEmpty()) {
@@ -94,17 +101,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error occoured " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that page has NOYDIR Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOYDIRTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
 					for (Element e : list) {
 						if (e.attr("content").isEmpty()) {
@@ -119,17 +131,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that page has NOINDEX Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOINDEXTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
 					for (Element e : list) {
 						if (e.attr("content").isEmpty()) {
@@ -144,17 +161,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that page has NOFOLLOW Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOFOLLOWTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
 					for (Element e : list) {
 						if (e.attr("content").isEmpty()) {
@@ -169,6 +191,9 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
@@ -176,11 +201,13 @@ public class PageLevel extends BaseReporting {
 	@Test(description = "Verify that multilingual site does have HREF Language Tag in head tag", groups = {
 			"HREF Language Tags" })
 	public void verifyHREFLanguageTags() {
+		SEOPage page = null;
 		if (SEOConfig.MULTI_LINGUAL) {
 			File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 			for (File file : urlFiles) {
 				try {
-					SEOPage page = stream.readFile(file);
+					page = stream.readFile(file);
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
 					if (page.getPage().getStatusCode() == 200
 							&& page.getPage().getContentType().contains("text/html")) {
 						Document document = Jsoup.parse(page.getHtml(), CrawlerConfig.site);
@@ -207,6 +234,9 @@ public class PageLevel extends BaseReporting {
 					}
 				} catch (ClassNotFoundException | IOException e) {
 					logger.error("error in reading file", e);
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 				}
 			}
 		} else {
@@ -216,11 +246,13 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has only one H1 Tag", groups = { "H1 Tag" })
 	public void verifyMultipleH1Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
 						if (list.size() == 1) {
@@ -232,17 +264,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that page do not has missing H1 Tag", groups = { "H1 Tag" })
 	public void verifyMissingH1Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
 						test.log(LogStatus.PASS, "Page has H1 Tag(s).", page.getPage().getWebURL().getURL());
@@ -252,17 +289,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that H1 Tag is not over character", groups = { "H1 Tag" })
 	public void verifyOverCharacterH1Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
 						for (Element e : list) {
@@ -284,17 +326,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that H1 Tag is not blank", groups = { "H1 Tag" })
 	public void verifyBlankH1Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
 						for (Element e : list) {
@@ -310,17 +357,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that H2 Tag is not over character", groups = { "H2 Tag" })
 	public void verifyOverCharacterH2Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH2Tags();
 					if (!list.isEmpty()) {
 						for (Element e : list) {
@@ -342,17 +394,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that H2 Tag is not blank", groups = { "H2 Tag" })
 	public void verifyBlankH2Tags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH2Tags();
 					if (!list.isEmpty()) {
 						for (Element e : list) {
@@ -368,17 +425,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that image alt text is not missing", groups = { "Image Alt Text" })
 	public void verifyImageAltText() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getImages();
 					if (!list.isEmpty()) {
 						for (Element e : list) {
@@ -399,17 +461,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that Content/HTML Ratio does not exceed on page", groups = { "Content/HTML Ratio" })
 	public void contentAndHTMLRatio() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					String html = page.getHtml();
 					String content = Jsoup.parse(html).text();
 					byte ratio = (byte) ((content.length() * 100) / html.length());
@@ -435,11 +502,13 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify Internal outgoing links count on the page", groups = { "Links" })
 	public void verifyInternalOutgoingLinksCount() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					Set<WebURL> links = page.getPage().getParseData().getOutgoingUrls();
 					int x = 0;
 					for (WebURL url : links) {
@@ -462,17 +531,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify External outgoing links count on the page", groups = { "Links" })
 	public void verifyExternalOutgoingLinksCount() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					Set<WebURL> links = page.getPage().getParseData().getOutgoingUrls();
 					int x = 0;
 					for (WebURL url : links) {
@@ -495,17 +569,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify missing title tag on page", groups = { "Title Tag" })
 	public void verifyMissingTitle() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getTitle();
 					if (links.isEmpty()) {
 						test.log(LogStatus.FAIL,
@@ -519,17 +598,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify multiple title tag on page", groups = { "Title Tag" })
 	public void verifyMultipleTitle() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getTitle();
 					if (links.size() > 1) {
 						test.log(LogStatus.FAIL,
@@ -543,17 +627,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify minimum length for title tag", groups = { "Title Tag" })
 	public void verifyTitleMinimumLength() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getTitle();
 					for (Element e : links) {
 						if (e.text().length() < SEOConfig.TITLE_CHARACTERS_LIMIT_MIN) {
@@ -574,17 +663,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify maximum length for title tag", groups = { "Title Tag" })
 	public void verifyTitleMaximumLength() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getTitle();
 					for (Element e : links) {
 						if (e.text().length() > SEOConfig.TITLE_CHARACTERS_LIMIT) {
@@ -605,17 +699,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify length for description tag", groups = { "Meta Description" })
 	public void verifyDescriptionLength() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getMetaDescription();
 					for (Element e : links) {
 						if (e.attr("content").length() > SEOConfig.META_DESCRIPTION_CHARACTERS_LIMIT) {
@@ -637,17 +736,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that description tag content is not blank", groups = { "Meta Description" })
 	public void verifyBlankDescription() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getMetaDescription();
 					for (Element e : links) {
 						if (e.attr("content").isEmpty()) {
@@ -661,17 +765,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify for missing description for page", groups = { "Meta Description" })
 	public void verifyMissingDescription() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getMetaDescription();
 					if (links.isEmpty()) {
 						test.log(LogStatus.FAIL,
@@ -684,17 +793,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify for multiple description for page", groups = { "Meta Description" })
 	public void verifyMultipleDescription() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getMetaDescription();
 					if (links.size() > 1) {
 						test.log(LogStatus.FAIL, "Meta Description are multiple <br/><b>URL: </b>"
@@ -707,17 +821,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify length for canonical tag", groups = { "Canonical Tag" })
 	public void verifyCanonicalLength() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getCanonical();
 					for (Element e : links) {
 						if (e.attr("href").length() > SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT) {
@@ -739,17 +858,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify for blank canonical tag url", groups = { "Canonical Tag" })
 	public void verifyBlankCanonicalURL() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getCanonical();
 					for (Element e : links) {
 						if (e.attr("href").isEmpty()) {
@@ -770,17 +894,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify for missing canonical tags for page", groups = { "Canonical Tag" })
 	public void verifyMissingCanonicalTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getCanonical();
 					if (links.isEmpty()) {
 						test.log(LogStatus.FAIL,
@@ -793,17 +922,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify for multiple canonical tags for page", groups = { "Canonical Tag" })
 	public void verifyMultipleCanonicalTags() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = page.getCanonical();
 					if (links.size() > 1) {
 						test.log(LogStatus.FAIL,
@@ -816,17 +950,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that if page has tables", groups = { "Div instead of Table" })
 	public void useDivInsteadOfTable() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = Jsoup.parse(page.getHtml()).select("table");
 					if (links.size() > 0) {
 						test.log(LogStatus.FAIL,
@@ -839,17 +978,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that if page has frames", groups = { "No Frames" })
 	public void verifyFrames() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = Jsoup.parse(page.getHtml()).select("frame");
 					if (links.size() > 0) {
 						test.log(LogStatus.FAIL,
@@ -862,17 +1006,22 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "Verify that if page has flash content", groups = { "No Flash" })
 	public void verifyFlash() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
-				if (page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
+				page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> links = Jsoup.parse(page.getHtml()).select("*[data]");
 					if (links.size() > 0) {
 						boolean flag = false;
@@ -895,6 +1044,9 @@ public class PageLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}

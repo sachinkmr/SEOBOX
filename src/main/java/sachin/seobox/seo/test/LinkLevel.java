@@ -43,11 +43,13 @@ public class LinkLevel extends BaseReporting {
 	@Test(description = "Verify that internal link response time is less than required", groups = {
 			"Links" }, enabled = true)
 	public void verifyLinkResponseTime() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()) {
 					int responseTime = page.getPage().getResponseTime();
 					if (responseTime <= SEOConfig.MAXIMUM_RESPONSE_TIME) {
@@ -65,6 +67,9 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 
 		}
@@ -72,11 +77,13 @@ public class LinkLevel extends BaseReporting {
 
 	@Test(description = "Verify that image size is less than required", groups = { "Links" }, enabled = true)
 	public void verifyImageSize() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				if (page.getPage().getStatusCode() == 200
 						&& CrawlerConfig.IMAGE_PATTERN.matcher(webUrl.getURL()).find()) {
 					int size = page.getPage().getContentData().length;
@@ -94,6 +101,9 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 
 		}
@@ -102,11 +112,13 @@ public class LinkLevel extends BaseReporting {
 	@Test(description = "Verify that compression is enabled. This verify for gzip in Content-Encoding header ", groups = {
 			"Links" }, enabled = true)
 	public void verifyCompression() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()) {
 					Header[] headers = page.getPage().getFetchResponseHeaders();
 					Map<String, String> map = new HashMap<>();
@@ -128,17 +140,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 2XX status code", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get2xxStatusCodeAllLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 200 && statusCode < 300) {
 					test.log(LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -146,17 +163,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 2XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get2xxStatusCodeInternalLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 200 && statusCode < 300) {
 					test.log(LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -164,17 +186,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 3XX status code", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get3xxStatusCodeAllLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 300 && statusCode < 400) {
 					test.log(LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -182,17 +209,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 3XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get3xxStatusCodeInternalLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 300 && statusCode < 400) {
 					test.log(LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -200,17 +232,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 4XX status code", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get4xxStatusCodeAllLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 400 && statusCode < 500) {
 					test.log(LogStatus.FAIL, "Status code is 4xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -224,11 +261,13 @@ public class LinkLevel extends BaseReporting {
 
 	@Test(description = "get 4XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get4xxStatusCodeInternalLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 400 && statusCode < 500) {
 					test.log(LogStatus.FAIL, "Status code is 4xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -242,11 +281,13 @@ public class LinkLevel extends BaseReporting {
 
 	@Test(description = "get 5XX status code", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get5xxStatusCodeAllLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 500) {
 					test.log(LogStatus.FAIL, "Status code is 5xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -254,17 +295,22 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
 
 	@Test(description = "get 5XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
 	public void get5xxStatusCodeInternalLinks() {
+		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				page = stream.readFile(file);
 				WebURL webUrl = page.getPage().getWebURL();
+				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 500) {
 					test.log(LogStatus.FAIL, "Status code is 5xx.<br/><b>URL: <b/>" + webUrl.getURL(),
@@ -272,6 +318,9 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
