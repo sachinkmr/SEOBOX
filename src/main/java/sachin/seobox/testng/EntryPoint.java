@@ -1,5 +1,6 @@
 package sachin.seobox.testng;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class EntryPoint {
 			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 				throw new Exception("Site url is missing");
 			}
+			new URL(System.getProperty("SiteAddress"));
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));
 			TestNG testng = new TestNG();
@@ -28,6 +30,7 @@ public class EntryPoint {
 			testng.setVerbose(0);
 			testng.run();
 		} catch (Exception e) {
+			System.out.println(e);
 			logger.error("\n\n\nError occured:  " + e + "\n\n");
 			System.exit(1);
 		}

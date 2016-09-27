@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -14,11 +16,16 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.seo.SEOPage;
 
 public class HelperUtils {
+	private static final Logger logger = LoggerFactory.getLogger(HelperUtils.class);
+	private static List<SEOPage> pages = null;
 
 	/**
 	 * Method returns the unique string based on time stamp
@@ -111,5 +118,35 @@ public class HelperUtils {
 			e.printStackTrace();
 		}
 		return file.getAbsolutePath();
+	}
+
+	public synchronized static List<SEOPage> getInternalPages() {
+		if (null != pages) {
+			return pages;
+		}
+		pages = new ArrayList<>();
+		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
+		StreamUtils stream = new StreamUtils();
+		for (File file : urlFiles) {
+			try {
+				SEOPage page = stream.readFile(file);
+				logger.debug("Verifying for: ", page.getPage().getWebURL());
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+						&& page.getPage().getContentType().contains("text/html")) {
+					pages.add(page);
+				}
+			} catch (ClassNotFoundException | IOException e) {
+				logger.error("error in reading file", e);
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+			}
+		}
+		try {
+			stream.closeStreams();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pages;
 	}
 }

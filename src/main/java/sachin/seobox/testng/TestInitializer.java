@@ -1,4 +1,4 @@
-package sachin.seobox.seo.test;
+package sachin.seobox.testng;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +31,26 @@ public class TestInitializer {
 			int code = HelperUtils.getUrlResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass)
 					.returnResponse().getStatusLine().getStatusCode();
 			if (code != 200) {
+				System.out.println("\nSite is giving " + code + " status code.\n");
 				LoggerFactory.getLogger(CrawlerConfig.class).error("\n\nSite is giving " + code + " status code.\n\n");
 				System.exit(1);
 			}
 		} catch (ParseException e1) {
+			System.out.println("Site is giving error " + e1);
 			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			System.exit(1);
 		} catch (ClientProtocolException e1) {
+			System.out.println("Site is giving error " + e1);
 			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			System.exit(1);
 		} catch (IOException e1) {
+			System.out.println("Site is giving error " + e1);
 			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			System.exit(1);
+		} catch (Exception e1) {
+			System.out.println("Site is giving error " + e1);
+			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			System.exit(1);
 		}
 		int numberOfCrawlers = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		CrawlerConfig control = new CrawlerConfig();
