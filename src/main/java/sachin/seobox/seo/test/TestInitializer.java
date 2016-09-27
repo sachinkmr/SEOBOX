@@ -25,7 +25,7 @@ import sachin.seobox.seo.SEOPage;
 public class TestInitializer {
 	public static List<SEOPage> internalPages = new ArrayList<>();
 
-	@BeforeSuite(enabled = false)
+	@BeforeSuite(enabled = true)
 	public void init() {
 		try {
 			int code = HelperUtils.getUrlResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass)
@@ -59,7 +59,7 @@ public class TestInitializer {
 		}
 	}
 
-	@AfterSuite(enabled = false)
+	@AfterSuite(enabled = true)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File(CrawlerConfig.crawlStorageFolder));
 	}
