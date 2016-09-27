@@ -24,7 +24,7 @@ import sachin.seobox.seo.SEOPage;
 public class LinkLevel extends BaseReporting {
 
 	private static final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
-	StreamUtils stream;
+	private StreamUtils stream;
 
 	@BeforeClass
 	public void initStreams() {

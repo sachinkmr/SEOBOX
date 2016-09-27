@@ -25,7 +25,7 @@ import sachin.seobox.seo.SEOPage;
 
 public class PageLevel extends BaseReporting {
 	private static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
-	StreamUtils stream;
+	private StreamUtils stream;
 
 	@BeforeClass
 	public void initStreams() {

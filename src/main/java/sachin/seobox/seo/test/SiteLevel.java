@@ -29,7 +29,7 @@ import sachin.seobox.seo.SEOPage;
 
 public class SiteLevel extends BaseReporting {
 	private static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
-	StreamUtils stream;
+	private StreamUtils stream;
 
 	@BeforeClass
 	public void initStreams() {
