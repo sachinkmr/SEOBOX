@@ -18,7 +18,7 @@ import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class PageLevel extends BaseReporting {
-	private static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
+	protected static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
 
 	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" })
 	public void verifyOGTags() {

@@ -423,13 +423,11 @@ public class WebCrawler implements Runnable {
 					if (!fetchResult.fetchContent(page)) {
 						throw new ContentFetchException();
 					}
-
 					parser.parse(page, curURL.getURL());
 					ParseData parseData = page.getParseData();
 					List<WebURL> toSchedule = new ArrayList<>();
 					int maxCrawlDepth = myController.getConfig().getMaxDepthOfCrawling();
 					for (WebURL webURL : parseData.getOutgoingUrls()) {
-
 						webURL.setParentDocid(curURL.getDocid());
 						webURL.setParentUrl(curURL.getURL());
 						int newdocid = docIdServer.getDocId(webURL.getURL());

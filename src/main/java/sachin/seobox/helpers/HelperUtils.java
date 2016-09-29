@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
+import edu.uci.ics.crawler4j.url.WebURL;
 import sachin.seobox.crawler.CrawlerConfig;
 import sachin.seobox.seo.SEOPage;
 
@@ -144,9 +147,20 @@ public class HelperUtils {
 		try {
 			stream.closeStreams();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Error in closing stream" + e);
 		}
 		return pages;
+	}
+
+	public static Set<WebURL> getAllLinks() {
+		Set<WebURL> urls = new HashSet<>();
+		for (SEOPage page : getInternalPages()) {
+			try {
+				urls.addAll(page.getPage().getParseData().getOutgoingUrls());
+			} catch (Exception e) {
+				logger.debug("Error " + e);
+			}
+		}
+		return urls;
 	}
 }

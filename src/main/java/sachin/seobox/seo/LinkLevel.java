@@ -21,8 +21,8 @@ import sachin.seobox.reporter.BaseReporting;
 
 public class LinkLevel extends BaseReporting {
 
-	private static final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
-	StreamUtils stream;
+	private final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
+	private StreamUtils stream;
 
 	@BeforeClass
 	public void initStreams() {
@@ -52,13 +52,14 @@ public class LinkLevel extends BaseReporting {
 					int responseTime = page.getPage().getResponseTime();
 					if (responseTime <= SEOConfig.MAXIMUM_RESPONSE_TIME) {
 						test.log(LogStatus.PASS,
-								"Response time is less than maximum response time.<br><b>URL: </b>" + webUrl.getURL(),
+								"Response time is less than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
 										+ SEOConfig.MAXIMUM_RESPONSE_TIME);
 					} else {
 						test.log(LogStatus.FAIL,
-								"Response time is greater than maximum response time.<br><b>URL: </b>"
-										+ webUrl.getURL(),
+								"Response time is greater than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
 										+ SEOConfig.MAXIMUM_RESPONSE_TIME);
 					}
@@ -66,8 +67,8 @@ public class LinkLevel extends BaseReporting {
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
+				test.log(LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL());
 			}
 
 		}
@@ -87,12 +88,14 @@ public class LinkLevel extends BaseReporting {
 					int size = page.getPage().getContentData().length;
 					if (size <= SEOConfig.MAXIMUM_IMAGE_SIZE) {
 						test.log(LogStatus.PASS,
-								"Image Size is less than required size.<br><b>URL: </b>" + webUrl.getURL(),
+								"Image Size is less than required size.<br><b>URL: </b>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
 										+ SEOConfig.MAXIMUM_IMAGE_SIZE);
 					} else {
 						test.log(LogStatus.FAIL,
-								"Image Size is greater than required size.<br><b>URL: </b>" + webUrl.getURL(),
+								"Image Size is greater than required size.<br><b>URL: </b>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
 										+ SEOConfig.MAXIMUM_IMAGE_SIZE);
 					}
@@ -100,8 +103,8 @@ public class LinkLevel extends BaseReporting {
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
+				test.log(LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL());
 			}
 
 		}
@@ -125,11 +128,11 @@ public class LinkLevel extends BaseReporting {
 					}
 					if (map.containsKey("Content-Encoding")) {
 						if (map.get("Content-Encoding").contains("gzip")) {
-							test.log(LogStatus.PASS,
-									"Content-Encoding header value is gzip.<br/><b>URL: <b/>" + webUrl.getURL());
+							test.log(LogStatus.PASS, "Content-Encoding header value is gzip.<br/><b>URL: <b/>"
+									+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
 						} else {
-							test.log(LogStatus.FAIL,
-									"Content-Encoding header value is not gzip.<br/><b>URL: <b/>" + webUrl.getURL());
+							test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.<br/><b>URL: <b/>"
+									+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
 						}
 					} else {
 						test.log(LogStatus.FAIL, "Content-Encoding header is not present in response.<br/><b>URL: <b/>"
@@ -139,8 +142,8 @@ public class LinkLevel extends BaseReporting {
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
+				test.log(LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL());
 			}
 		}
 	}
@@ -156,14 +159,19 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 200 && statusCode < 300) {
-					test.log(LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
+									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
+				// test.log(LogStatus.FAIL, "<b>URL:</b> " +
+				// page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+				// + page.getPage().getWebURL().getParentUrl(), "<b>Status Code:
+				// </b>" + statusCode);
 			}
 		}
 	}
@@ -172,6 +180,7 @@ public class LinkLevel extends BaseReporting {
 	public void get2xxStatusCodeInternalLinks() {
 		SEOPage page = null;
 		File[] urlFiles = new File(CrawlerConfig.dataLocation).listFiles();
+
 		for (File file : urlFiles) {
 			try {
 				page = stream.readFile(file);
@@ -185,8 +194,11 @@ public class LinkLevel extends BaseReporting {
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
+				// test.log(LogStatus.FAIL, "<b>URL:</b> " +
+				// page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+				// + page.getPage().getWebURL().getParentUrl(), "<b>Status Code:
+				// </b>" + statusCode);
 			}
 		}
 	}
@@ -202,14 +214,15 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 300 && statusCode < 400) {
-					test.log(LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
+									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
 			}
 		}
 	}
@@ -225,14 +238,15 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 300 && statusCode < 400) {
-					test.log(LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
+									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
 			}
 		}
 	}
@@ -248,7 +262,9 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 400 && statusCode < 500) {
-					test.log(LogStatus.FAIL, "Status code is 4xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
@@ -268,7 +284,9 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 400 && statusCode < 500) {
-					test.log(LogStatus.FAIL, "Status code is 4xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
@@ -288,14 +306,15 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 500) {
-					test.log(LogStatus.FAIL, "Status code is 5xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
 			}
 		}
 	}
@@ -311,14 +330,15 @@ public class LinkLevel extends BaseReporting {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 500) {
-					test.log(LogStatus.FAIL, "Status code is 5xx.<br/><b>URL: <b/>" + webUrl.getURL(),
+					test.log(
+							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
 			} catch (Exception e) {
-				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				logger.debug("Error ", e);
 			}
 		}
 	}

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -24,6 +25,7 @@ import sachin.seobox.seo.SEOPage;
 
 public class TestInitializer {
 	public static List<SEOPage> internalPages = new ArrayList<>();
+	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
 	@BeforeSuite(enabled = true)
 	public void init() {
@@ -32,24 +34,24 @@ public class TestInitializer {
 					.returnResponse().getStatusLine().getStatusCode();
 			if (code != 200) {
 				System.out.println("\nSite is giving " + code + " status code.\n");
-				LoggerFactory.getLogger(CrawlerConfig.class).error("\n\nSite is giving " + code + " status code.\n\n");
+				logger.error("\n\nSite is giving " + code + " status code.\n\n");
 				System.exit(1);
 			}
 		} catch (ParseException e1) {
 			System.out.println("Site is giving error " + e1);
-			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			logger.debug("Site is not running", e1);
 			System.exit(1);
 		} catch (ClientProtocolException e1) {
 			System.out.println("Site is giving error " + e1);
-			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			logger.debug("Site is not running", e1);
 			System.exit(1);
 		} catch (IOException e1) {
 			System.out.println("Site is giving error " + e1);
-			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			logger.debug("Site is not running", e1);
 			System.exit(1);
 		} catch (Exception e1) {
 			System.out.println("Site is giving error " + e1);
-			LoggerFactory.getLogger(CrawlerConfig.class).debug("Site is not running", e1);
+			logger.debug("Site is not running", e1);
 			System.exit(1);
 		}
 		int numberOfCrawlers = Integer.parseInt(CrawlerConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
@@ -64,8 +66,7 @@ public class TestInitializer {
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 			controller.start(Crawler.class, numberOfCrawlers);
 		} catch (Exception e) {
-			LoggerFactory.getLogger(CrawlerConfig.class).debug("Error in controller", e);
-			e.printStackTrace();
+			logger.debug("Error in controller", e);
 			System.exit(1);
 		}
 	}
