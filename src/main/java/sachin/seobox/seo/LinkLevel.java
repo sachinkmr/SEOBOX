@@ -66,6 +66,7 @@ public class LinkLevel extends BaseReporting {
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);
+				logger.debug("DEBUG", e);
 			} catch (Exception e) {
 				logger.debug("Error ", e);
 				test.log(LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL());
