@@ -20,7 +20,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import sachin.seobox.crawler.Crawler;
 import sachin.seobox.crawler.CrawlerConfig;
-import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.seo.SEOPage;
 
 public class TestInitializer {
@@ -30,8 +30,8 @@ public class TestInitializer {
 	@BeforeSuite(enabled = true)
 	public void init() {
 		try {
-			int code = HelperUtils.getUrlResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass)
-					.returnResponse().getStatusLine().getStatusCode();
+			int code = HttpRequestUtils.getUrlResponse(CrawlerConfig.site, CrawlerConfig.user, CrawlerConfig.pass)
+					.getStatusLine().getStatusCode();
 			if (code != 200) {
 				System.out.println("\nSite is giving " + code + " status code.\n");
 				logger.error("\n\nSite is giving " + code + " status code.\n\n");

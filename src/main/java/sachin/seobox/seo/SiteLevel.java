@@ -22,6 +22,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import sachin.seobox.crawler.CrawlerConfig;
 import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.helpers.SiteMapUtils;
 import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.reporter.BaseReporting;
@@ -167,8 +168,8 @@ public class SiteLevel extends BaseReporting {
 					}
 				} else {
 					try {
-						responseCode = HelperUtils.getUrlResponse(url, CrawlerConfig.user, CrawlerConfig.pass)
-								.returnResponse().getStatusLine().getStatusCode();
+						responseCode = HttpRequestUtils.getUrlResponse(url, CrawlerConfig.user, CrawlerConfig.pass)
+								.getStatusLine().getStatusCode();
 						if (responseCode == 200) {
 							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
 						} else {
