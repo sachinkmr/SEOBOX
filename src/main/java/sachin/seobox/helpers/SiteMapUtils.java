@@ -29,26 +29,20 @@ public class SiteMapUtils {
 				&& !SEOConfig.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 			add = SEOConfig.PROPERTIES.getProperty("seo.sitemapFile");
 		}
-		Response response = null;
-		if (data.length == 1 || null == data[1] || data[1].trim().isEmpty()) {
-			response = Request.Get(add)
-					.connectTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-					.socketTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-					.execute();
-
-		} else {
-			String login = data[1] + ":" + data[2];
-			String base64login = new String(Base64.encodeBase64(login.getBytes()));
-			response = Request.Get(add).addHeader("Authorization", "Basic " + base64login)
-					.connectTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-					.socketTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-					.execute();
+		Request request = Request.Get(add)
+			.addHeader("user-agent",
+				SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+					"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+			.connectTimeout(
+				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			.socketTimeout(
+				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+		    String login = data[1] + ":" + data[2];
+		    String base64login = new String(Base64.encodeBase64(login.getBytes()));
+		    request.addHeader("Authorization", "Basic " + base64login);
 		}
-		return response;
+		return request.execute();
 	}
 
 	/**

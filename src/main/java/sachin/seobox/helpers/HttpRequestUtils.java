@@ -15,7 +15,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.fluent.Request;
-import org.apache.http.client.fluent.Response;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -38,103 +37,91 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import sachin.seobox.common.SEOConfig;
 
 public class HttpRequestUtils {
-	protected static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
+    protected static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 
-	/***
-	 * 
-	 * To get response for a url
-	 * 
-	 * @throws IOException
-	 * @throws ClientProtocolException
-	 * 
-	 * 
-	 */
+    /***
+     * 
+     * To get response for a url
+     * 
+     * @throws IOException
+     * @throws ClientProtocolException
+     * 
+     * 
+     */
 
-	@SuppressWarnings("deprecation")
-	public static CloseableHttpResponse getUrlResponse(String... data) throws ClientProtocolException, IOException {
-		RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(false)
-				.setCookieSpec(CookieSpecs.IGNORE_COOKIES).setRedirectsEnabled(false)
-				.setSocketTimeout(
-						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-				.setConnectTimeout(
-						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
-				.build();
+    @SuppressWarnings("deprecation")
+    public static CloseableHttpResponse getUrlResponse(String... data) throws ClientProtocolException, IOException {
+	RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(false)
+		.setCookieSpec(CookieSpecs.IGNORE_COOKIES).setRedirectsEnabled(false)
+		.setSocketTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
+		.setConnectTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")))
+		.build();
 
-		RegistryBuilder<ConnectionSocketFactory> connRegistryBuilder = RegistryBuilder.create();
-		connRegistryBuilder.register("http", PlainConnectionSocketFactory.INSTANCE);
+	RegistryBuilder<ConnectionSocketFactory> connRegistryBuilder = RegistryBuilder.create();
+	connRegistryBuilder.register("http", PlainConnectionSocketFactory.INSTANCE);
 
-		try { // Fixing:
-				// https://code.google.com/p/crawler4j/issues/detail?id=174
-				// By always trusting the ssl certificate
-			SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustStrategy() {
-				@Override
-				public boolean isTrusted(final X509Certificate[] chain, String authType) {
-					return true;
-				}
-			}).build();
-			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-					SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-			connRegistryBuilder.register("https", sslsf);
-		} catch (Exception e) {
-			logger.warn("Exception thrown while trying to register https");
-			logger.debug("Stacktrace", e);
+	try { // Fixing:
+	      // https://code.google.com/p/crawler4j/issues/detail?id=174
+	      // By always trusting the ssl certificate
+	    SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustStrategy() {
+		@Override
+		public boolean isTrusted(final X509Certificate[] chain, String authType) {
+		    return true;
 		}
-
-		Registry<ConnectionSocketFactory> connRegistry = connRegistryBuilder.build();
-		PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(connRegistry);
-		connectionManager.setMaxTotal(10);
-		connectionManager.setDefaultMaxPerRoute(10);
-
-		HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-		clientBuilder.setDefaultRequestConfig(requestConfig);
-		clientBuilder.setConnectionManager(connectionManager);
-		clientBuilder.setUserAgent(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
-
-		CloseableHttpClient httpClient = clientBuilder.build();
-
-		if (data.length == 3 && null != data[1] && data[1].trim().isEmpty()) {
-			CredentialsProvider credsProvider = new BasicCredentialsProvider();
-			credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(data[1], data[2]));
-			httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
-		}
-		HttpClientContext context = HttpClientContext.create();
-		String add = URLCanonicalizer.getCanonicalURL(data[0]);
-		HttpGet get = new HttpGet(add);
-		CloseableHttpResponse response = httpClient.execute(new HttpGet(add), context);
-		get.releaseConnection();
-		connectionManager.close();
-		return response;
+	    }).build();
+	    SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
+		    SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+	    connRegistryBuilder.register("https", sslsf);
+	} catch (Exception e) {
+	    logger.warn("Exception thrown while trying to register https");
+	    logger.debug("Stacktrace", e);
 	}
 
-	public static HttpResponse getUrlFluentResponse(String... data)
-			throws ParseException, ClientProtocolException, IOException {
-		String add = URLCanonicalizer.getCanonicalURL(data[0]);
-		Response response = null;
-		if (data.length == 1 || null == data[1] || data[1].trim().isEmpty()) {
-			response = Request.Get(add)
-					.connectTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-					.socketTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-					.addHeader("user-agent",
-							SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-									"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-					.execute();
+	Registry<ConnectionSocketFactory> connRegistry = connRegistryBuilder.build();
+	PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(connRegistry);
+	connectionManager.setMaxTotal(10);
+	connectionManager.setDefaultMaxPerRoute(10);
 
-		} else {
-			String login = data[1] + ":" + data[2];
-			String base64login = new String(Base64.encodeBase64(login.getBytes()));
-			response = Request.Get(add).addHeader("Authorization", "Basic " + base64login)
-					.addHeader("user-agent",
-							SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-									"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-					.connectTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-					.socketTimeout(
-							Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-					.execute();
-		}
-		return response.returnResponse();
+	HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+	clientBuilder.setDefaultRequestConfig(requestConfig);
+	clientBuilder.setConnectionManager(connectionManager);
+	clientBuilder.setUserAgent(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+		"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
+
+	CloseableHttpClient httpClient = clientBuilder.build();
+
+	if (data.length == 3 && null != data[1] && data[1].trim().isEmpty()) {
+	    CredentialsProvider credsProvider = new BasicCredentialsProvider();
+	    credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(data[1], data[2]));
+	    httpClient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
 	}
+	HttpClientContext context = HttpClientContext.create();
+	String add = URLCanonicalizer.getCanonicalURL(data[0]);
+	HttpGet get = new HttpGet(add);
+	CloseableHttpResponse response = httpClient.execute(new HttpGet(add), context);
+	get.releaseConnection();
+	connectionManager.close();
+	return response;
+    }
+
+    public static HttpResponse getUrlFluentResponse(String... data)
+	    throws ParseException, ClientProtocolException, IOException {
+	String add = URLCanonicalizer.getCanonicalURL(data[0]);
+	Request request = Request.Get(add)
+		.addHeader("user-agent",
+			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+		.connectTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+		.socketTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+	    String login = data[1] + ":" + data[2];
+	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
+	    request.addHeader("Authorization", "Basic " + base64login);
+	}
+	return request.execute().returnResponse();
+    }
 }
