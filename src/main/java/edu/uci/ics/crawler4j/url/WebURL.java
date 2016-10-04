@@ -24,7 +24,7 @@ import org.apache.http.Header;
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
-import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.common.SEOConfig;
 
 /**
  * @author Yasser Ganjisaffar
@@ -86,7 +86,7 @@ public class WebURL implements Serializable {
 	}
 
 	public void setURL(String url) {
-		if (!CrawlerConfig.caseSensitive) {
+		if (!SEOConfig.caseSensitive) {
 			url = url.toLowerCase();
 		}
 		this.url = url;
@@ -116,7 +116,6 @@ public class WebURL implements Serializable {
 		if (pathEndIdx >= 0) {
 			path = path.substring(0, pathEndIdx);
 		}
-
 	}
 
 	/**

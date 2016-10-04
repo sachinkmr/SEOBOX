@@ -1,4 +1,4 @@
-package sachin.seobox.testng;
+package sachin.seobox.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class EntryPoint {
 	private static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		System.setProperty("SiteAddress", "http://www.comfortworld.com.sg/");
+		// System.setProperty("SiteAddress", "http://www.dove.com/uk");
 		try {
 			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 				throw new SEOException("Site url is missing");

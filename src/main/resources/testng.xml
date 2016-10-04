@@ -2,13 +2,16 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="SEOBOX">
 	<test name="Automation Test">
-		<!-- -->
-		<classes>
-			<class name="sachin.seobox.testng.TestInitializer" />
-			<class name="sachin.seobox.seo.SEOConfig" />
-			<class name="sachin.seobox.seo.SiteLevel" />			
+		<!--<class name="sachin.seobox.seo.Link" />
+			<class name="sachin.seobox.seo.Page" /> 
+			<class name="sachin.seobox.common.TestInitializer" />
+			<class name="sachin.seobox.seo.SiteLevel" />	
+			-->
+		<classes>					
+			<class name="sachin.seobox.common.TestInitializer" />
+			<class name="sachin.seobox.seo.SiteLevel" />
 			<class name="sachin.seobox.seo.LinkLevel" />
-			<class name="sachin.seobox.seo.PageLevel" />
+			<class name="sachin.seobox.seo.PageLevel" /> 
 		</classes>
 	</test>
 </suite>

@@ -9,7 +9,7 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.NetworkMode;
 
-import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
 
 public class ComplexReportFactory {
@@ -31,12 +31,7 @@ public class ComplexReportFactory {
 
 	public synchronized static ExtentReports getExtentReport() {
 		if (reporter == null) {
-			String outputDirectory = new File(
-					System.getProperty("user.dir") + File.separator + "output" + File.separator + "Reports")
-							.getAbsolutePath();
-			CrawlerConfig.reportPath = outputDirectory + File.separator + "SEOBOX_Report"
-					+ HelperUtils.generateUniqueString() + ".html";
-			reporter = new ExtentReports(CrawlerConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
+			reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
 			reporter.loadConfig(new File(HelperUtils.getResourceFile("extent-config.xml")));
 		}
 		return reporter;

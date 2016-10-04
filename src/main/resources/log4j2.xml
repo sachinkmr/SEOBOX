@@ -5,7 +5,7 @@
 	</Properties>
   <appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%-4level] - %msg%n"/>
     </Console>
 
     <RollingFile name="RollingFile" fileName="${log-path}/log4j.log" filePattern="${log-path}/log4j-%d{yyyy-MM-dd}.log">
@@ -25,7 +25,7 @@
 
   <loggers>     
     <root level="debug">
-      <appender-ref ref="Console" level="error"/>
+      <appender-ref ref="Console" level="info"/>
        <appender-ref ref="RollingFile" level="warn"/>
     </root>    
   </loggers>

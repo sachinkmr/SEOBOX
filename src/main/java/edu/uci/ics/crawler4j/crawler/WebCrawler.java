@@ -20,6 +20,7 @@ package edu.uci.ics.crawler4j.crawler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
@@ -39,7 +40,7 @@ import edu.uci.ics.crawler4j.parser.Parser;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 import edu.uci.ics.crawler4j.util.Util;
-import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.common.SEOConfig;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
 import uk.org.lidalia.slf4jext.LoggerFactory;
@@ -346,6 +347,21 @@ public class WebCrawler implements Runnable {
 			if (curURL == null) {
 				throw new Exception("Failed processing a NULL url !?");
 			}
+			Matcher m = SEOConfig.pattern.matcher(curURL.getURL());
+			String prop = SEOConfig.PROPERTIES.getProperty("crawler.urlRegex");
+			if (null == prop || prop.isEmpty()) {
+				if (!SEOConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) {
+					throw new ExternalLinkException(Level.WARN, "Skipping parsing of external link: " + curURL);
+				}
+			} else {
+				if (!SEOConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !m.find()) {
+					throw new ExternalLinkException(Level.INFO,
+							"Skipping parsing of link based on user regex: " + curURL);
+				} else {
+					if (m.find())
+						curURL.setInternalLink(true);
+				}
+			}
 
 			fetchResult = pageFetcher.fetchPage(curURL);
 			int statusCode = fetchResult.getStatusCode();
@@ -407,59 +423,51 @@ public class WebCrawler implements Runnable {
 				}
 
 			} else {
-				try {// if status code is 200
-					if (!CrawlerConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) { // skipping
-						throw new ExternalLinkException(Level.INFO, "Skipping parsing of External Link: " + curURL);
+				// if status code is 200
+				if (!curURL.getURL().equals(fetchResult.getFetchedUrl())) {
+					if (docIdServer.isSeenBefore(fetchResult.getFetchedUrl())) {
+						throw new RedirectException(Level.DEBUG, "Redirect page: " + curURL + " has already been seen");
 					}
-					if (!curURL.getURL().equals(fetchResult.getFetchedUrl())) {
-						if (docIdServer.isSeenBefore(fetchResult.getFetchedUrl())) {
-							throw new RedirectException(Level.DEBUG,
-									"Redirect page: " + curURL + " has already been seen");
-						}
-						curURL.setURL(fetchResult.getFetchedUrl());
-						curURL.setDocid(docIdServer.getNewDocID(fetchResult.getFetchedUrl()));
-					}
+					curURL.setURL(fetchResult.getFetchedUrl());
+					curURL.setDocid(docIdServer.getNewDocID(fetchResult.getFetchedUrl()));
+				}
 
-					if (!fetchResult.fetchContent(page)) {
-						throw new ContentFetchException();
-					}
-					parser.parse(page, curURL.getURL());
-					ParseData parseData = page.getParseData();
-					List<WebURL> toSchedule = new ArrayList<>();
-					int maxCrawlDepth = myController.getConfig().getMaxDepthOfCrawling();
-					for (WebURL webURL : parseData.getOutgoingUrls()) {
-						webURL.setParentDocid(curURL.getDocid());
-						webURL.setParentUrl(curURL.getURL());
-						int newdocid = docIdServer.getDocId(webURL.getURL());
-						if (newdocid > 0) {
-							// This is not the first time that this Url is
-							// visited.
-							// So, we set the depth to a negative number.
-							webURL.setDepth((short) -1);
-							webURL.setDocid(newdocid);
-						} else {
-							webURL.setDocid(-1);
-							webURL.setDepth((short) (curURL.getDepth() + 1));
-							if ((maxCrawlDepth == -1) || (curURL.getDepth() < maxCrawlDepth)) {
-								if (shouldVisit(page, webURL)) {
-									if (robotstxtServer.allows(webURL)) {
-										webURL.setDocid(docIdServer.getNewDocID(webURL.getURL()));
-										toSchedule.add(webURL);
-									} else {
-										logger.debug("Not visiting: {} as per the server's \"robots.txt\" policy",
-												webURL.getURL());
-									}
+				if (!fetchResult.fetchContent(page)) {
+					throw new ContentFetchException();
+				}
+				parser.parse(page, curURL.getURL());
+				ParseData parseData = page.getParseData();
+				List<WebURL> toSchedule = new ArrayList<>();
+				int maxCrawlDepth = myController.getConfig().getMaxDepthOfCrawling();
+				for (WebURL webURL : parseData.getOutgoingUrls()) {
+					webURL.setParentDocid(curURL.getDocid());
+					webURL.setParentUrl(curURL.getURL());
+					int newdocid = docIdServer.getDocId(webURL.getURL());
+					if (newdocid > 0) {
+						// This is not the first time that this Url is
+						// visited.
+						// So, we set the depth to a negative number.
+						webURL.setDepth((short) -1);
+						webURL.setDocid(newdocid);
+					} else {
+						webURL.setDocid(-1);
+						webURL.setDepth((short) (curURL.getDepth() + 1));
+						if ((maxCrawlDepth == -1) || (curURL.getDepth() < maxCrawlDepth)) {
+							if (shouldVisit(page, webURL)) {
+								if (robotstxtServer.allows(webURL)) {
+									webURL.setDocid(docIdServer.getNewDocID(webURL.getURL()));
+									toSchedule.add(webURL);
 								} else {
-									logger.debug("Not visiting: {} as per your \"shouldVisit\" policy",
+									logger.debug("Not visiting: {} as per the server's \"robots.txt\" policy",
 											webURL.getURL());
 								}
+							} else {
+								logger.debug("Not visiting: {} as per your \"shouldVisit\" policy", webURL.getURL());
 							}
 						}
 					}
-					frontier.scheduleAll(toSchedule);
-				} catch (ExternalLinkException re) {
-					logger.log(re.level, re.getMessage());
 				}
+				frontier.scheduleAll(toSchedule);
 			}
 			visit(page);
 		} catch (PageBiggerThanMaxSizeException e) {
@@ -473,6 +481,8 @@ public class WebCrawler implements Runnable {
 		} catch (NotAllowedContentException nace) {
 			logger.debug("Skipping: {} as it contains binary content which you configured not to crawl",
 					curURL.getURL());
+		} catch (ExternalLinkException re) {
+			logger.log(re.level, re.getMessage());
 		} catch (Exception e) {
 			onUnhandledException(curURL, e);
 		} finally {

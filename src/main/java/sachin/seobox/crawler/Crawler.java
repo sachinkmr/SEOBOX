@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.url.WebURL;
+import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.seo.SEOPage;
 
@@ -31,14 +32,14 @@ public class Crawler extends WebCrawler {
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		Matcher m = CrawlerConfig.pattern.matcher(url.getURL());
-		return !CrawlerConfig.SKIPPED_URLS.contains(url.getModifiedHost()) && m.find();
+		Matcher m = SEOConfig.shouldVisitPattern.matcher(url.getURL());
+		return !SEOConfig.SKIPPED_URLS.contains(url.getModifiedHost()) && m.find();
 	}
 
 	@Override
 	public void visit(Page page) {
-		System.out.println("Visiting: " + page.getWebURL().getURL());
-		File file = new File(CrawlerConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
+		// System.out.println("Visiting: " + page.getWebURL().getURL());
+		File file = new File(SEOConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
 		try {
 			SEOPage seoPage = new SEOPage(page);
 			stream.writeFile(file, seoPage);

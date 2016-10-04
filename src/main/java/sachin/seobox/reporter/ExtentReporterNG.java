@@ -21,12 +21,18 @@ import org.testng.xml.XmlSuite;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
-import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.common.SEOConfig;
 
 public class ExtentReporterNG implements IReporter {
 
 	@Override
 	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+		// for (String name : ComplexReportFactory.nameToTestMap.keySet()) {
+		// ExtentTest test = ComplexReportFactory.nameToTestMap.get(name);
+		// test.log(test.getRunStatus(), "END", "Test Case Completed.");
+		// ComplexReportFactory.closeTest(test);
+		// }
+
 		for (ISuite suite : suites) {
 			Map<String, ISuiteResult> result = suite.getResults();
 			for (ISuiteResult r : result.values()) {
@@ -38,15 +44,15 @@ public class ExtentReporterNG implements IReporter {
 		}
 		ComplexReportFactory.closeReport();
 		try {
-			File file = new File(CrawlerConfig.reportPath);
+			File file = new File(SEOConfig.reportPath);
 			Document doc = Jsoup.parse(file, "UTF-8");
-			doc.select("div.report-name").html(CrawlerConfig.site);
+			doc.select("div.report-name").html(SEOConfig.site);
 			FileUtils.writeStringToFile(file, doc.outerHtml(), "UTF-8");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		String path = System.getenv("JENKINS_URL") + "/"
-				+ CrawlerConfig.reportPath.substring(CrawlerConfig.reportPath.indexOf("workspace"));
+				+ SEOConfig.reportPath.substring(SEOConfig.reportPath.indexOf("workspace"));
 		System.out.println("Report Generated: " + path);
 	}
 

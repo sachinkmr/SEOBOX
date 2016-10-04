@@ -1,8 +1,11 @@
 package sachin.seobox.seo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,16 +16,18 @@ import org.testng.annotations.Test;
 import com.relevantcodes.extentreports.LogStatus;
 
 import edu.uci.ics.crawler4j.url.WebURL;
-import sachin.seobox.crawler.CrawlerConfig;
+import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class PageLevel extends BaseReporting {
 	protected static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
+	private List<SEOPage> pages = HelperUtils.getInternalPages();
 
 	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" })
 	public void verifyOGTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getOgTags();
@@ -53,7 +58,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOODPTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getRobotsTags();
@@ -76,8 +81,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has NOYDIR Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOYDIRTags() {
-
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getRobotsTags();
@@ -100,7 +104,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has NOINDEX Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOINDEXTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getRobotsTags();
@@ -123,7 +127,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has NOFOLLOW Robots meta tags", groups = { "Robots Tags" })
 	public void verifyNOFOLLOWTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getRobotsTags();
@@ -148,12 +152,12 @@ public class PageLevel extends BaseReporting {
 			"HREF Language Tags" })
 	public void verifyHREFLanguageTags() {
 		if (SEOConfig.MULTI_LINGUAL) {
-			for (SEOPage page : HelperUtils.getInternalPages()) {
+			for (SEOPage page : pages) {
 				try {
 					logger.debug("Verifying for: ", page.getPage().getWebURL());
 					if (page.getPage().getStatusCode() == 200
 							&& page.getPage().getContentType().contains("text/html")) {
-						Document document = Jsoup.parse(page.getHtml(), CrawlerConfig.site);
+						Document document = Jsoup.parse(page.getHtml(), SEOConfig.site);
 						Element head = document.getElementsByTag("head").first();
 						List<Element> links = head.select("link[rel=alternate]");
 						if (links.isEmpty()) {
@@ -187,7 +191,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page has only one H1 Tag", groups = { "H1 Tag" })
 	public void verifyMultipleH1Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH1Tags();
@@ -207,7 +211,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that page do not has missing H1 Tag", groups = { "H1 Tag" })
 	public void verifyMissingH1Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH1Tags();
@@ -225,7 +229,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that H1 Tag is not over character", groups = { "H1 Tag" })
 	public void verifyOverCharacterH1Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH1Tags();
@@ -255,7 +259,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that H1 Tag is not blank", groups = { "H1 Tag" })
 	public void verifyBlankH1Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH1Tags();
@@ -279,7 +283,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that H2 Tag is not over character", groups = { "H2 Tag" })
 	public void verifyOverCharacterH2Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH2Tags();
@@ -309,7 +313,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that H2 Tag is not blank", groups = { "H2 Tag" })
 	public void verifyBlankH2Tags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getH2Tags();
@@ -333,7 +337,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that image alt text is not missing", groups = { "Image Alt Text" })
 	public void verifyImageAltText() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> list = page.getImages();
@@ -360,9 +364,9 @@ public class PageLevel extends BaseReporting {
 		}
 	}
 
-	@Test(description = "Verify that Content/HTML Ratio does not exceed on page", groups = { "Content/HTML Ratio" })
+	@Test(description = "Verify that Content/HTML Ratio does not exceed on page", groups = { "Content/HTML" })
 	public void contentAndHTMLRatio() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				String html = page.getHtml();
@@ -388,7 +392,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify Internal outgoing links count on the page", groups = { "Links" })
 	public void verifyInternalOutgoingLinksCount() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				Set<WebURL> links = page.getPage().getParseData().getOutgoingUrls();
@@ -417,7 +421,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify External outgoing links count on the page", groups = { "Links" })
 	public void verifyExternalOutgoingLinksCount() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				Set<WebURL> links = page.getPage().getParseData().getOutgoingUrls();
@@ -449,7 +453,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify missing title tag on page", groups = { "Title Tag" })
 	public void verifyMissingTitle() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getTitle();
@@ -470,7 +474,7 @@ public class PageLevel extends BaseReporting {
 	@Test(description = "Verify multiple title tag on page", groups = { "Title Tag" })
 	public void verifyMultipleTitle() {
 
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getTitle();
@@ -491,7 +495,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify minimum length for title tag", groups = { "Title Tag" })
 	public void verifyTitleMinimumLength() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getTitle();
@@ -519,7 +523,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify maximum length for title tag", groups = { "Title Tag" })
 	public void verifyTitleMaximumLength() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getTitle();
@@ -548,7 +552,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify length for description tag", groups = { "Meta Description" })
 	public void verifyDescriptionLength() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getMetaDescription();
@@ -578,7 +582,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that description tag content is not blank", groups = { "Meta Description" })
 	public void verifyBlankDescription() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getMetaDescription();
@@ -600,7 +604,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify for missing description for page", groups = { "Meta Description" })
 	public void verifyMissingDescription() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getMetaDescription();
@@ -620,7 +624,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify for multiple description for page", groups = { "Meta Description" })
 	public void verifyMultipleDescription() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getMetaDescription();
@@ -640,7 +644,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify length for canonical tag", groups = { "Canonical Tag" })
 	public void verifyCanonicalLength() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getCanonical();
@@ -670,7 +674,7 @@ public class PageLevel extends BaseReporting {
 	@Test(description = "Verify for blank canonical tag url", groups = { "Canonical Tag" })
 	public void verifyBlankCanonicalURL() {
 
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getCanonical();
@@ -697,7 +701,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify for missing canonical tags for page", groups = { "Canonical Tag" })
 	public void verifyMissingCanonicalTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getCanonical();
@@ -717,7 +721,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify for multiple canonical tags for page", groups = { "Canonical Tag" })
 	public void verifyMultipleCanonicalTags() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = page.getCanonical();
@@ -737,7 +741,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that if page has tables", groups = { "Div instead of Table" })
 	public void useDivInsteadOfTable() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = Jsoup.parse(page.getHtml()).select("table");
@@ -756,7 +760,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that if page has frames", groups = { "No Frames" })
 	public void verifyFrames() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = Jsoup.parse(page.getHtml()).select("frame");
@@ -776,7 +780,7 @@ public class PageLevel extends BaseReporting {
 
 	@Test(description = "Verify that if page has flash content", groups = { "No Flash" })
 	public void verifyFlash() {
-		for (SEOPage page : HelperUtils.getInternalPages()) {
+		for (SEOPage page : pages) {
 			try {
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				List<Element> links = Jsoup.parse(page.getHtml()).select("*[data]");
@@ -801,6 +805,125 @@ public class PageLevel extends BaseReporting {
 				logger.debug("Error " + e);
 				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 			}
+		}
+	}
+
+	@Test(description = "Verify that site does not have duplicate meta description values", groups = {
+			"Meta Description" })
+	public void verifyDuplicateDescription() {
+		try {
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			for (SEOPage page : pages) {
+				try {
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					String key = page.getMetaDescription().get(0).attr("content");
+					String value = page.getPage().getWebURL().getURL();
+					if (map.containsKey(key)) {
+						map.put(key, map.get(key) + "<br/>" + value);
+						flag = false;
+					} else {
+						map.put(key, value);
+					}
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				}
+			}
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(LogStatus.FAIL, map.get(key), "<b>Description: </b>" + key);
+				}
+			}
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate descriptions found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test Step Failed");
+		}
+	}
+
+	@Test(description = "Verify that site does not have duplicate title values", groups = { "Title Tag" })
+	public void verifyDuplicateTitle() {
+		try {
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			for (SEOPage page : pages) {
+				try {
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					String key = page.getTitle().get(0).text();
+					String value = page.getPage().getWebURL().getURL();
+					if (map.containsKey(key)) {
+						map.put(key, map.get(key) + "<br/>" + value);
+						flag = false;
+					} else {
+						map.put(key, value);
+					}
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				}
+			}
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(LogStatus.FAIL, map.get(key), "<b>Title: </b>" + key);
+				}
+			}
+
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate titles found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test Step Failed", e);
+		}
+	}
+
+	@Test(description = "Verify that pages do not have duplicate content", groups = { "Content/HTML" })
+	public void verifyDuplicateBodyContent() {
+		try {
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			for (SEOPage page : pages) {
+				try {
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					String key = Integer
+							.toString(Jsoup.parse(page.getHtml(), SEOConfig.site).select("body").text().hashCode());
+					String value = page.getPage().getWebURL().getURL();
+					if (map.containsKey(key)) {
+						map.put(key, map.get(key) + "<br/>" + value);
+						flag = false;
+					} else {
+						map.put(key, value);
+					}
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				}
+			}
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(
+							LogStatus.FAIL, map
+									.get(key),
+							"<b>Duplicate Body Content: </b>"
+									+ EntityUtils
+											.toString(
+													HttpRequestUtils
+															.getUrlFluentResponse(map.get(key).split("<br/>")[0],
+																	SEOConfig.user, SEOConfig.pass)
+															.getEntity(),
+													"UTF-8"));
+				}
+			}
+
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate body content found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test Step Failed", e);
 		}
 	}
 }
