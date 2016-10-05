@@ -904,10 +904,17 @@ public class PageLevel extends BaseReporting {
 			}
 			for (String key : map.keySet()) {
 				if (map.get(key).split("<br/>").length > 2) {
-					test.log(LogStatus.FAIL, map.get(key),
-							"<b>Duplicate Body Content: </b>" + EntityUtils.toString(HttpRequestUtils
-									.getUrlResponse(map.get(key).split("<br/>")[0], SEOConfig.user, SEOConfig.pass)
-									.getEntity(), "UTF-8"));
+					test.log(
+							LogStatus.FAIL, map
+									.get(key),
+							"<b>Duplicate Body Content: </b>"
+									+ EntityUtils
+											.toString(
+													HttpRequestUtils
+															.getUrlFluentResponse(map.get(key).split("<br/>")[0],
+																	SEOConfig.user, SEOConfig.pass)
+															.getEntity(),
+													"UTF-8"));
 				}
 			}
 

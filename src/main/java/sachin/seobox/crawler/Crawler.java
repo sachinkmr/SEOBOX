@@ -14,7 +14,7 @@ import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.seo.SEOPage;
 
 public class Crawler extends WebCrawler {
-	StreamUtils stream;
+	private StreamUtils stream;
 
 	@Override
 	public void onBeforeExit() {

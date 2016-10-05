@@ -85,11 +85,11 @@ public class WebURL implements Serializable {
 		return url;
 	}
 
-	public void setURL(String url) {
+	public void setURL(String url1) {
 		if (!SEOConfig.caseSensitive) {
-			url = url.toLowerCase();
+			url = url1.toLowerCase();
 		}
-		this.url = url;
+		this.url = url1;
 
 		int domainStartIdx = url.indexOf("//") + 2;
 		int domainEndIdx = url.indexOf('/', domainStartIdx);
