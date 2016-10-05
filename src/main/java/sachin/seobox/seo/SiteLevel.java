@@ -10,7 +10,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.fluent.Response;
 import org.apache.http.util.EntityUtils;
-import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -159,44 +158,11 @@ public class SiteLevel extends BaseReporting {
 					}
 				}
 			}
-			stream.close();
 		} catch (Exception e) {
 			logger.debug("Error " + e);
 			test.log(LogStatus.FAIL, "Test Step Failed");
 		}
 
-	}
-
-	@Test(description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" })
-	public void missingLinksInSitemapXML() {
-		try {
-			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user,
-					SEOConfig.pass);
-			for (SEOPage page : HelperUtils.getAllPages()) {
-				try {
-					logger.debug("Verifying for: ", page.getPage().getWebURL());
-					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
-							&& page.getPage().getContentType().contains("text/html")) {
-						String url = page.getPage().getWebURL().getURL();
-						if (urlsInSiteMap.contains(url)) {
-							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
-						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
-						}
-					}
-				} catch (Exception e) {
-					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
-				}
-			}
-		} catch (ParseException | IOException | JDOMException e) {
-			logger.error("error in reading URLs from sitemap xml", e);
-			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
-		} catch (Exception e) {
-			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "Test Step Failed");
-		}
 	}
 
 	@Test(description = "Verify that site has custom error pages enabled", groups = {

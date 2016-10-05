@@ -1,12 +1,17 @@
 package sachin.seobox.seo;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.Header;
+import org.apache.http.ParseException;
+import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.LogStatus;
@@ -14,12 +19,18 @@ import com.relevantcodes.extentreports.LogStatus;
 import edu.uci.ics.crawler4j.url.WebURL;
 import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.helpers.SiteMapUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class LinkLevel extends BaseReporting {
 
 	private final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
-	private List<SEOPage> pages = HelperUtils.getAllPages();
+	private List<SEOPage> pages;
+
+	@BeforeClass
+	public void getPages() {
+		pages = HelperUtils.getAllPages();
+	}
 
 	@Test(description = "Verify that internal link response time is less than required", groups = {
 			"Links" }, enabled = true)
@@ -258,6 +269,38 @@ public class LinkLevel extends BaseReporting {
 			} catch (Exception e) {
 				logger.debug("Error ", e);
 			}
+		}
+	}
+
+	@Test(description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
+			"SiteMap.xml" })
+	public void missingLinksInSitemapXML() {
+		try {
+			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user,
+					SEOConfig.pass);
+			for (SEOPage page : pages) {
+				try {
+					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+							&& page.getPage().getContentType().contains("text/html")) {
+						String url = page.getPage().getWebURL().getURL();
+						if (urlsInSiteMap.contains(url)) {
+							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
+						} else {
+							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
+						}
+					}
+				} catch (Exception e) {
+					logger.debug("Error " + e);
+					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+				}
+			}
+		} catch (ParseException | IOException | JDOMException e) {
+			logger.error("error in reading URLs from sitemap xml", e);
+			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
+		} catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "Test Step Failed");
 		}
 	}
 

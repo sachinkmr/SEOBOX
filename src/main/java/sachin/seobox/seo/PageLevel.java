@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.LogStatus;
@@ -23,7 +24,12 @@ import sachin.seobox.reporter.BaseReporting;
 
 public class PageLevel extends BaseReporting {
 	protected static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
-	private List<SEOPage> pages = HelperUtils.getInternalPages();
+	private List<SEOPage> pages;
+
+	@BeforeClass
+	public void getPages() {
+		pages = HelperUtils.getInternalPages();
+	}
 
 	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" })
 	public void verifyOGTags() {

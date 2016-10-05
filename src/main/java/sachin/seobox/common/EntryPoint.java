@@ -19,6 +19,10 @@ public class EntryPoint {
 		try {
 			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 				throw new SEOException("Site url is missing");
+			} else {
+				SEOConfig.site = System.getProperty("SiteAddress");
+				SEOConfig.user = System.getProperty("Username");
+				SEOConfig.pass = System.getProperty("Password");
 			}
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));

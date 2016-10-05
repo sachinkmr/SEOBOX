@@ -188,7 +188,6 @@ public class CrawlConfig {
 			siteHost = new URL(siteUrl).getHost().replaceAll("www.", "");
 		} catch (MalformedURLException e) {
 			LoggerFactory.getLogger(CrawlConfig.class).error("Site url is not correct. Please validate. " + siteUrl, e);
-			System.exit(1);
 		}
 
 		if (crawlStorageFolder == null) {

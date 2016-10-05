@@ -110,7 +110,6 @@ public class HelperUtils {
 				logger.debug("Error " + e);
 			}
 		}
-		stream.close();
 		return pages;
 	}
 
@@ -128,7 +127,6 @@ public class HelperUtils {
 				logger.debug("Error " + e);
 			}
 		}
-		stream.close();
 		return pages;
 	}
 

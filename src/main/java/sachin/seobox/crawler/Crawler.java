@@ -17,11 +17,6 @@ public class Crawler extends WebCrawler {
 	private StreamUtils stream;
 
 	@Override
-	public void onBeforeExit() {
-		stream.close();
-	}
-
-	@Override
 	public void onStart() {
 		stream = new StreamUtils();
 	}

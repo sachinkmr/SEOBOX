@@ -70,7 +70,6 @@ import edu.uci.ics.crawler4j.crawler.authentication.NtAuthInfo;
 import edu.uci.ics.crawler4j.crawler.exceptions.PageBiggerThanMaxSizeException;
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import edu.uci.ics.crawler4j.url.WebURL;
-import edu.uci.ics.crawler4j.util.Util;
 
 /**
  * @author Yasser Ganjisaffar
@@ -241,7 +240,6 @@ public class PageFetcher extends Configurable {
 			}
 			long start = System.currentTimeMillis();
 			CloseableHttpResponse response = httpClient.execute(request);
-			webUrl.setInternalLink(Util.getUrlHost(webUrl.getURL()).contains(config.getSiteHost()));
 			fetchResult.setEntity(response.getEntity());
 			fetchResult.setResponseHeaders(response.getAllHeaders());
 			fetchResult.setResponseTime((int) (System.currentTimeMillis() - start));
