@@ -908,7 +908,7 @@ public class PageLevel extends BaseReporting {
 			}
 			for (String key : map.keySet()) {
 				if (map.get(key).split("<br/>").length > 2) {
-					test.log(LogStatus.FAIL, map.get(key), "<b>Duplicate Body Content: </b>" + map.get(key));
+					test.log(LogStatus.FAIL, "<b>Duplicate Body Content: </b>", map.get(key));
 				}
 			}
 

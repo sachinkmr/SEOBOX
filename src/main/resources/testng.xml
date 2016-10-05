@@ -6,11 +6,12 @@
 			<class name="sachin.seobox.seo.Page" /> 
 			<class name="sachin.seobox.common.TestInitializer" />
 			<class name="sachin.seobox.seo.SiteLevel" />	
-			-->
-		<classes>					
 			<class name="sachin.seobox.common.TestInitializer" />
-			<class name="sachin.seobox.seo.SiteLevel" />
+			-->
+		<classes>	
+			<class name="sachin.seobox.common.TestInitializer" />				
 			<class name="sachin.seobox.seo.LinkLevel" />
+			<class name="sachin.seobox.seo.SiteLevel" />			
 			<class name="sachin.seobox.seo.PageLevel" /> 
 		</classes>
 	</test>
