@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 public class Configuration {
 	private Map<String, String> configurationMap;
 	private InputStream stream;
-	private static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
+	protected static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
 
 	public Map<String, String> getConfigurationMap() {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

@@ -23,7 +23,7 @@ import com.relevantcodes.extentreports.utils.DateTimeUtil;
 import com.relevantcodes.extentreports.utils.FileReaderEx;
 
 public class TestConverter extends LogSettings {
-	private static final Logger logger = Logger.getLogger(TestConverter.class.getName());
+	protected static final Logger logger = Logger.getLogger(TestConverter.class.getName());
 	private Document doc;
 	private File file;
 	private ExtentReports extent;

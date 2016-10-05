@@ -36,7 +36,7 @@ import edu.uci.ics.crawler4j.util.Util;
  */
 
 public class DocIDServer extends Configurable {
-	private static final Logger logger = LoggerFactory.getLogger(DocIDServer.class);
+	protected static final Logger logger = LoggerFactory.getLogger(DocIDServer.class);
 
 	private final Database docIDsDB;
 	private static final String DATABASE_NAME = "DocIDs";

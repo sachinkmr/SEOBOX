@@ -35,7 +35,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
  * @author Yasser Ganjisaffar
  */
 public class InProcessPagesDB extends WorkQueues {
-	private static final Logger logger = LoggerFactory.getLogger(InProcessPagesDB.class);
+	protected static final Logger logger = LoggerFactory.getLogger(InProcessPagesDB.class);
 
 	private static final String DATABASE_NAME = "InProcessPagesDB";
 

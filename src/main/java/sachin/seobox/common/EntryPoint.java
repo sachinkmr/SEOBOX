@@ -12,10 +12,10 @@ import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.reporter.ExtentReporterNG;
 
 public class EntryPoint {
-	private static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
+	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.dove.com/uk");
+		System.setProperty("SiteAddress", "http://us.tigiprofessional.com/");
 		try {
 			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 				throw new SEOException("Site url is missing");

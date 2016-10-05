@@ -25,7 +25,7 @@ import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class SiteLevel extends BaseReporting {
-	private static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
+	protected static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
 
 	@Test(description = "Verify that site does have robot.txt file and its encoding is gzip", groups = {
 			"Robots.txt" }, enabled = true)

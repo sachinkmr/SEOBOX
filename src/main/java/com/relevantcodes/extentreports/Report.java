@@ -34,7 +34,7 @@ import com.relevantcodes.extentreports.utils.DateTimeUtil;
 
 // Report abstract
 abstract class Report extends LogSettings {
-	private static final Logger LOGGER = Logger.getLogger(Report.class.getName());
+	protected static final Logger LOGGER = Logger.getLogger(Report.class.getName());
 	private static final String INTERNAL_WARNING = "Close was called before test could end safely using EndTest.";
 
 	/**

@@ -42,7 +42,7 @@ import edu.uci.ics.crawler4j.util.Util;
  */
 public class RobotstxtServer {
 
-	private static final Logger logger = LoggerFactory.getLogger(RobotstxtServer.class);
+	protected static final Logger logger = LoggerFactory.getLogger(RobotstxtServer.class);
 
 	protected RobotstxtConfig config;
 

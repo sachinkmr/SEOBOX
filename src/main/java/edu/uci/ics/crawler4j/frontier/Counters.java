@@ -40,7 +40,7 @@ import edu.uci.ics.crawler4j.util.Util;
  * @author Yasser Ganjisaffar
  */
 public class Counters extends Configurable {
-	private static final Logger logger = LoggerFactory.getLogger(Counters.class);
+	protected static final Logger logger = LoggerFactory.getLogger(Counters.class);
 
 	public static class ReservedCounterNames {
 		public static final String SCHEDULED_PAGES = "Scheduled-Pages";

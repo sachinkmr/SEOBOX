@@ -343,10 +343,23 @@ public class WebCrawler implements Runnable {
 
 	private void processPage(WebURL curURL) {
 		PageFetchResult fetchResult = null;
+		Page page = null;
 		try {
 			if (curURL == null) {
 				throw new Exception("Failed processing a NULL url !?");
 			}
+			fetchResult = pageFetcher.fetchPage(curURL);
+			int statusCode = fetchResult.getStatusCode();
+
+			// Finds the status reason for all known statuses
+			handlePageStatusCode(curURL, statusCode,
+					EnglishReasonPhraseCatalog.INSTANCE.getReason(statusCode, Locale.ENGLISH));
+
+			page = new Page(curURL);
+			page.setFetchResponseHeaders(fetchResult.getResponseHeaders());
+			page.setStatusCode(statusCode);
+			page.setResponseTime(fetchResult.getResponseTime());
+
 			Matcher m = SEOConfig.pattern.matcher(curURL.getURL());
 			String prop = SEOConfig.PROPERTIES.getProperty("crawler.urlRegex");
 			if (null == prop || prop.isEmpty()) {
@@ -363,17 +376,6 @@ public class WebCrawler implements Runnable {
 				}
 			}
 
-			fetchResult = pageFetcher.fetchPage(curURL);
-			int statusCode = fetchResult.getStatusCode();
-
-			// Finds the status reason for all known statuses
-			handlePageStatusCode(curURL, statusCode,
-					EnglishReasonPhraseCatalog.INSTANCE.getReason(statusCode, Locale.ENGLISH));
-
-			Page page = new Page(curURL);
-			page.setFetchResponseHeaders(fetchResult.getResponseHeaders());
-			page.setStatusCode(statusCode);
-			page.setResponseTime(fetchResult.getResponseTime());
 			// Not 2XX: 2XX status codes indicate success
 			if (statusCode < 200 || statusCode > 299) {
 				if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY
@@ -469,7 +471,6 @@ public class WebCrawler implements Runnable {
 				}
 				frontier.scheduleAll(toSchedule);
 			}
-			visit(page);
 		} catch (PageBiggerThanMaxSizeException e) {
 			onPageBiggerThanMaxSize(curURL.getURL(), e.getPageSize());
 		} catch (ParseException pe) {
@@ -486,6 +487,10 @@ public class WebCrawler implements Runnable {
 		} catch (Exception e) {
 			onUnhandledException(curURL, e);
 		} finally {
+			if (page != null) {
+				visit(page);
+				page = null;
+			}
 			if (fetchResult != null) {
 				fetchResult.discardContentIfNotConsumed();
 			}

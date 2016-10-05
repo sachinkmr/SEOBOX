@@ -51,8 +51,11 @@ public class ExtentReporterNG implements IReporter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String path = System.getenv("JENKINS_URL") + "/"
-				+ SEOConfig.reportPath.substring(SEOConfig.reportPath.indexOf("workspace"));
+		String path = SEOConfig.reportPath;
+		if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
+			path = System.getenv("JENKINS_URL") + "/"
+					+ SEOConfig.reportPath.substring(SEOConfig.reportPath.indexOf("workspace"));
+		}
 		System.out.println("Report Generated: " + path);
 	}
 

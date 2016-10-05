@@ -42,7 +42,7 @@ import freemarker.template.TemplateModelException;
  *
  */
 public class HTMLReporter extends LogSettings implements IReporter {
-	private static final Logger logger = Logger.getLogger(HTMLReporter.class.getName());
+	protected static final Logger logger = Logger.getLogger(HTMLReporter.class.getName());
 
 	private Report report;
 

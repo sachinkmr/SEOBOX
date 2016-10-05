@@ -30,7 +30,7 @@ import com.relevantcodes.extentreports.model.Test;
 public class ExtentReports extends Report implements Serializable {
 
 	private static final long serialVersionUID = -6996595703916138742L;
-	private static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
+	protected static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
 
 	/**
 	 * <p>
