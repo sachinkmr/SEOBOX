@@ -48,9 +48,7 @@ import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -58,6 +56,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
+import org.apache.http.ssl.TrustStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +82,7 @@ public class PageFetcher extends Configurable {
 	protected long lastFetchTime = 0;
 	protected IdleConnectionMonitorThread connectionMonitorThread = null;
 
+	@SuppressWarnings("deprecation")
 	public PageFetcher(CrawlConfig config) {
 		super(config);
 
@@ -101,12 +101,10 @@ public class PageFetcher extends Configurable {
 					public boolean isTrusted(final X509Certificate[] chain, String authType) {
 						return true;
 					}
+
 				}).build();
 				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-						new NoopHostnameVerifier());
-				// SSLConnectionSocketFactory sslsf = new
-				// SSLConnectionSocketFactory(sslContext,
-				// SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+						SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 				connRegistryBuilder.register("https", sslsf);
 			} catch (Exception e) {
 				logger.warn("Exception thrown while trying to register https");
@@ -138,7 +136,9 @@ public class PageFetcher extends Configurable {
 			logger.debug("Working through Proxy: {}", proxy.getHostName());
 		}
 
-		httpClient = clientBuilder.build();
+		httpClient = clientBuilder
+				// .setSSLHostnameVerifier(new NoopHostnameVerifier())
+				.build();
 		if ((config.getAuthInfos() != null) && !config.getAuthInfos().isEmpty()) {
 			doAuthetication(config.getAuthInfos());
 		}

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,7 +18,6 @@ import com.relevantcodes.extentreports.LogStatus;
 import edu.uci.ics.crawler4j.url.WebURL;
 import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
-import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class PageLevel extends BaseReporting {
@@ -910,10 +908,7 @@ public class PageLevel extends BaseReporting {
 			}
 			for (String key : map.keySet()) {
 				if (map.get(key).split("<br/>").length > 2) {
-					test.log(LogStatus.FAIL, map.get(key),
-							"<b>Duplicate Body Content: </b>" + EntityUtils.toString(HttpRequestUtils
-									.getUrlResponse(map.get(key).split("<br/>")[0], SEOConfig.user, SEOConfig.pass)
-									.getEntity(), "UTF-8"));
+					test.log(LogStatus.FAIL, map.get(key), "<b>Duplicate Body Content: </b>" + map.get(key));
 				}
 			}
 

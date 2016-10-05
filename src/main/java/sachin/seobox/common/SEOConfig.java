@@ -11,43 +11,43 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeTest;
 
 import sachin.seobox.helpers.HelperUtils;
 
 public class SEOConfig {
 
-	public static int URL_CHARACTERS_LIMIT;
-	public static int H1_CHARACTERS_LIMIT;
-	public static int H2_CHARACTERS_LIMIT;
-	public static int TITLE_CHARACTERS_LIMIT;
-	public static int TITLE_CHARACTERS_LIMIT_MIN;
-	public static int META_DESCRIPTION_CHARACTERS_LIMIT;
-	public static int META_KEYWORDS_CHARACTERS_LIMIT;
-	public static int IMAGE_ALT_TEXT_CHARACTERS_LIMIT;
-	public static int CANONICAL_URL_CHARACTERS_LIMIT;
-	public static int MAXIMUM_LINKS_COUNTS;
-	public static int MAXIMUM_EXTERNAL_LINKS_COUNTS;
-	public static byte CONTENT_HTML_RATIO;
-	public static int MAXIMUM_RESPONSE_TIME;
-	public static int MAXIMUM_IMAGE_SIZE;
-	public static boolean MULTI_LINGUAL;
+	public static final int URL_CHARACTERS_LIMIT;
+	public static final int H1_CHARACTERS_LIMIT;
+	public static final int H2_CHARACTERS_LIMIT;
+	public static final int TITLE_CHARACTERS_LIMIT;
+	public static final int TITLE_CHARACTERS_LIMIT_MIN;
+	public static final int META_DESCRIPTION_CHARACTERS_LIMIT;
+	public static final int META_KEYWORDS_CHARACTERS_LIMIT;
+	public static final int IMAGE_ALT_TEXT_CHARACTERS_LIMIT;
+	public static final int CANONICAL_URL_CHARACTERS_LIMIT;
+	public static final int MAXIMUM_LINKS_COUNTS;
+	public static final int MAXIMUM_EXTERNAL_LINKS_COUNTS;
+	public static final byte CONTENT_HTML_RATIO;
+	public static final int MAXIMUM_RESPONSE_TIME;
+	public static final int MAXIMUM_IMAGE_SIZE;
+	public static final boolean MULTI_LINGUAL;
 	public static String site;
 	public static String user;
 	public static String pass;
-	public static Properties PROPERTIES;
-	public static List<String> SKIPPED_URLS;
-	public static String crawlStorageFolder;
-	public static String dataLocation;
-	public static Pattern pattern;
-	public static Pattern shouldVisitPattern;
-	public static boolean caseSensitive;
+	public static final Properties PROPERTIES;
+	public static final List<String> SKIPPED_URLS;
+	public static final String crawlStorageFolder;
+	public static final String dataLocation;
+	public static final Pattern pattern;
+	public static final Pattern shouldVisitPattern;
+	public static final boolean caseSensitive;
 	public static String PROPERTIES_LOC = "";
 	public static String reportPath;
-	public static Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp)))",
+	public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp)))",
 			Pattern.CASE_INSENSITIVE);
-	public static Pattern ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css)))",
+	public static final Pattern ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css)))",
 			Pattern.CASE_INSENSITIVE);
+
 	static {
 		String outputDirectory = new File(
 				System.getProperty("user.dir") + File.separator + "output" + File.separator + "Reports")
@@ -57,10 +57,6 @@ public class SEOConfig {
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 		storage.mkdirs();
 		crawlStorageFolder = storage.getAbsolutePath();
-	}
-
-	@BeforeTest
-	public void initSEOConfig() {
 		PROPERTIES = new Properties();
 		SKIPPED_URLS = new ArrayList<>();
 		PROPERTIES_LOC = System.getProperty("CrawlerConfigFile");
@@ -80,7 +76,11 @@ public class SEOConfig {
 		} catch (IOException e) {
 			LoggerFactory.getLogger(SEOConfig.class).debug("Error in loading config file", e);
 		}
-		String host = "host";
+		site = System.getProperty("SiteAddress");
+		user = System.getProperty("Username");
+		pass = System.getProperty("Password");
+
+		String host = "";
 		try {
 			host = new URL(site).getHost().replaceAll("www.", "");
 		} catch (MalformedURLException e) {

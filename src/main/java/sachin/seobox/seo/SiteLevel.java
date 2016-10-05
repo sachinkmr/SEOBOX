@@ -9,6 +9,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.fluent.Response;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,8 +147,11 @@ public class SiteLevel extends BaseReporting {
 					}
 				} else {
 					try {
-						responseCode = HttpRequestUtils.getUrlResponse(url, SEOConfig.user, SEOConfig.pass)
-								.getStatusLine().getStatusCode();
+						CloseableHttpResponse res = HttpRequestUtils.getUrlResponse(url, SEOConfig.user,
+								SEOConfig.pass);
+						responseCode = res.getStatusLine().getStatusCode();
+						EntityUtils.consume(res.getEntity());
+						res.close();
 						if (responseCode == 200) {
 							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
 						} else {

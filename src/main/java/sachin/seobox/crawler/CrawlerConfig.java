@@ -24,14 +24,13 @@ public class CrawlerConfig {
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
 		config.setCrawlStorageFolder(SEOConfig.crawlStorageFolder);
 		config.setConnectionTimeout(
-				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")));
+				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 		config.setSocketTimeout(
-				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "20000")));
+				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 		config.setFollowRedirects(
 				Boolean.parseBoolean(SEOConfig.PROPERTIES.getProperty("crawler.followRedirects", "true")));
 		config.setPolitenessDelay(Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.URLHitDelay", "200")));
-		config.setProcessBinaryContentInCrawling(
-				Boolean.parseBoolean(SEOConfig.PROPERTIES.getProperty("crawler.binaryContent", "true")));
+		config.setProcessBinaryContentInCrawling(false);
 		config.setIncludeBinaryContentInCrawling(
 				Boolean.parseBoolean(SEOConfig.PROPERTIES.getProperty("crawler.binaryContent", "true")));
 		config.setIncludeHttpsPages(true);
