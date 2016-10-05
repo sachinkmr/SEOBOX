@@ -18,11 +18,7 @@ public class Crawler extends WebCrawler {
 
 	@Override
 	public void onBeforeExit() {
-		try {
-			stream.closeStreams();
-		} catch (IOException e) {
-			LoggerFactory.getLogger(Crawler.class).debug("Unable to close streams " + e);
-		}
+		stream.close();
 	}
 
 	@Override

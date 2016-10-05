@@ -19,7 +19,7 @@ import sachin.seobox.reporter.BaseReporting;
 public class LinkLevel extends BaseReporting {
 
 	private final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
-	private List<SEOPage> pages = HelperUtils.getAllLinkPages();
+	private List<SEOPage> pages = HelperUtils.getAllPages();
 
 	@Test(description = "Verify that internal link response time is less than required", groups = {
 			"Links" }, enabled = true)

@@ -54,6 +54,9 @@ public class SEOConfig {
 						.getAbsolutePath();
 		SEOConfig.reportPath = outputDirectory + File.separator + "SEOBOX_Report" + HelperUtils.generateUniqueString()
 				+ ".html";
+		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
+		storage.mkdirs();
+		crawlStorageFolder = storage.getAbsolutePath();
 		PROPERTIES = new Properties();
 		SKIPPED_URLS = new ArrayList<>();
 		PROPERTIES_LOC = System.getProperty("CrawlerConfigFile");
@@ -76,9 +79,7 @@ public class SEOConfig {
 		site = System.getProperty("SiteAddress");
 		user = System.getProperty("Username");
 		pass = System.getProperty("Password");
-		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
-		storage.mkdirs();
-		crawlStorageFolder = storage.getAbsolutePath();
+
 		String host = "";
 		try {
 			host = new URL(site).getHost().replaceAll("www.", "");

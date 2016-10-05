@@ -40,11 +40,14 @@ public class TestInitializer {
 			logger.debug("Error in controller", e);
 			System.exit(1);
 		}
+		System.out.println("\nExecuting Test Cases");
+		System.out.println("---------------------------------------");
 	}
 
 	@AfterSuite(enabled = true)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
+
 	}
 
 }

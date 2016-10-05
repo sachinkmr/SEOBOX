@@ -8,11 +8,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import sachin.seobox.seo.SEOPage;
 
-public class StreamUtils {
+public class StreamUtils implements AutoCloseable {
 	private FileOutputStream fout;
 	private ObjectInputStream in;
+	protected static final Logger logger = LoggerFactory.getLogger(StreamUtils.class);
 
 	public void writeFile(File file, SEOPage seoPage) throws IOException {
 		fout = new FileOutputStream(file);
@@ -29,10 +33,19 @@ public class StreamUtils {
 		return link;
 	}
 
-	public void closeStreams() throws IOException {
+	@Override
+	public void close() {
 		if (fout != null)
-			fout.close();
+			try {
+				fout.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		if (in != null)
-			in.close();
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 }

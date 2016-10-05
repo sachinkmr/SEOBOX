@@ -92,7 +92,7 @@ public class HelperUtils {
 		return file.getAbsolutePath();
 	}
 
-	public synchronized static List<SEOPage> getInternalPages() {
+	public static List<SEOPage> getInternalPages() {
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
 		StreamUtils stream = new StreamUtils();
@@ -110,15 +110,11 @@ public class HelperUtils {
 				logger.debug("Error " + e);
 			}
 		}
-		try {
-			stream.closeStreams();
-		} catch (IOException e) {
-			logger.debug("Error in closing stream" + e);
-		}
+		stream.close();
 		return pages;
 	}
 
-	public synchronized static List<SEOPage> getAllLinkPages() {
+	public static List<SEOPage> getAllPages() {
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
 		StreamUtils stream = new StreamUtils();
@@ -132,15 +128,11 @@ public class HelperUtils {
 				logger.debug("Error " + e);
 			}
 		}
-		try {
-			stream.closeStreams();
-		} catch (IOException e) {
-			logger.debug("Error in closing stream" + e);
-		}
+		stream.close();
 		return pages;
 	}
 
-	public static Set<WebURL> getAllLinks() {
+	public static Set<WebURL> getAllOutgoingLinksOnPage() {
 		Set<WebURL> urls = new HashSet<>();
 		for (SEOPage page : getInternalPages()) {
 			try {

@@ -159,7 +159,7 @@ public class SiteLevel extends BaseReporting {
 					}
 				}
 			}
-			stream.closeStreams();
+			stream.close();
 		} catch (Exception e) {
 			logger.debug("Error " + e);
 			test.log(LogStatus.FAIL, "Test Step Failed");
@@ -173,7 +173,7 @@ public class SiteLevel extends BaseReporting {
 		try {
 			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user,
 					SEOConfig.pass);
-			for (SEOPage page : HelperUtils.getAllLinkPages()) {
+			for (SEOPage page : HelperUtils.getAllPages()) {
 				try {
 					logger.debug("Verifying for: ", page.getPage().getWebURL());
 					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
