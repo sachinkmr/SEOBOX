@@ -28,7 +28,7 @@ import sachin.seobox.seo.SEOPage;
 
 public class HelperUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(HelperUtils.class);
+	protected static final Logger logger = LoggerFactory.getLogger(HelperUtils.class);
 
 	/**
 	 * Method returns the unique string based on time stamp
