@@ -414,7 +414,8 @@ public class WebCrawler implements Runnable {
 							logger.debug("Not visiting: {} as per your \"shouldVisit\" policy", webURL.getURL());
 						}
 					}
-				} else { // All other http codes other than 3xx & 200
+				} else {
+					// All other http codes other than 3xx & 200
 					// Finds the status reason for all known statuses
 					String description = EnglishReasonPhraseCatalog.INSTANCE.getReason(fetchResult.getStatusCode(),
 							Locale.ENGLISH);

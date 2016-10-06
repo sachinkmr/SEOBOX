@@ -148,4 +148,16 @@ public class HelperUtils {
 		String site = add.substring(0, add.indexOf(domain) + domain.length() + 1);
 		return site;
 	}
+
+	public static String getResourceFile(String fileName, String pROPERTIES_LOC) {
+		File file = null;
+		try {
+			String str = FileUtils.readFileToString(new File(pROPERTIES_LOC), "UTF-8");
+			file = new File(SEOConfig.crawlStorageFolder, fileName);
+			FileUtils.write(file, str, "utf-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file.getAbsolutePath();
+	}
 }

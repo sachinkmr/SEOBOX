@@ -47,8 +47,7 @@ public class TestInitializer {
 
 	@AfterSuite(enabled = true)
 	public void afterSuite() {
+		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
-
 	}
-
 }

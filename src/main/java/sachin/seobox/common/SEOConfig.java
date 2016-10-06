@@ -59,12 +59,14 @@ public class SEOConfig {
 		crawlStorageFolder = storage.getAbsolutePath();
 		PROPERTIES = new Properties();
 		SKIPPED_URLS = new ArrayList<>();
-		PROPERTIES_LOC = System.getProperty("CrawlerConfigFile");
+		PROPERTIES_LOC = "CrawlerConfigFile";
 		try {
-			if (PROPERTIES_LOC == null || PROPERTIES_LOC.isEmpty() || !PROPERTIES_LOC.contains(".properties")
-					|| !new File(PROPERTIES_LOC).exists()) {
+			if (!new File(PROPERTIES_LOC).exists()) {
 				System.out.println("Loading default config file");
 				PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties");
+			} else {
+				System.out.println("Loading user's config file");
+				PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties", PROPERTIES_LOC);
 			}
 			FileInputStream in = new FileInputStream(new File(PROPERTIES_LOC));
 			PROPERTIES.load(in);
