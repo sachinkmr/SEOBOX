@@ -93,6 +93,7 @@ public class HelperUtils {
 	}
 
 	public static List<SEOPage> getInternalPages() {
+		System.out.println("Reading Internal Links.....");
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {
@@ -113,6 +114,7 @@ public class HelperUtils {
 	}
 
 	public static List<SEOPage> getAllPages() {
+		System.out.println("Reading Links.....");
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
 		for (File file : urlFiles) {

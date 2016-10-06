@@ -21,6 +21,7 @@ import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -89,7 +90,7 @@ public class HttpRequestUtils {
 		clientBuilder.setUserAgent(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
 
-		CloseableHttpClient httpClient = clientBuilder.build();
+		CloseableHttpClient httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 
 		if (data.length == 3 && null != data[1] && !data[1].trim().isEmpty()) {
 			CredentialsProvider credsProvider = new BasicCredentialsProvider();

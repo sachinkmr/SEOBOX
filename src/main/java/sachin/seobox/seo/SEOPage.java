@@ -28,9 +28,9 @@ public class SEOPage implements Serializable {
 		if (str != null) {
 			html = str.getBytes(Charset.forName("UTF-8"));
 		}
-		if (!page.getWebURL().isInternalLink())
+		if (!page.getWebURL().isInternalLink()) {
 			html = null;
-
+		}
 	}
 
 	public String getHtml() {

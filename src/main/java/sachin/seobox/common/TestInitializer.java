@@ -40,6 +40,8 @@ public class TestInitializer {
 			logger.debug("Error in controller", e);
 			System.out.println("Error in application: " + e);
 
+		} finally {
+			System.gc();
 		}
 		System.out.println("\nExecuting Test Cases");
 		System.out.println("---------------------------------------");
@@ -49,5 +51,6 @@ public class TestInitializer {
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
+		System.gc();
 	}
 }

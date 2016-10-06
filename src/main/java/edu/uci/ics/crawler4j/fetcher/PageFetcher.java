@@ -48,6 +48,7 @@ import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -136,9 +137,7 @@ public class PageFetcher extends Configurable {
 			logger.debug("Working through Proxy: {}", proxy.getHostName());
 		}
 
-		httpClient = clientBuilder
-				// .setSSLHostnameVerifier(new NoopHostnameVerifier())
-				.build();
+		httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 		if ((config.getAuthInfos() != null) && !config.getAuthInfos().isEmpty()) {
 			doAuthetication(config.getAuthInfos());
 		}

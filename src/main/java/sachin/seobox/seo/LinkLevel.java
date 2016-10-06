@@ -21,7 +21,7 @@ import sachin.seobox.reporter.BaseReporting;
 
 public class LinkLevel extends BaseReporting {
 
-	private final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
+	protected final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
 	private List<SEOPage> pages;
 
 	@BeforeClass

@@ -28,7 +28,7 @@ public class Crawler extends WebCrawler {
 			SEOPage seoPage = new SEOPage(page);
 			StreamUtils.writeFile(file, seoPage);
 		} catch (IOException e) {
-			LoggerFactory.getLogger(Crawler.class).debug("Unable to write data for " + page.getWebURL().getURL(), e);
+			LoggerFactory.getLogger(this.getClass()).debug("Unable to write data for " + page.getWebURL().getURL(), e);
 		}
 	}
 

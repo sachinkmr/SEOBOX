@@ -13,6 +13,21 @@ public class SEOException extends Exception {
 		super(msg);
 	}
 
+	public SEOException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+
+	}
+
+	public SEOException(String message, Throwable cause) {
+		super(message, cause);
+
+	}
+
+	public SEOException(Throwable cause) {
+		super(cause);
+
+	}
+
 	public SEOException(Level level, String msg) {
 		super(msg);
 		this.level = level;
