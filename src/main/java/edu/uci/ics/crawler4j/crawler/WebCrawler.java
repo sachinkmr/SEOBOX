@@ -361,7 +361,7 @@ public class WebCrawler implements Runnable {
 			page.setResponseTime(fetchResult.getResponseTime());
 
 			Matcher m = SEOConfig.pattern.matcher(curURL.getURL());
-			String prop = SEOConfig.PROPERTIES.getProperty("crawler.urlRegex");
+			String prop = SEOConfig.PROPERTIES.getProperty("crawler.domainRegex");
 			if (null == prop || prop.isEmpty()) {
 				if (!SEOConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) {
 					throw new ExternalLinkException(Level.WARN, "Skipping parsing of external link: " + curURL);

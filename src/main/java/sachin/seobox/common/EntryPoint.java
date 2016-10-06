@@ -15,7 +15,8 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://us.tigiprofessional.com/");
+		// System.setProperty("SiteAddress",
+		// "http://knorr-uk-uat.unileversolutions.com/");
 		try {
 			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 				throw new SEOException("Site url is missing");
@@ -31,7 +32,7 @@ public class EntryPoint {
 		} catch (SEOException e) {
 			System.out.println(e);
 			logger.error("\n\n\nError occured:  " + e + "\n\n");
-			System.out.println("Error in application: "+ e);
+			System.out.println("Error in application: " + e);
 		}
 	}
 }

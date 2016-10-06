@@ -23,7 +23,7 @@ public class TestInitializer {
 	public static List<SEOPage> internalPages = new ArrayList<>();
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-	@BeforeSuite(enabled = true)
+	@BeforeSuite(enabled = false)
 	public void init() {
 		int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		CrawlerConfig control = new CrawlerConfig();
