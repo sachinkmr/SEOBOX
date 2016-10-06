@@ -7,7 +7,7 @@ public class Demo {
 
 	public static void main(String[] args) {
 		Matcher m = Pattern.compile("^(http://www.dove.com/uk)|(https://www.dove.com/uk)", Pattern.CASE_INSENSITIVE)
-				.matcher("http://www.dove.com");
+				.matcher("http://www.dove.com/uk/asdad");
 		System.out.println(m.find());
 	}
 
