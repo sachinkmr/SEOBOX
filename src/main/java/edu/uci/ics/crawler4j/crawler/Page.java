@@ -63,7 +63,7 @@ public class Page implements Serializable {
 	/**
 	 * The content of this page in binary format.
 	 */
-	protected byte[] contentData;
+	volatile protected byte[] contentData;
 
 	/**
 	 * The ContentType of this page. For example: "text/html; charset=UTF-8"
@@ -93,7 +93,7 @@ public class Page implements Serializable {
 	/**
 	 * The parsed data populated by parsers
 	 */
-	protected ParseData parseData;
+	volatile protected ParseData parseData;
 	private int responseTime;
 
 	public int getResponseTime() {

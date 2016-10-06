@@ -115,7 +115,6 @@ public class SiteLevel extends BaseReporting {
 	@Test(description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
 			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
 	public void brokenLinksSitemapXML() {
-		StreamUtils stream = new StreamUtils();
 		Set<String> urls = new HashSet<>();
 		try {
 			try {
@@ -131,7 +130,7 @@ public class SiteLevel extends BaseReporting {
 				File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
 				if (file.exists()) {
 					try {
-						page = stream.readFile(file);
+						page = StreamUtils.readFile(file);
 						responseCode = page.getPage().getStatusCode();
 						if (responseCode == 200) {
 							test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);

@@ -38,13 +38,14 @@ public class TestInitializer {
 			controller.start(Crawler.class, numberOfCrawlers);
 		} catch (Exception e) {
 			logger.debug("Error in controller", e);
-			System.exit(1);
+			System.out.println("Error in application: " + e);
+
 		}
 		System.out.println("\nExecuting Test Cases");
 		System.out.println("---------------------------------------");
 	}
 
-	@AfterSuite(enabled = true)
+	@AfterSuite(enabled = false)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
 

@@ -1,6 +1,7 @@
 package sachin.seobox.seo;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -18,13 +19,20 @@ public class SEOPage implements Serializable {
 	 */
 	private static final long serialVersionUID = -1220222940314333382L;
 	private final Page page;
+	private byte[] html;
 
 	public SEOPage(Page page) {
 		this.page = page;
+		String str = (page.getParseData() instanceof HtmlParseData) ? ((HtmlParseData) page.getParseData()).getHtml()
+				: null;
+		if (str != null) {
+			html = str.getBytes(Charset.forName("UTF-8"));
+		}
+
 	}
 
 	public String getHtml() {
-		return (page.getParseData() instanceof HtmlParseData) ? ((HtmlParseData) page.getParseData()).getHtml() : null;
+		return new String(html, Charset.forName("UTF-8"));
 
 	}
 
@@ -75,6 +83,16 @@ public class SEOPage implements Serializable {
 
 	public Page getPage() {
 		return this.page;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getPage().getWebURL().getURL();
 	}
 
 }

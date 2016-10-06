@@ -1,12 +1,9 @@
 package sachin.seobox.seo;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.Header;
 import org.apache.http.ParseException;
 import org.jdom2.JDOMException;
 import org.slf4j.Logger;
@@ -97,29 +94,25 @@ public class LinkLevel extends BaseReporting {
 			try {
 				WebURL webUrl = page.getPage().getWebURL();
 				logger.debug("Verifying for: ", webUrl);
-				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()) {
-					Header[] headers = page.getPage().getFetchResponseHeaders();
-					Map<String, String> map = new HashMap<>();
-					for (Header header : headers) {
-						map.put(header.getName(), header.getValue());
-					}
-					if (map.containsKey("Content-Encoding")) {
-						if (map.get("Content-Encoding").contains("gzip")) {
-							test.log(LogStatus.PASS, "Content-Encoding header value is gzip.<br/><b>URL: <b/>"
-									+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
-						} else {
-							test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.<br/><b>URL: <b/>"
-									+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
-						}
+				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()
+						&& page.getPage().getContentEncoding() != null
+						&& !page.getPage().getContentEncoding().isEmpty()) {
+					if (page.getPage().getContentEncoding().contains("gzip")) {
+						test.log(LogStatus.PASS, "Content-Encoding header value is gzip.<br/><b>URL: <b/>"
+								+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
 					} else {
-						test.log(LogStatus.FAIL, "Content-Encoding header is not present in response.<br/><b>URL: <b/>"
-								+ webUrl.getURL());
+						test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.<br/><b>URL: <b/>"
+								+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
 					}
+				} else {
+					test.log(LogStatus.FAIL,
+							"Content-Encoding header is not present in response.<br/><b>URL: <b/>" + webUrl.getURL());
 				}
 			} catch (Exception e) {
 				logger.debug("Error ", e);
 			}
 		}
+
 	}
 
 	@Test(description = "get 2XX status code", groups = { "HTTP Status Codes" }, enabled = true)

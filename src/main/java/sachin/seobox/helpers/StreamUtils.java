@@ -16,7 +16,7 @@ import sachin.seobox.seo.SEOPage;
 public class StreamUtils {
 	protected static final Logger logger = LoggerFactory.getLogger(StreamUtils.class);
 
-	public void writeFile(File file, SEOPage seoPage) throws IOException {
+	public static void writeFile(File file, SEOPage seoPage) throws IOException {
 		FileOutputStream fout = new FileOutputStream(file);
 		ObjectOutputStream out = new ObjectOutputStream(fout);
 		out.writeObject(seoPage);
@@ -24,7 +24,7 @@ public class StreamUtils {
 		out.close();
 	}
 
-	public SEOPage readFile(File file) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public static SEOPage readFile(File file) throws FileNotFoundException, IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 		SEOPage link = (SEOPage) in.readObject();
 		in.close();

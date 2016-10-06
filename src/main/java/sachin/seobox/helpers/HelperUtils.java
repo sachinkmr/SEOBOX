@@ -95,10 +95,9 @@ public class HelperUtils {
 	public static List<SEOPage> getInternalPages() {
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
-		StreamUtils stream = new StreamUtils();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				SEOPage page = StreamUtils.readFile(file);
 				logger.debug("Verifying for: ", page.getPage().getWebURL());
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 						&& page.getPage().getContentType().contains("text/html")) {
@@ -116,10 +115,9 @@ public class HelperUtils {
 	public static List<SEOPage> getAllPages() {
 		List<SEOPage> pages = new ArrayList<>();
 		File[] urlFiles = new File(SEOConfig.dataLocation).listFiles();
-		StreamUtils stream = new StreamUtils();
 		for (File file : urlFiles) {
 			try {
-				SEOPage page = stream.readFile(file);
+				SEOPage page = StreamUtils.readFile(file);
 				pages.add(page);
 			} catch (ClassNotFoundException | IOException e) {
 				logger.error("error in reading file", e);

@@ -31,7 +31,7 @@ public class EntryPoint {
 		} catch (SEOException e) {
 			System.out.println(e);
 			logger.error("\n\n\nError occured:  " + e + "\n\n");
-			System.exit(1);
+			System.out.println("Error in application: "+ e);
 		}
 	}
 }
