@@ -362,13 +362,13 @@ public class WebCrawler implements Runnable {
 
 			Matcher m = SEOConfig.pattern.matcher(curURL.getURL());
 			String prop = SEOConfig.PROPERTIES.getProperty("crawler.domainRegex");
-			if (null == prop || prop.isEmpty()) {
+			if (null == prop || prop.isEmpty() || prop.equals(".")) {
 				if (!SEOConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !curURL.isInternalLink()) {
 					throw new ExternalLinkException(Level.WARN, "Skipping parsing of external link: " + curURL);
 				}
 			} else {
 				if (!SEOConfig.ASSETS_PATTERN.matcher(curURL.getURL()).find() && !m.find()) {
-					throw new ExternalLinkException(Level.INFO,
+					throw new ExternalLinkException(Level.WARN,
 							"Skipping parsing of link based on user regex: " + curURL);
 				} else {
 					if (m.find())
