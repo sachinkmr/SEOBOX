@@ -25,153 +25,150 @@ import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.reporter.BaseReporting;
 
 public class SiteLevel extends BaseReporting {
-	protected static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
 
-	@Test(description = "Verify that site does have robot.txt file and its encoding is gzip", groups = {
-			"Robots.txt" }, enabled = true)
-	public void verifyRobotsTXT() {
+    @Test(description = "Verify that site does have robot.txt file and its encoding is gzip", groups = {
+	    "Robots.txt" }, enabled = true)
+    public void verifyRobotsTXT() {
+	try {
+	    Response response = HelperUtils.getRobotFileResponse(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
+	    HttpResponse res = response.returnResponse();
+	    int code = res.getStatusLine().getStatusCode();
+	    Header[] headers = res.getAllHeaders();
+	    boolean head = res.containsHeader("Content-Encoding");
+	    String str = EntityUtils.toString(res.getEntity()).toLowerCase();
+	    if (code == 200 && null != str && str.contains("user-agent")) {
+		test.log(LogStatus.PASS, "Robots.txt file found.");
+	    } else {
+		test.log(LogStatus.FAIL, "Robots.txt file not found.");
+	    }
+	    // Content-Encoding
+	    if (head) {
+		test.log(LogStatus.PASS, "Content-Encoding header is present in response.");
 		try {
-			Response response = HelperUtils.getRobotFileResponse(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
-			HttpResponse res = response.returnResponse();
-			int code = res.getStatusLine().getStatusCode();
-			Header[] headers = res.getAllHeaders();
-			boolean head = res.containsHeader("Content-Encoding");
-			String str = EntityUtils.toString(res.getEntity()).toLowerCase();
-			if (code == 200 && null != str && str.contains("user-agent")) {
-				test.log(LogStatus.PASS, "Robots.txt file found.");
+		    if (this.getFirstHeader(headers, "Content-Encoding").getValue().contains("gzip")) {
+			test.log(LogStatus.PASS, "Content-Encoding header value is gzip.");
+		    }
+		} catch (Exception ex) {
+		    test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.");
+		}
+	    } else {
+		test.log(LogStatus.FAIL, "Content-Encoding header is not present in response.");
+	    }
+	} catch (ParseException | IOException e) {
+	    logger.debug("Error in fatching response. " + e);
+	    test.log(LogStatus.FAIL, "Unable to read robots.txt");
+	} catch (Exception e) {
+	    logger.debug("Error " + e);
+	    test.log(LogStatus.FAIL, "Test Step Failed");
+	}
+    }
+
+    private Header getFirstHeader(Header[] headers, String string) {
+	for (Header header : headers) {
+	    if (header.getName().equals(string)) {
+		return header;
+	    }
+	}
+	return null;
+    }
+
+    @Test(priority = 0, description = "Verify that site does have Sitemap.xml file", groups = {
+	    "SiteMap.xml" }, enabled = true)
+    public void verifySitemapXML() {
+	try {
+	    Response response = SiteMapUtils.getSiteMapXMLResponse(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
+	    HttpResponse res = response.returnResponse();
+	    int code = res.getStatusLine().getStatusCode();
+	    String str = EntityUtils.toString(res.getEntity());
+	    if (code == 200 && null != str && str.contains("<urlset")) {
+		test.log(LogStatus.PASS, "Sitemap.xml file found.");
+	    } else {
+		test.log(LogStatus.FAIL, "Sitemap.xml file not found.");
+	    }
+	    // // Content-Encoding
+	    // if (response.containsHeader("Content-Encoding")) {
+	    // test.log(LogStatus.PASS, "Content-Encoding header is present in
+	    // response.");
+	    // if
+	    // (response.getFirstHeader("Content-Encoding").getValue().contains("gzip"))
+	    // {
+	    // test.log(LogStatus.PASS, "Content-Encoding header value is
+	    // gzip.");
+	    // } else {
+	    // test.log(LogStatus.FAIL, "Content-Encoding header value is not
+	    // gzip.");
+	    // }
+	    // } else {
+	    // test.log(LogStatus.FAIL, "Content-Encoding header is not present
+	    // in response.");
+	    // }
+	} catch (ParseException | IOException e) {
+	    logger.debug("Error in fatching response. " + e);
+	    test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml");
+	} catch (Exception e) {
+	    logger.debug("Error " + e);
+	    test.log(LogStatus.FAIL, "Test Step Failed");
+	}
+    }
+
+    @Test(description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
+	    "SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
+    public void brokenLinksSitemapXML() {
+	Set<String> urls = new HashSet<>();
+	try {
+	    try {
+		urls = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
+	    } catch (Exception e1) {
+		logger.debug("Error " + e1);
+		test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
+	    }
+	    File urlsDirectory = new File(SEOConfig.dataLocation);
+	    SEOPage page = null;
+	    for (String url : urls) {
+		int responseCode = 0;
+		File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
+		if (file.exists()) {
+		    try {
+			page = StreamUtils.readFile(file);
+			responseCode = page.getPage().getStatusCode();
+			if (responseCode == 200) {
+			    test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
 			} else {
-				test.log(LogStatus.FAIL, "Robots.txt file not found.");
+			    test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
 			}
-			// Content-Encoding
-			if (head) {
-				test.log(LogStatus.PASS, "Content-Encoding header is present in response.");
-				try {
-					if (this.getFirstHeader(headers, "Content-Encoding").getValue().contains("gzip")) {
-						test.log(LogStatus.PASS, "Content-Encoding header value is gzip.");
-					}
-				} catch (Exception ex) {
-					test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.");
-				}
+		    }  catch (Exception e) {
+			logger.debug("Error " + e);
+			test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
+		    }
+		} else {
+		    try {
+			CloseableHttpResponse res = HttpRequestUtils.getUrlResponse(url, SEOConfig.user,
+				SEOConfig.pass);
+			responseCode = res.getStatusLine().getStatusCode();
+			EntityUtils.consume(res.getEntity());
+			res.close();
+			if (responseCode == 200) {
+			    test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
 			} else {
-				test.log(LogStatus.FAIL, "Content-Encoding header is not present in response.");
+			    test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
 			}
-		} catch (ParseException | IOException e) {
-			logger.debug("Error in fatching response. " + e);
-			test.log(LogStatus.FAIL, "Unable to read robots.txt");
-		} catch (Exception e) {
-			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "Test Step Failed");
+		    } catch (Exception e) {
+			test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "Unable to fetch response");
+		    }
 		}
+	    }
+	} catch (Exception e) {
+	    logger.debug("Error " + e);
+	    test.log(LogStatus.FAIL, "Test Step Failed");
 	}
 
-	private Header getFirstHeader(Header[] headers, String string) {
-		for (Header header : headers) {
-			if (header.getName().equals(string)) {
-				return header;
-			}
-		}
-		return null;
-	}
+    }
 
-	@Test(priority = 0, description = "Verify that site does have Sitemap.xml file", groups = {
-			"SiteMap.xml" }, enabled = true)
-	public void verifySitemapXML() {
-		try {
-			Response response = SiteMapUtils.getSiteMapXMLResponse(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
-			HttpResponse res = response.returnResponse();
-			int code = res.getStatusLine().getStatusCode();
-			String str = EntityUtils.toString(res.getEntity());
-			if (code == 200 && null != str && str.contains("<urlset")) {
-				test.log(LogStatus.PASS, "Sitemap.xml file found.");
-			} else {
-				test.log(LogStatus.FAIL, "Sitemap.xml file not found.");
-			}
-			// // Content-Encoding
-			// if (response.containsHeader("Content-Encoding")) {
-			// test.log(LogStatus.PASS, "Content-Encoding header is present in
-			// response.");
-			// if
-			// (response.getFirstHeader("Content-Encoding").getValue().contains("gzip"))
-			// {
-			// test.log(LogStatus.PASS, "Content-Encoding header value is
-			// gzip.");
-			// } else {
-			// test.log(LogStatus.FAIL, "Content-Encoding header value is not
-			// gzip.");
-			// }
-			// } else {
-			// test.log(LogStatus.FAIL, "Content-Encoding header is not present
-			// in response.");
-			// }
-		} catch (ParseException | IOException e) {
-			logger.debug("Error in fatching response. " + e);
-			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml");
-		} catch (Exception e) {
-			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "Test Step Failed");
-		}
-	}
-
-	@Test(description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
-	public void brokenLinksSitemapXML() {
-		Set<String> urls = new HashSet<>();
-		try {
-			try {
-				urls = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
-			} catch (Exception e1) {
-				logger.debug("Error " + e1);
-				test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
-			}
-			File urlsDirectory = new File(SEOConfig.dataLocation);
-			SEOPage page = null;
-			for (String url : urls) {
-				int responseCode = 0;
-				File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
-				if (file.exists()) {
-					try {
-						page = StreamUtils.readFile(file);
-						responseCode = page.getPage().getStatusCode();
-						if (responseCode == 200) {
-							test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
-						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
-						}
-					} catch (ClassNotFoundException | IOException e) {
-						logger.debug("Error in fetching response from file. " + e);
-						test.log(LogStatus.FAIL, "Unable to fetch response from saved location");
-					} catch (Exception e) {
-						logger.debug("Error " + e);
-						test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
-					}
-				} else {
-					try {
-						CloseableHttpResponse res = HttpRequestUtils.getUrlResponse(url, SEOConfig.user,
-								SEOConfig.pass);
-						responseCode = res.getStatusLine().getStatusCode();
-						EntityUtils.consume(res.getEntity());
-						res.close();
-						if (responseCode == 200) {
-							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
-						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
-						}
-					} catch (Exception e) {
-						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "Unable to fetch response");
-					}
-				}
-			}
-		} catch (Exception e) {
-			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "Test Step Failed");
-		}
-
-	}
-
-	@Test(description = "Verify that site has custom error pages enabled", groups = {
-			"Custom Error Pages" }, enabled = false)
-	public void verifyCutomErrorPages() {
-		test.log(LogStatus.INFO, "Not implemented yet");
-	}
+    @Test(description = "Verify that site has custom error pages enabled", groups = {
+	    "Custom Error Pages" }, enabled = false)
+    public void verifyCutomErrorPages() {
+	test.log(LogStatus.INFO, "Not implemented yet");
+    }
 
 }
