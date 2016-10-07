@@ -53,12 +53,10 @@ public class SEOConfig {
 		System.getProperty("user.dir") + File.separator + "output" + File.separator + "Reports")
 			.getAbsolutePath();
 	if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
-	    outputDirectory = outputDirectory.substring(0, outputDirectory.indexOf("jenkins")) + File.separator
+		    outputDirectory = outputDirectory.substring(0, outputDirectory.indexOf("jenkins")) + File.separator
 		    + "SEOBOX" + File.separator + "Reports";
-	} else {
-	    reportPath = outputDirectory + File.separator + "SEOBOX_Report" + HelperUtils.generateUniqueString()
-		    + ".html";
 	}
+	reportPath = outputDirectory + File.separator + "SEOBOX_Report" + HelperUtils.generateUniqueString() + ".html";
 
 	File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 	storage.mkdirs();
