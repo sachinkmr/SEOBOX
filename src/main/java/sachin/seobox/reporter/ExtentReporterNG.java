@@ -43,21 +43,19 @@ public class ExtentReporterNG implements IReporter {
 	    }
 	}
 	ComplexReportFactory.closeReport();
-	File file = new File(SEOConfig.reportPath);
-	String path = SEOConfig.reportPath;
-	if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
-	    path = System.getenv("JENKINS_URL").substring(0, System.getenv("JENKINS_URL").indexOf("jenkins"))
-		    + "SEOBOX/Reports" + File.separator + file.getName();
-	}
-	File fineNew = new File(path);
 	try {
+	    File file = new File(SEOConfig.reportPath);
 	    Document doc = Jsoup.parse(file, "UTF-8");
 	    doc.select("div.report-name").html(SEOConfig.site);
-	    FileUtils.writeStringToFile(fineNew, doc.outerHtml(), "UTF-8");
+	    FileUtils.writeStringToFile(file, doc.outerHtml(), "UTF-8");
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-
+	String path = SEOConfig.reportPath;
+	if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
+	    path = System.getenv("JENKINS_URL").substring(0, System.getenv("JENKINS_URL").indexOf("jenkins")) + "/"
+		    + SEOConfig.reportPath.substring(SEOConfig.reportPath.indexOf("SEOBOX"));
+	}
 	System.out.println("Report Generated: " + path);
     }
 
