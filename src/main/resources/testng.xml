@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="SEOBOX">
-	<test name="Automation Test">
+<suite name="SEOBOX Automation Suite">
+
+	<test name="SEOBOX Automation Test" >
 		<!--<class name="sachin.seobox.seo.Link" />
 			<class name="sachin.seobox.seo.Page" /> 
 			<class name="sachin.seobox.common.TestInitializer" />
 			<class name="sachin.seobox.seo.SiteLevel" />	
-			<class name="sachin.seobox.common.TestInitializer" />
+			parallel="methods" thread-count="3"
 			-->
 		<classes>	
 			<class name="sachin.seobox.common.TestInitializer" />				
