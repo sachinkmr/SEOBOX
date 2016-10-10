@@ -1,0 +1,9 @@
+package sachin.seobox.common;
+
+public class Demo {
+
+	public static void main(String[] args) {
+
+	}
+
+}
