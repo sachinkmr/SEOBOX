@@ -16,110 +16,110 @@ import sachin.seobox.helpers.HttpRequestUtils;
 
 public class SEOPage implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -1220222940314333382L;
-    private final Page page;
-    private byte[] html;
-    private JSONObject pageSpeedDesktop;
-    private JSONObject pageSpeedMobile;
-    private JSONObject pageStructure;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1220222940314333382L;
+	private final Page page;
+	private byte[] html;
+	private JSONObject pageSpeedDesktop;
+	private JSONObject pageSpeedMobile;
+	private JSONObject pageStructure;
 
-    public SEOPage(Page page) {
-	this.page = page;
-	String str = (page.getParseData() instanceof HtmlParseData) ? ((HtmlParseData) page.getParseData()).getHtml()
-		: null;
-	if (str != null) {
-	    html = str.getBytes(Charset.forName("UTF-8"));
+	public SEOPage(Page page) {
+		this.page = page;
+		String str = (page.getParseData() instanceof HtmlParseData) ? ((HtmlParseData) page.getParseData()).getHtml()
+				: null;
+		if (str != null) {
+			html = str.getBytes(Charset.forName("UTF-8"));
+		}
+		if (!page.getWebURL().isInternalLink()) {
+			html = null;
+		} else if (html != null) {
+			if (getHtml().contains("itemtype") && getHtml().contains("http://schema.org/")) {
+				pageStructure = HttpRequestUtils.getStructuredData(getHtml());
+			}
+			if (SEOConfig.user != null && !SEOConfig.user.isEmpty() && getPage().getWebURL().isInternalLink()
+					&& getPage().getStatusCode() == 200 && getPage().getContentType().contains("text/html")) {
+				pageSpeedMobile = HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(), "mobile");
+				pageSpeedDesktop = HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(), "desktop");
+			}
+		}
 	}
-	if (!page.getWebURL().isInternalLink()) {
-	    html = null;
+
+	public JSONObject getPageStructure() {
+		return this.pageStructure;
 	}
-	if (getHtml().contains("itemtype") && getHtml().contains("http://schema.org/")) {
-	    pageStructure = HttpRequestUtils.getStructuredData(getHtml());
+
+	public JSONObject getPageSpeedDesktop() {
+		return this.pageSpeedDesktop;
 	}
-	if (SEOConfig.user != null && !SEOConfig.user.isEmpty() && getPage().getWebURL().isInternalLink()
-		&& getPage().getStatusCode() == 200 && getPage().getContentType().contains("text/html")) {
-	    pageSpeedMobile = HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(), "mobile");
-	    pageSpeedDesktop = HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(), "desktop");
+
+	public JSONObject getPageSpeedMobile() {
+		return this.pageSpeedMobile;
 	}
-    }
 
-    public JSONObject getPageStructure() {
-	return this.pageStructure;
-    }
+	public String getHtml() {
+		return new String(html, Charset.forName("UTF-8"));
+	}
 
-    public JSONObject getPageSpeedDesktop() {
-	return this.pageSpeedDesktop;
-    }
+	public List<Element> getH1Tags() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("h1");
+	}
 
-    public JSONObject getPageSpeedMobile() {
-	return this.pageSpeedMobile;
-    }
+	public List<Element> getH2Tags() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("h2");
+	}
 
-    public String getHtml() {
-	return new String(html, Charset.forName("UTF-8"));
+	public List<Element> getMetaDescription() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("meta[name=description]");
+	}
 
-    }
+	public List<Element> getTitle() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("title");
+	}
 
-    public List<Element> getH1Tags() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("h1");
-    }
+	public List<Element> getMetaKeywords() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("meta[name=keywords]");
+	}
 
-    public List<Element> getH2Tags() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("h2");
-    }
+	public List<Element> getCanonical() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("link[rel=canonical]");
+	}
 
-    public List<Element> getMetaDescription() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("meta[name=description]");
-    }
+	public List<Element> getRobotsTags() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("meta[name=ROBOTS]");
+	}
 
-    public List<Element> getTitle() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("title");
-    }
+	public List<Element> getOgTags() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("meta[property^=og]");
+	}
 
-    public List<Element> getMetaKeywords() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("meta[name=keywords]");
-    }
+	public List<Element> getImages() {
+		Document document = Jsoup.parse(getHtml(), SEOConfig.site);
+		return document.select("img");
+	}
 
-    public List<Element> getCanonical() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("link[rel=canonical]");
-    }
+	public Page getPage() {
+		return this.page;
+	}
 
-    public List<Element> getRobotsTags() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("meta[name=ROBOTS]");
-    }
-
-    public List<Element> getOgTags() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("meta[property^=og]");
-    }
-
-    public List<Element> getImages() {
-	Document document = Jsoup.parse(getHtml(), SEOConfig.site);
-	return document.select("img");
-    }
-
-    public Page getPage() {
-	return this.page;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.getPage().getWebURL().getURL();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getPage().getWebURL().getURL();
+	}
 
 }
