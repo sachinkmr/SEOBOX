@@ -20,7 +20,8 @@ public class CrawlerConfig {
 				LoggerFactory.getLogger(CrawlerConfig.class).debug("Error in controller", e);
 			}
 		}
-		config.setUserAgentString(SEOConfig.USER_AGENT);
+		config.setUserAgentString(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
 		config.setCrawlStorageFolder(SEOConfig.crawlStorageFolder);
 		config.setConnectionTimeout(
 				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));

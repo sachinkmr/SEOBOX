@@ -20,9 +20,6 @@ public class SEOPage implements Serializable {
 	private static final long serialVersionUID = -1220222940314333382L;
 	private final Page page;
 	private byte[] html;
-	// private JSONObject pageSpeedDesktop;
-	// private JSONObject pageSpeedMobile;
-	// private JSONObject pageStructure;
 
 	public SEOPage(Page page) {
 		this.page = page;
@@ -34,40 +31,11 @@ public class SEOPage implements Serializable {
 		if (!page.getWebURL().isInternalLink()) {
 			html = null;
 		}
-
-		// else if (html != null) {
-		// if (getHtml().contains("itemtype") &&
-		// getHtml().contains("http://schema.org/")) {
-		// pageStructure = HttpRequestUtils.getStructuredData(getHtml());
-		// }
-		// if (SEOConfig.user != null && !SEOConfig.user.isEmpty() &&
-		// getPage().getWebURL().isInternalLink()
-		// && getPage().getStatusCode() == 200 &&
-		// getPage().getContentType().contains("text/html")) {
-		// pageSpeedMobile =
-		// HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(),
-		// "mobile");
-		// pageSpeedDesktop =
-		// HttpRequestUtils.getPageSpeedData(getPage().getWebURL().getURL(),
-		// "desktop");
-		// }
-		// }
 	}
-
-	// public JSONObject getPageStructure() {
-	// return this.pageStructure;
-	// }
-	//
-	// public JSONObject getPageSpeedDesktop() {
-	// return this.pageSpeedDesktop;
-	// }
-	//
-	// public JSONObject getPageSpeedMobile() {
-	// return this.pageSpeedMobile;
-	// }
 
 	public String getHtml() {
 		return new String(html, Charset.forName("UTF-8"));
+
 	}
 
 	public List<Element> getH1Tags() {

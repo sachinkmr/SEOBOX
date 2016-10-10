@@ -41,22 +41,19 @@ public class SEOConfig {
     public static final Pattern pattern;
     public static final Pattern shouldVisitPattern;
     public static final boolean caseSensitive;
+    public static String PROPERTIES_LOC = "";
     public static String reportPath;
     public static final Pattern IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp)))",
 	    Pattern.CASE_INSENSITIVE);
     public static final Pattern ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css)))",
 	    Pattern.CASE_INSENSITIVE);
-    public static final String PAGE_STRUCTURE_URL;
-    public static final String USER_AGENT;
-    public static final String PAGE_SPEED_KEY;
-    static {
 
-	PAGE_STRUCTURE_URL = "https://search.google.com/structured-data/testing-tool";
+    static {
 	String outputDirectory = new File(
 		System.getProperty("user.dir") + File.separator + "output" + File.separator + "Reports")
 			.getAbsolutePath();
 	if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
-	    outputDirectory = outputDirectory.substring(0, outputDirectory.indexOf("jenkins")) + File.separator
+		    outputDirectory = outputDirectory.substring(0, outputDirectory.indexOf("jenkins")) + File.separator
 		    + "SEOBOX" + File.separator + "Reports";
 	}
 	reportPath = outputDirectory + File.separator + "SEOBOX_Report" + HelperUtils.generateUniqueString() + ".html";
@@ -66,7 +63,7 @@ public class SEOConfig {
 	crawlStorageFolder = storage.getAbsolutePath();
 	PROPERTIES = new Properties();
 	SKIPPED_URLS = new ArrayList<>();
-	String PROPERTIES_LOC = "CrawlerConfigFile";
+	PROPERTIES_LOC = "CrawlerConfigFile";
 	try {
 	    if (!new File(PROPERTIES_LOC).exists()) {
 		System.out.println("Loading default config file");
@@ -100,9 +97,6 @@ public class SEOConfig {
 	pattern = Pattern.compile(PROPERTIES.getProperty("crawler.domainRegex", "."), Pattern.CASE_INSENSITIVE);
 	shouldVisitPattern = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", "."),
 		Pattern.CASE_INSENSITIVE);
-	USER_AGENT = SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-		"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
-	PAGE_SPEED_KEY = PROPERTIES.getProperty("seo.pageSpeedKey", "AIzaSyAwlPiPJIkTejgqqH01v9DmtPoPeOPXDUQ");
 	caseSensitive = Boolean.parseBoolean(PROPERTIES.getProperty("crawler.caseSensitiveUrl", "false"));
 	URL_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.url.word.count", "115"));
 	H1_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.h1.word.count", "70"));
