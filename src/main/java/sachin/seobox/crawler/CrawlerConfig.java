@@ -41,7 +41,9 @@ public class CrawlerConfig {
 		config.setMaxDownloadSize(Integer.parseInt(
 				SEOConfig.PROPERTIES.getProperty("crawler.maxDownloadSize", Integer.toString(Integer.MAX_VALUE))));
 		Set<BasicHeader> headers = new HashSet<>(config.getDefaultHeaders());
-		headers.add(new BasicHeader("Accept-Encoding", "*"));
+		// headers.add(new BasicHeader("Accept-Encoding", "gzip, deflate"));
+		headers.add(new BasicHeader("Accept-Encoding",
+				"gzip, compress, deflate, br, identity, exi, pack200-gzip, bzip2, lzma, peerdist, sdch, xpress, xz"));
 		config.setDefaultHeaders(headers);
 		return config;
 	}

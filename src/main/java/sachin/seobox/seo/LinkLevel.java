@@ -100,7 +100,7 @@ public class LinkLevel {
 	}
 
 	@Test(description = "Verify that compression is enabled. This verify for gzip in Content-Encoding header ", groups = {
-			"Links" }, enabled = true)
+			"Links" }, enabled = false)
 	public void verifyCompression() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();

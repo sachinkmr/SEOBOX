@@ -43,7 +43,7 @@ public class TestInitializer {
 		System.out.println("---------------------------------------");
 	}
 
-	@AfterSuite(enabled = false)
+	@AfterSuite(enabled = true)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
