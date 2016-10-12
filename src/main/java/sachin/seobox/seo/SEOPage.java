@@ -33,11 +33,15 @@ public class SEOPage implements Serializable {
 		if (!page.getWebURL().isInternalLink()) {
 			html = null;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7af7b64bb337c15cb97a41f98237b32281fdc00e
 	}
 
 	public String getHtml() {
 		return new String(html, Charset.forName("UTF-8"));
+
 	}
 
 	public List<Element> getH1Tags() {
