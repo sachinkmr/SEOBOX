@@ -26,6 +26,7 @@ public class EntryPoint {
 			testng.setTestSuites(suites);
 			testng.addListener(new ExtentReporterNG());
 			testng.setUseDefaultListeners(false);
+			testng.setPreserveOrder(true);
 			testng.setVerbose(0);
 			testng.run();
 		} catch (SEOException e) {

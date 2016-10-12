@@ -187,9 +187,10 @@ public class LinkLevel {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (statusCode >= 300 && statusCode < 400) {
-					test.log(
-							LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
-									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+					test.log(LogStatus.WARNING,
+							"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+									+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+									+ webUrl.getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
 			} catch (Exception e) {
@@ -210,8 +211,9 @@ public class LinkLevel {
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
 				if (webUrl.isInternalLink() && statusCode >= 300 && statusCode < 400) {
-					test.log(
-							LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
+					test.log(LogStatus.WARNING,
+							"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+									+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
 									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 							"<b>Status Code: </b>" + statusCode);
 				}
