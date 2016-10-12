@@ -14,6 +14,8 @@ import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.seo.SEOPage;
 
 public class Crawler extends WebCrawler {
+	private StreamUtils streamUtils = new StreamUtils();
+
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 		Matcher m = SEOConfig.shouldVisitPattern.matcher(url.getURL());
@@ -26,7 +28,7 @@ public class Crawler extends WebCrawler {
 		File file = new File(SEOConfig.dataLocation, page.getWebURL().hashCode() + ".webUrl");
 		try {
 			SEOPage seoPage = new SEOPage(page);
-			StreamUtils.writeFile(file, seoPage);
+			streamUtils.writeFile(file, seoPage);
 		} catch (IOException e) {
 			LoggerFactory.getLogger(this.getClass()).debug("Unable to write data for " + page.getWebURL().getURL(), e);
 		}

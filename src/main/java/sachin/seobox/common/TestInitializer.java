@@ -1,8 +1,6 @@
 package sachin.seobox.common;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -17,10 +15,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import sachin.seobox.crawler.Crawler;
 import sachin.seobox.crawler.CrawlerConfig;
-import sachin.seobox.seo.SEOPage;
 
 public class TestInitializer {
-	public static List<SEOPage> internalPages = new ArrayList<>();
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
 	@BeforeSuite(enabled = true)
@@ -47,7 +43,7 @@ public class TestInitializer {
 		System.out.println("---------------------------------------");
 	}
 
-	@AfterSuite(enabled = true)
+	@AfterSuite(enabled = false)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));

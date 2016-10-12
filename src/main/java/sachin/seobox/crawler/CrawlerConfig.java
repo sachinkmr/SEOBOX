@@ -1,7 +1,10 @@
 package sachin.seobox.crawler;
 
 import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.apache.http.message.BasicHeader;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -20,6 +23,7 @@ public class CrawlerConfig {
 				LoggerFactory.getLogger(CrawlerConfig.class).debug("Error in controller", e);
 			}
 		}
+
 		config.setUserAgentString(SEOConfig.USER_AGENT);
 		config.setCrawlStorageFolder(SEOConfig.crawlStorageFolder);
 		config.setConnectionTimeout(
@@ -35,6 +39,9 @@ public class CrawlerConfig {
 		config.setIncludeHttpsPages(true);
 		config.setMaxDownloadSize(Integer.parseInt(
 				SEOConfig.PROPERTIES.getProperty("crawler.maxDownloadSize", Integer.toString(Integer.MAX_VALUE))));
+		Set<BasicHeader> headers = new HashSet<>(config.getDefaultHeaders());
+		headers.add(new BasicHeader("Accept-Encoding", "*"));
+		config.setDefaultHeaders(headers);
 		// config.setResumableCrawling(true);
 		return config;
 	}
