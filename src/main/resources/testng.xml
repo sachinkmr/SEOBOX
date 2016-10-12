@@ -14,7 +14,8 @@
 		<classes>	
 			<class name="sachin.seobox.common.TestInitializer" />				
 			<class name="sachin.seobox.seo.LinkLevel" />
-			 
+			 <class name="sachin.seobox.seo.SiteLevel" />			
+			<class name="sachin.seobox.seo.PageLevel" />
 		</classes>
 	</test>
 </suite>
