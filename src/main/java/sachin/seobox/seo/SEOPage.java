@@ -17,7 +17,7 @@ public class SEOPage implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1220222940314333382L;
+	private static final long serialVersionUID = -12L;
 	private final Page page;
 	private byte[] html;
 
@@ -33,10 +33,6 @@ public class SEOPage implements Serializable {
 		if (!page.getWebURL().isInternalLink()) {
 			html = null;
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> 7af7b64bb337c15cb97a41f98237b32281fdc00e
 	}
 
 	public String getHtml() {

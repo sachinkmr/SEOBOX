@@ -23,13 +23,9 @@ public class CrawlerConfig {
 				LoggerFactory.getLogger(CrawlerConfig.class).debug("Error in controller", e);
 			}
 		}
-<<<<<<< HEAD
-
 		config.setUserAgentString(SEOConfig.USER_AGENT);
-=======
 		config.setUserAgentString(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
->>>>>>> 7af7b64bb337c15cb97a41f98237b32281fdc00e
 		config.setCrawlStorageFolder(SEOConfig.crawlStorageFolder);
 		config.setConnectionTimeout(
 				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
@@ -47,7 +43,6 @@ public class CrawlerConfig {
 		Set<BasicHeader> headers = new HashSet<>(config.getDefaultHeaders());
 		headers.add(new BasicHeader("Accept-Encoding", "*"));
 		config.setDefaultHeaders(headers);
-		// config.setResumableCrawling(true);
 		return config;
 	}
 }
