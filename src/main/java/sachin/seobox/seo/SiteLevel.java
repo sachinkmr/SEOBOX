@@ -140,14 +140,12 @@ public class SiteLevel {
 		logger.debug("Error " + e1);
 		test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
 	    }
-	    File urlsDirectory = new File(SEOConfig.dataLocation);
-	    SEOPage page = null;
 	    for (String url : urls) {
 		int responseCode = 0;
-		File file = new File(urlsDirectory, url.hashCode() + ".webUrl");
+		File file = new File(SEOConfig.dataLocation, url.hashCode() + ".webUrl");
 		if (file.exists()) {
 		    try {
-			page = streamUtils.readFile(file);
+			SEOPage page = streamUtils.readFile(file);
 			responseCode = page.getPage().getStatusCode();
 			if (responseCode == 200) {
 			    test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
@@ -156,7 +154,6 @@ public class SiteLevel {
 			}
 		    } catch (Exception e) {
 			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 		    }
 		} else {
 		    try {

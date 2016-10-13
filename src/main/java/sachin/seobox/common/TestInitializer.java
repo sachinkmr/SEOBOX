@@ -19,7 +19,7 @@ import sachin.seobox.crawler.CrawlerConfig;
 public class TestInitializer {
     protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-    @BeforeSuite(enabled = true)
+    @BeforeSuite(enabled = false)
     public void init() {
 	int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 	CrawlerConfig control = new CrawlerConfig();

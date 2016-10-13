@@ -84,12 +84,9 @@ public class HTMLReporter extends LogSettings implements IReporter {
 	} catch (TemplateModelException e) {
 	    e.printStackTrace();
 	}
-
 	File reportFile = new File(filePath);
-
 	if (report.getNetworkMode() == NetworkMode.OFFLINE) {
 	    templateName = "Extent.Offline.ftl";
-
 	    initOfflineMode(reportFile);
 	}
     }
