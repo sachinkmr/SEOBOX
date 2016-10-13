@@ -47,7 +47,7 @@ public class SiteLevel {
 			int code = res.getStatusLine().getStatusCode();
 			Header[] headers = res.getAllHeaders();
 			boolean head = res.containsHeader("Content-Encoding");
-			String str = EntityUtils.toString(res.getEntity()).toLowerCase();
+			String str = EntityUtils.toString(res.getEntity(), "UTF-8").toLowerCase();
 			if (code == 200 && null != str && str.contains("user-agent")) {
 				test.log(LogStatus.PASS, "Robots.txt file found.");
 			} else {
@@ -94,7 +94,7 @@ public class SiteLevel {
 			Response response = SiteMapUtils.getSiteMapXMLResponse(SEOConfig.site, SEOConfig.user, SEOConfig.pass);
 			HttpResponse res = response.returnResponse();
 			int code = res.getStatusLine().getStatusCode();
-			String str = EntityUtils.toString(res.getEntity());
+			String str = EntityUtils.toString(res.getEntity(), "UTF-8");
 			if (code == 200 && null != str && str.contains("<urlset")) {
 				test.log(LogStatus.PASS, "Sitemap.xml file found.");
 			} else {
