@@ -1,12 +1,16 @@
 package sachin.seobox.helpers;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -14,9 +18,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -28,8 +36,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,4 +136,58 @@ public class HttpRequestUtils {
 		}
 		return request.execute().returnResponse();
 	}
+
+	public static JSONObject getStructuredData(String html) {
+		CloseableHttpClient client = HttpClients.createDefault();
+		try {
+			HttpClientContext localContext = HttpClientContext.create();
+			HttpPost httpPost = new HttpPost(SEOConfig.PAGE_STRUCTURE_URL);
+			httpPost.addHeader("user-agent", SEOConfig.USER_AGENT);
+			httpPost.addHeader("referer", SEOConfig.PAGE_STRUCTURE_URL);
+			httpPost.addHeader("accept-encoding", "gzip, deflate, br");
+			httpPost.addHeader("accept-language", "en-US,en;q=0.8");
+			httpPost.addHeader("x-client-data", "CIW2yQEIpLbJAQjBtskB");
+			httpPost.addHeader("origin", "https://search.google.com");
+
+			List<NameValuePair> params = new ArrayList<>();
+			params.add(new BasicNameValuePair("html", html));
+			httpPost.setEntity(new UrlEncodedFormEntity(params));
+			CloseableHttpResponse response = client.execute(httpPost, localContext);
+			String str = EntityUtils.toString(response.getEntity(), "UTF-8");
+			EntityUtils.consumeQuietly(response.getEntity());
+			httpPost.releaseConnection();
+			client.close();
+			JSONObject json = new JSONObject(str.substring(4, str.length()));
+			json.remove("html");
+			json.remove("cse");
+			return json;
+		} catch (IOException e) {
+			logger.debug("Unable to fatch structured data", e);
+		}
+		return null;
+	}
+
+	public static JSONObject getPageSpeedData(String url, String strategy) {
+		try {
+			CloseableHttpClient client = HttpClients.createDefault();
+			URIBuilder builder = new URIBuilder(SEOConfig.PAGE_SPEED_URL);
+			builder.addParameter("key", SEOConfig.PAGE_SPEED_KEY);
+			builder.addParameter("locale", "en_US");
+			builder.addParameter("url", url);
+			builder.addParameter("strategy", strategy);
+
+			HttpGet httpget = new HttpGet(builder.build());
+			httpget.addHeader("user-agent", SEOConfig.USER_AGENT);
+			CloseableHttpResponse response = client.execute(httpget);
+			String str = EntityUtils.toString(response.getEntity(), "UTF-8");
+			EntityUtils.consumeQuietly(response.getEntity());
+			httpget.releaseConnection();
+			client.close();
+			return new JSONObject(str);
+		} catch (URISyntaxException | IOException e) {
+			logger.debug("Unable to fatch page speed data", e);
+		}
+		return null;
+	}
+
 }
