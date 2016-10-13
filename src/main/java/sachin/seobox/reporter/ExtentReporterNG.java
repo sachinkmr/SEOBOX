@@ -27,8 +27,9 @@ public class ExtentReporterNG implements IReporter {
 
     @Override
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-	System.out.println("\n----------------------------------------------------------");
-	System.out.println("Generating Report, Please Wait.....");
+	System.out.println("\nGenerating Report, Please Wait.....");
+	System.out.println("----------------------------------------------------------");
+	
 	for (ISuite suite : suites) {
 	    Map<String, ISuiteResult> result = suite.getResults();
 	    for (ISuiteResult r : result.values()) {
@@ -52,6 +53,7 @@ public class ExtentReporterNG implements IReporter {
 	    path = System.getenv("JENKINS_URL").substring(0, System.getenv("JENKINS_URL").indexOf("jenkins")) + "/"
 		    + SEOConfig.reportPath.substring(SEOConfig.reportPath.indexOf("SEOBOX"));
 	}
+	System.out.println("\n----------------------------------------------------------");
 	System.out.println("Report Generated: " + path);
     }
 
