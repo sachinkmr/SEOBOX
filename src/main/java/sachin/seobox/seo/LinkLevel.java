@@ -9,6 +9,7 @@ import org.apache.http.ParseException;
 import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -20,8 +21,9 @@ import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.helpers.SiteMapUtils;
 import sachin.seobox.helpers.StreamUtils;
+import sachin.seobox.reporter.BaseReport;
 
-public class LinkLevel {
+public class LinkLevel extends BaseReport{
 
     protected final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
     private File[] pages;
@@ -31,6 +33,12 @@ public class LinkLevel {
     public void getPages() {
 	pages = new File(SEOConfig.dataLocation).listFiles();
 	streamUtils = new StreamUtils();
+    }
+
+    @AfterClass
+    public void afterClass() {
+	pages = null;
+	streamUtils = null;
     }
 
     @Test(description = "Verify that internal link response time is less than required", groups = {
