@@ -2,18 +2,21 @@ package sachin.seobox.reporter;
 
 import java.util.Date;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 public class TestCase {
-    private String status;
+    private LogStatus status;
     private String id;
     private String name;
     private Date time;
 
-    public String getStatus() {
-	return this.status;
+  
+    public LogStatus getStatus() {
+        return this.status;
     }
 
-    public void setStatus(String status) {
-	this.status = status;
+    public void setStatus(LogStatus status) {
+        this.status = status;
     }
 
     public String getId() {

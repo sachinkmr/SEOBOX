@@ -1,6 +1,9 @@
 package sachin.seobox.reporter;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,14 +33,17 @@ public class DashBoard {
     private int skippedSteps;
     private int unknownSteps;
     private List<DashBoardCategory> dashBoardCategories;
-    private Map<String, String> systemInfoMap;
 
-    protected Map<String, String> getSystemInfoMap() {
-	return systemInfoMap;
-    }
-
-    public void setSystemInfoMap(Map<String, String> systemInfoMap) {
-        this.systemInfoMap = systemInfoMap;
+    public Map<String, String> getSystemInfo() {
+	Map<String, String> map = new HashMap<>();
+	map.put("User Name", System.getProperty("user.name"));
+	map.put("OS", System.getProperty("os.name"));
+	map.put("Java Version", System.getProperty("java.version"));
+	try {
+	    map.put("Host Name", InetAddress.getLocalHost().getHostName());
+	} catch (UnknownHostException e) {
+	}
+	return map;
     }
 
     public DashBoard() {
@@ -62,7 +68,7 @@ public class DashBoard {
 	    TestCase tc = new TestCase();
 	    tc.setId(test.getTest().getId().toString());
 	    tc.setName(test.getTest().getName());
-	    tc.setStatus(test.getRunStatus().name());
+	    tc.setStatus(test.getRunStatus());
 	    tc.setTime(test.getStartedTime());
 	    for (TestAttribute attr : test.getTest().getCategoryList()) {
 		DashBoardCategory cat = new DashBoardCategory(attr.getName());
@@ -77,6 +83,7 @@ public class DashBoard {
 		    cat.setFailed(cat.getFailed() + 1);
 		}
 		cat.setTotal(cat.getTotal() + 1);
+		cat.getTestCases().add(tc);
 		dashBoardCategories.add(cat);
 	    }
 
@@ -114,7 +121,7 @@ public class DashBoard {
 		}
 	    }
 	}
-	this.totalTests = report.getTestList().size();	
+	this.totalTests = report.getTestList().size();
 	return this;
     }
 

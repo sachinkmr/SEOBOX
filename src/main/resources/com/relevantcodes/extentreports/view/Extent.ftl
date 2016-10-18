@@ -185,10 +185,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<#list dashboard.systemInfoMap?keys as info>
+								<#list dashboard.systemInfo as key, value>
 										<tr>
-											<td>${info}</td>
-											<td>${dashboard.systemInfoMap[info]}</td>
+											<td>${key}</td>
+											<td>${value}</td>
 										</tr>
 									</#list>
 								</tbody>
@@ -432,7 +432,7 @@
 											<#assign others = category.total-(category.passed+category.failed)>
 											<li class='category-item displayed'>
 												<div class='cat-head'>
-													<span class='category-name'>${category}</span>
+													<span class='category-name'>${category.name}</span>
 												</div>
 												<div class='category-status-counts'>
 													<#if (category.passed > 0)>
@@ -450,7 +450,7 @@
 														<div class='button-group'>
 															<a href='#!' class='pass label filter'>Pass <span class='icon'>${category.passed}</span></a>
 															<a href='#!' class='fail label filter'>Fail <span class='icon'>${category.failed}</span></a>
-															<a href='#!' class='other label filter'>Others <span class='icon'>${category.others}</span></a>
+															<a href='#!' class='other label filter'>Others <span class='icon'>${others}</span></a>
 														</div>
 													</div>
 													<div class='cat-tests'>
@@ -521,7 +521,7 @@
 		</div>
 		<!-- /container -->
 		
-		<script src='${protocol}://cdn.rawgit.com/anshooarora/extentreports/6032d73243ba4fe4fb8769eb9c315d4fdf16fe68/cdn/extent.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/anshooarora/extentreports/6032d73243ba4fe4fb8769eb9c315d4fdf16fe68/cdn/extent.js' type='text/javascript'></script>
 		
 		-->
 		<script   src="https://code.jquery.com/jquery-2.2.0.min.js"   integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4="   crossorigin="anonymous"></script>
@@ -535,10 +535,6 @@
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
 			}
-			
-			<#if report.configurationMap??>
-				${report.configurationMap["scripts"]}
-			</#if>
 		</script>
 	</body>
 </html>

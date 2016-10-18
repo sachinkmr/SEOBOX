@@ -52,7 +52,6 @@ public class HTMLReporter extends LogSettings implements IReporter {
     // path of the html file
     private String filePath;
 
-
     @Override
     public void start(Report report) {
 	this.report = report;
@@ -88,9 +87,9 @@ public class HTMLReporter extends LogSettings implements IReporter {
 	    Template template = getConfig().getTemplate(templateName);
 	    BufferedWriter out = new BufferedWriter(new FileWriter(new File(filePath)));
 	    try {
-		DashBoard db= new DashBoard();
-		db.setSystemInfoMap(report.getSystemInfoMap());
-		templateMap.put("dashboard",db.getDashBoard());
+		DashBoard db = new DashBoard();
+		db.getDashBoard();
+		templateMap.put("dashboard", db);
 		template.process(templateMap, out);
 	    } catch (TemplateException e) {
 		e.printStackTrace();
