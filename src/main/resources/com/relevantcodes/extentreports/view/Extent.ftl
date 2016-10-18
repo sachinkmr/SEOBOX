@@ -15,8 +15,6 @@
 		<meta name='description' content='${resourceBundle.getString("head.metaDescription")}' />
 		<meta name='robots' content='noodp, noydir' />
 		<meta name='viewport' content='width=device-width, initial-scale=1' />
-		<meta name='extentx' id='extentx' content='${report.mongoDBObjectID}' />
-		
 		<title>
 			<#if report.configurationMap??>
 				${report.configurationMap["documentTitle"]}
@@ -40,19 +38,14 @@
 		</style>
 	</head>
 	
-	<#assign theme = ''>
-	<#if report.configurationMap??>
-		<#assign theme = report.configurationMap["theme"]> 
-	</#if>
-	
-	<body class='extent default ${theme} hide-overflow' onload="_updateCurrentStage(-1)">
+	<body class='extent default hide-overflow' onload="_updateCurrentStage(-1)">
 		<header>
 			<div class='logo-container left'>
 				<img src="https://cdn.rawgit.com/sachinkmr/Content/master/SEOBOX/Images/logo.png" alt='SEOBOX' title="SEOBOX" class="responsive-img">
 				<a href='#' data-activates='slide-out' class='button-collapse hide-on-large-only'><i class='mdi-navigation-apps'></i></a>
 			</div>
 			<div class="blue darken-2 report-info">
-				<div class='report-name'><#if report.configurationMap??>${report.configurationMap["reportName"]}</#if></div> <div class='report-headline'><#if report.configurationMap??>${report.configurationMap["reportHeadline"]}</#if></div>				
+				<div class='report-name'></div> <div class='report-headline'>Site SEO and Performance Validator</div>				
 			</div>			
 		</header>
 		
@@ -62,18 +55,8 @@
 				<li class='analysis waves-effect active'>
 					<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
 				</li>
-				<#if report.categoryTestMap?? && (report.categoryTestMap?size != 0)>
-					<li class='analysis waves-effect'><a href='#!' class='categories-view' onclick="_updateCurrentStage(1)"><i class='mdi-maps-local-offer'></i>Test Categories</a></li>
-				</#if>
-				<li class='analysis waves-effect'><a href='#!' class='test-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-dashboard'></i>Test Cases</a></li>
-				
-				<#if report.exceptionTestMap?? && (report.exceptionTestMap?size != 0)>
-					<li class='analysis waves-effect'><a href='#!' class='exceptions-view' onclick="_updateCurrentStage(2)"><i class='mdi-action-bug-report'></i>${resourceBundle.getString("nav.menu.exceptions")}</a></li>
-				</#if>
-				
-				<#if report.testRunnerLogList?? && (report.testRunnerLogList?size != 0)>
-					<li class='analysis waves-effect'><a href='#!' onclick="_updateCurrentStage(-1)" class='testrunner-logs-view'><i class='mdi-action-assignment'></i>${resourceBundle.getString("nav.menu.testRunnerLogs")}</a></li>
-				</#if>
+				<li class='analysis waves-effect'><a href='#!' class='categories-view' onclick="_updateCurrentStage(1)"><i class='mdi-maps-local-offer'></i>Test Categories</a></li>
+				<li class='analysis waves-effect'><a href='#!' class='test-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-dashboard'></i>Test Cases</a></li>				
 			</ul>			
 		</nav>
 		<!-- /nav -->
@@ -87,13 +70,13 @@
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.totalTests")}</b></span> 
-							<span class='total-tests'> <span class='panel-lead'></span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>${dashboard.totalTest}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-steps'> 
 							<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.totalSteps")}</b></span> 
-							<span class='total-steps'> <span class='panel-lead'></span> </span> 
+							<span class='total-steps'> <span class='panel-lead'>${dashboard.totalStep}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s12'>
@@ -126,21 +109,18 @@
 						<div class='card-panel'> 
 							<div>
 								<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.testsView")}</b></span>
-							</div> 
-							<div class='panel-setting modal-trigger test-count-setting right'>
-								<a href='#test-count-setting'><i class='mdi-navigation-more-vert text-md'></i></a>
-							</div> 
+							</div> 							
 							<div class='chart-box'>
 								<canvas class='text-centered' id='test-analysis'></canvas>
 							</div> 
 							<div>
-								<span class='weight-light'>Passed: <span class='t-pass-count weight-normal'></span> ${resourceBundle.getString("dashboard.panel.label.testsPassed")}</span>
+								<span class='weight-light'>Passed: <span class='t-pass-count weight-normal'>${dashboard.passedTests}</span> ${resourceBundle.getString("dashboard.panel.label.testsPassed")}</span>
 							</div> 
 							<div>
-								<span class='weight-light'>Failed: <span class='t-fail-count weight-normal'></span> ${resourceBundle.getString("dashboard.panel.label.testsFailed")}</span>
+								<span class='weight-light'>Failed: <span class='t-fail-count weight-normal'>${dashboard.failedTests}</span> ${resourceBundle.getString("dashboard.panel.label.testsFailed")}</span>
 							</div> 
 							<div>
-								<span class='weight-light'>Others: <span class='t-others-count weight-normal'></span> ${resourceBundle.getString("dashboard.panel.label.others")}</span>
+								<span class='weight-light'>Others: <span class='t-others-count weight-normal'>${dashboard.otherTests}</span> ${resourceBundle.getString("dashboard.panel.label.others")}</span>
 							</div> 
 						</div> 
 					</div> 
@@ -148,10 +128,7 @@
 						<div class='card-panel'> 
 							<div>
 								<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.stepsView")}</b></span>
-							</div> 
-							<div class='panel-setting modal-trigger step-status-filter right'>
-								<a href='#step-status-filter'><i class='mdi-navigation-more-vert text-md'></i></a>
-							</div> 
+							</div> 							 
 							<div class='chart-box'>
 								<canvas class='text-centered' id='step-analysis'></canvas>
 							</div> 
@@ -661,60 +638,29 @@
 				Created By <a href='https://github.com/sachinkmr'>Sachin Kumar</a>. Suite uses <a href='http://extentreports.relevantcodes.com/'>Extent Reports</a> and <a href='https://github.com/yasserg/crawler4j'>Crawler4j</a>.
 			</footer>
 		</div>
+		<div id='testDataCount'>
+			<input type='hidden' id='totalTests' name='totalTests' value='${dashboard.totalTests}'>
+			<input type='hidden' id='passedTests' name='passedTests' value='${dashboard.passedTests}'>
+			<input type='hidden' id='failedTests' name='failedTests' value='${dashboard.failedTests}'>
+			<input type='hidden' id='fatalTests' name='fatalTests' value='${dashboard.fatalTests}'>
+			<input type='hidden' id='warningTests' name='warningTests' value='${dashboard.warningTests}'>
+			<input type='hidden' id='errorTests' name='errorTests' value='${dashboard.errorTests}'>
+			<input type='hidden' id='skippedTests' name='skippedTests' value='${dashboard.skippedTests}'>
+			<input type='hidden' id='unknownTests' name='unknownTests' value='${dashboard.unknownTests}'>
+			<input type='hidden' id='totalSteps' name='totalSteps' value='${dashboard.totalSteps}'>
+			<input type='hidden' id='passedSteps' name='passedSteps' value='${dashboard.passedSteps}'>
+			<input type='hidden' id='failedSteps' name='failedSteps' value='${dashboard.failedSteps}'>
+			<input type='hidden' id='fatalSteps' name='fatalSteps' value='${dashboard.fatalSteps}'>
+			<input type='hidden' id='warningSteps' name='warningSteps' value='${dashboard.warningSteps}'>
+			<input type='hidden' id='errorSteps' name='errorSteps' value='${dashboard.errorSteps}'>
+			<input type='hidden' id='infoSteps' name='infoSteps' value='${dashboard.infoSteps}'>
+			<input type='hidden' id='skippedSteps' name='skippedSteps' value='${dashboard.skippedSteps}'>
+			<input type='hidden' id='unknownSteps' name='unknownSteps' value='${dashboard.unknownSteps}'>
+			<input type='hidden' id='otherTests' name='otherTests' value='${dashboard.otherTests}'>
+			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
+		</div>
 		<!-- /container -->
 		
-		<!-- test dashboard counts setting -->
-		<div id='test-count-setting' class='modal bottom-sheet'> 
-			<div class='modal-content'> 
-				<h5>${resourceBundle.getString("modal.heading.testCount")}</h5> 
-				<input name='test-count-setting' type='radio' id='parentWithoutNodes' class='with-gap'> 
-				<label for='parentWithoutNodes'>${resourceBundle.getString("modal.selection.parentTestOnly")}</label> 
-				<br> 
-				<input name='test-count-setting' type='radio' id='parentWithoutNodesAndNodes' class='with-gap'> 
-				<label for='parentWithoutNodesAndNodes'>${resourceBundle.getString("modal.selection.parentWithoutChildNodes")}</label> 
-				<br> 
-				<input name='test-count-setting' type='radio' id='childNodes' class='with-gap'> 
-				<label for='childNodes'>${resourceBundle.getString("modal.selection.childTests")}</label> 
-			</div> 
-			<div class='modal-footer'> 
-				<a href='#!' class='modal-action modal-close waves-effect waves-green btn'>${resourceBundle.getString("modal.button.save")}</a> 
-			</div> 
-		</div>
-		<!-- /test dashboard counts setting -->
-		
-		<!-- filter for step status -->
-		<div id='step-status-filter' class='modal bottom-sheet'> 
-			<div class='modal-content'> 
-				<h5>${resourceBundle.getString("modal.heading.selectStatus")}</h5> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-pass'> 
-				<label for='step-dashboard-filter-pass'>Pass</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-fail'> 
-				<label for='step-dashboard-filter-fail'>Fail</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-fatal'> 
-				<label for='step-dashboard-filter-fatal'>Fatal</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-error'> 
-				<label for='step-dashboard-filter-error'>Error</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-warning'> 
-				<label for='step-dashboard-filter-warning'>Warning</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-skip'> 
-				<label for='step-dashboard-filter-skip'>Skipped</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-info'> 
-				<label for='step-dashboard-filter-info'>Info</label> 
-				<br> 
-				<input checked class='filled-in' type='checkbox' id='step-dashboard-filter-unknown'> 
-				<label for='step-dashboard-filter-unknown'>Unknown</label> 
-			</div>
-			<div class='modal-footer'> 
-				<a href='#!' class='modal-action modal-close waves-effect waves-green btn'>${resourceBundle.getString("modal.button.save")}</a> 
-			</div> 
-		</div>
-		<!-- /filter for step status 
 		<script src='${protocol}://cdn.rawgit.com/anshooarora/extentreports/6032d73243ba4fe4fb8769eb9c315d4fdf16fe68/cdn/extent.js' type='text/javascript'></script>
 		
 		-->

@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.relevantcodes.extentreports.converters.TimeConverter;
-import com.relevantcodes.extentreports.model.ExceptionInfo;
 import com.relevantcodes.extentreports.model.Log;
 import com.relevantcodes.extentreports.model.SuiteTimeInfo;
 import com.relevantcodes.extentreports.model.Test;
@@ -184,17 +183,17 @@ abstract class Report extends LogSettings {
 	 */
 	private Boolean terminated = false;
 
-	/**
-	 * <p>
-	 * A map of categories and tests assigned
-	 */
-	private Map<String, List<Test>> categoryTestMap;
+	// /**
+	// * <p>
+	// * A map of categories and tests assigned
+	// */
+	// // private Map<String, List<Test>> categoryTestMap;
 
-	/**
-	 * <p>
-	 * A map of exception headline and tests assigned
-	 */
-	private Map<String, List<ExceptionInfo>> exceptionTestMap;
+	// /**
+	// * <p>
+	// * A map of exception headline and tests assigned
+	// */
+	// private Map<String, List<ExceptionInfo>> exceptionTestMap;
 
 	/**
 	 * Map of user defined configuration created from extent-config.xml
@@ -232,10 +231,10 @@ abstract class Report extends LogSettings {
 
 	protected SuiteTimeInfo suiteTimeInfo;
 	protected SystemInfo systemInfo;
-	protected List<ExtentTest> testList = new ArrayList<ExtentTest>();
+	protected List<ExtentTest> testList = new ArrayList<>();
 	protected File configFile = null;
 
-	protected List<ExtentTest> getTestList() {
+	public List<ExtentTest> getTestList() {
 		return testList;
 	}
 
@@ -294,12 +293,25 @@ abstract class Report extends LogSettings {
 	}
 
 	protected Map<String, List<Test>> getCategoryTestMap() {
+		Iterator<TestAttribute> catIter = test.categoryIterator();
+		Map<String, List<Test>> categoryTestMap = new TreeMap<>();
+		// add each category and associated test
+		while (catIter.hasNext()) {
+			TestAttribute category = catIter.next();
+			if (!categoryTestMap.containsKey(category.getName())) {
+				List<Test> testList = new ArrayList<>();
+				testList.add(test);
+				categoryTestMap.put(category.getName(), testList);
+			} else {
+				categoryTestMap.get(category.getName()).add(test);
+			}
+		}
 		return categoryTestMap;
 	}
 
-	protected Map<String, List<ExceptionInfo>> getExceptionTestMap() {
-		return exceptionTestMap;
-	}
+	// protected Map<String, List<ExceptionInfo>> getExceptionTestMap() {
+	// return exceptionTestMap;
+	// }
 
 	protected SystemInfo getSystemInfo() {
 		return systemInfo;
@@ -311,7 +323,7 @@ abstract class Report extends LogSettings {
 
 	protected void attach(IReporter reporter) {
 		if (reporters == null) {
-			reporters = new ArrayList<IReporter>();
+			reporters = new ArrayList<>();
 		}
 
 		reporters.add(reporter);
@@ -327,29 +339,12 @@ abstract class Report extends LogSettings {
 		if (test.getEndedTime() == null) {
 			test.setEndedTime(Calendar.getInstance().getTime());
 		}
-
-		Iterator<TestAttribute> catIter = test.categoryIterator();
-
-		// add each category and associated test
-		while (catIter.hasNext()) {
-			TestAttribute category = catIter.next();
-
-			if (!categoryTestMap.containsKey(category.getName())) {
-				List<Test> testList = new ArrayList<Test>();
-				testList.add(test);
-
-				categoryTestMap.put(category.getName(), testList);
-			} else {
-				categoryTestMap.get(category.getName()).add(test);
-			}
-		}
-
-		List<ExceptionInfo> exceptionList = test.getExceptionList();
-		if (exceptionList != null) {
-			for (ExceptionInfo exceptionInfo : exceptionList) {
-				setCauseTest(exceptionInfo);
-			}
-		}
+		// List<ExceptionInfo> exceptionList = test.getExceptionList();
+		// if (exceptionList != null) {
+		// for (ExceptionInfo exceptionInfo : exceptionList) {
+		// setCauseTest(exceptionInfo);
+		// }
+		// }
 
 		// #301 - for users using the TestNG listener, the log timestamps are
 		// all
@@ -382,13 +377,13 @@ abstract class Report extends LogSettings {
 		updateReportStartedTime(test);
 	}
 
-	private void setCauseTest(ExceptionInfo exceptionInfo) {
-		String ex = exceptionInfo.getExceptionName();
-		if (!exceptionTestMap.containsKey(ex)) {
-			exceptionTestMap.put(ex, new ArrayList<ExceptionInfo>());
-		}
-		exceptionTestMap.get(ex).add(exceptionInfo);
-	}
+	// private void setCauseTest(ExceptionInfo exceptionInfo) {
+	// String ex = exceptionInfo.getExceptionName();
+	// if (!exceptionTestMap.containsKey(ex)) {
+	// exceptionTestMap.put(ex, new ArrayList<ExceptionInfo>());
+	// }
+	// exceptionTestMap.get(ex).add(exceptionInfo);
+	// }
 
 	private void updateTestStatusList(Test test) {
 		Boolean toAdd = false;
@@ -605,12 +600,11 @@ abstract class Report extends LogSettings {
 		URL url = getClass().getClassLoader().getResource(resourceFile);
 		defaultConfiguration = loadConfig(new Configuration(url));
 
-		categoryTestMap = new TreeMap<String, List<Test>>();
-		exceptionTestMap = new TreeMap<String, List<ExceptionInfo>>();
+		// exceptionTestMap = new TreeMap<>();
 		systemInfo = new SystemInfo();
 		suiteTimeInfo = new SuiteTimeInfo();
-		testRunnerLogList = new ArrayList<String>();
-		logStatusList = new ArrayList<LogStatus>();
+		testRunnerLogList = new ArrayList<>();
+		logStatusList = new ArrayList<>();
 
 		reportId = UUID.randomUUID();
 		startedTime = new Date(suiteTimeInfo.getSuiteStartTimestamp());

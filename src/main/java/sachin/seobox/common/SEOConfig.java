@@ -49,8 +49,8 @@ public class SEOConfig {
 	public static final String PAGE_STRUCTURE_URL, PAGE_SPEED_URL;
 	public static final String USER_AGENT;
 	public static final String PAGE_SPEED_KEY;
-	static {
 
+	static {
 		String outputDirectory = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator
 				+ HelperUtils.generateUniqueString()).getAbsolutePath();
 		if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
