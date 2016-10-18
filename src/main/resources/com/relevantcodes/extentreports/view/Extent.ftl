@@ -1,6 +1,6 @@
-<#assign dateFormat = report.configurationMap["dateFormat"]>
-<#assign timeFormat = report.configurationMap["timeFormat"]>
-<#assign dateTimeFormat = report.configurationMap["dateFormat"] + " " + report.configurationMap["timeFormat"]>
+<#assign dateFormat = "dd-MMMM-YYYY">
+<#assign timeFormat = "h:mm:ss a">
+<#assign dateTimeFormat = "dd-MMMM-YYYY" + " " + "h:mm:ss a">
 
 <!DOCTYPE html>
 <html>
@@ -10,32 +10,14 @@
 			Copyright (c) 2015, Anshoo Arora (Relevant Codes) | ${resourceBundle.getString("head.copyrights")} | http://opensource.org/licenses/BSD-3-Clause
 			${resourceBundle.getString("head.documentation")}: http://extentreports.relevantcodes.com 
 		-->
-
-		<meta charset='<#if report.configurationMap??>${report.configurationMap["encoding"]}<#else>UTF-8</#if>' /> 
+		<meta charset='UTF-8' /> 
 		<meta name='description' content='${resourceBundle.getString("head.metaDescription")}' />
 		<meta name='robots' content='noodp, noydir' />
 		<meta name='viewport' content='width=device-width, initial-scale=1' />
-		<title>
-			<#if report.configurationMap??>
-				${report.configurationMap["documentTitle"]}
-			</#if>
-		</title>
-		
-		<#if report.configurationMap??>
-			<#assign protocol = report.configurationMap["protocol"]>
-		<#else>
-			<#assign protocol = "https">
-		</#if>
-		
-		<link href='${protocol}://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
+		<title>SEOBOX Report</title>
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
-			
-		<style>
-			<#if report.configurationMap??>
-				${report.configurationMap["styles"]}
-			</#if>
-		</style>
 	</head>
 	
 	<body class='extent default hide-overflow' onload="_updateCurrentStage(-1)">
@@ -70,13 +52,13 @@
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 
 							<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.totalTests")}</b></span> 
-							<span class='total-tests'> <span class='panel-lead'>${dashboard.totalTest}</span> </span> 
+							<span class='total-tests'> <span class='panel-lead'>${dashboard.totalTests}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-steps'> 
 							<span class='panel-name'><b>${resourceBundle.getString("dashboard.panel.name.totalSteps")}</b></span> 
-							<span class='total-steps'> <span class='panel-lead'>${dashboard.totalStep}</span> </span> 
+							<span class='total-steps'> <span class='panel-lead'>${dashboard.totalSteps}</span> </span> 
 						</div> 
 					</div>
 					<div class='col l2 m4 s12'>
@@ -155,8 +137,7 @@
 							</div> 
 						</div> 
 					</div>
-				</div>
-				<#if report.categoryTestMap?? && (report.categoryTestMap?size != 0)>
+				</div>				
 					<div class='category-summary-view'>
 						<div class='col l8 m6 s12'>
 							<div class='card-panel'>
@@ -171,25 +152,19 @@
 										</tr>										
 									</thead>
 									<tbody>
-										<#list report.categoryTestMap as category,tests>
+										<#list dashboard.dashBoardCategories as category>
 											<tr>
 												<td>
-													${category}
-												</td>
-												<#assign x=0>
+													${category.name}
+												</td>												
 												<td>
-													<#list tests as test>
-													    <#if test.getStatus().toString()?upper_case=="PASS">
-													    <#assign x++>
-													    </#if>
-													</#list>
-													${x}
+													${category.passed}
 												</td>
 												<td>													
-													${tests?size-x}
+													${category.failed}
 												</td>
 												<td>
-													${tests?size}
+													${category.total}
 												</td>
 											</tr>
 										</#list>
@@ -197,9 +172,7 @@
 								</table>
 							</div>
 						</div>
-					</div>
-				</#if>
-				
+					</div>	
 				<div class='system-view'>
 					<div class='col l4 m12 s12'>
 						<div class='card-panel'>
@@ -212,10 +185,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<#list report.systemInfoMap?keys as info>
+									<#list dashboard.systemInfoMap?keys as info>
 										<tr>
 											<td>${info}</td>
-											<td>${report.systemInfoMap[info]}</td>
+											<td>${dashboard.systemInfoMap[info]}</td>
 										</tr>
 									</#list>
 								</tbody>
@@ -259,28 +232,21 @@
 									<li class='clear'><a href='#!'>${resourceBundle.getString("tests.filters.clearFilters")}</a></li>
 								</ul>
 							</div>
-							<#if report.categoryTestMap?? && report.categoryTestMap?size != 0>
 								<div>
 									<a class='dropdown-button btn-floating btn-small waves-effect waves-light grey category-toggle' data-activates='category-toggle' data-constrainwidth='false' data-beloworigin='true' data-hover='true' href='#'>
 										<i class='mdi-maps-local-offer'></i>
 									</a>
 									<ul id='category-toggle' class='dropdown-content'>
-										<#list report.categoryTestMap?keys as category>
-											<li class='${category}'><a href='#!'>${category}</a></li>
+										<#list dashboard.dashBoardCategories as category>
+											<li class='${category.name}'><a href='#!'>${category.name}</a></li>
 										</#list>
 										<li class='divider'></li>
 										<li class='clear'><a href='#!'>${resourceBundle.getString("tests.filters.clearFilters")}</a></li>
 									</ul>
 								</div>
-							</#if>
 							<div>
 								<a class='btn-floating btn-small waves-effect waves-light grey' id='clear-filters' alt='${resourceBundle.getString("tests.filters.clearFilters")}' title='${resourceBundle.getString("tests.filters.clearFilters")}'>
 									<i class='mdi-navigation-close'></i>
-								</a>
-							</div>
-							<div>
-								<a class='btn-floating btn-small waves-effect waves-light grey' id='enableDashboard' alt='${resourceBundle.getString("tests.filters.enableDashboard")}' title='${resourceBundle.getString("tests.filters.enableDashboard")}'>
-									<i class='mdi-action-track-changes'></i>
 								</a>
 							</div>
 							<div>
@@ -302,9 +268,9 @@
 								<ul id='test-collection' class='test-collection'>
 									<#list report.testList as extentTest>
 										<#assign test = extentTest.getTest()>
-										<li class='collection-item test displayed active ${test.status} <#if test.nodeList?size != 0>hasChildren</#if>' extentid='${test.id?string}'>
+										<li class='collection-item test displayed active ${test.status}' extentid='${test.id?string}'>
 											<div class='test-head'>
-												<span class='test-name'>${test.name} <#if test.internalWarning??><i class='tooltipped mdi-alert-error' data-position='top' data-delay='50' data-tooltip='${test.internalWarning}'></i></#if></span>
+												<span class='test-name'>${test.name}</span>
 												<span class='test-status label right outline capitalize ${test.status}'>${test.status}</span>
 												<span class='category-assigned hide <#list test.categoryList as category> ${category.name?lower_case?replace(".", "")?replace("#", "")?replace(" ", "")}</#list>'></span>
 											</div>
@@ -321,14 +287,6 @@
 																<b>Categories: </b>
 																	<#list test.categoryList as category>
 																		<span class='category text-white'>${category.name}</span>
-																	</#list>
-																</div>
-															</#if>
-															<#if test.authorsList?? && test.authorsList?size != 0>
-																<div class='authors'>
-																<b>Authers: </b>
-																	<#list test.authorsList as author>
-																		<span class='author text-white'>${author.name}</span>
 																	</#list>
 																</div>
 															</#if>
@@ -450,8 +408,7 @@
 			</div>
 			<!-- /tests -->
 			
-			<!-- categories -->
-			<#if report.categoryTestMap?? && (report.categoryTestMap?size != 0)>
+			<!-- categories -->			
 				<div id='categories-view' class='row _addedTable hide'>
 					<div class='col _addedCell1'>
 						<div class='contents'>
@@ -471,28 +428,18 @@
 							<div class='card-panel no-padding-h no-padding-v'>
 								<div class='wrapper'>
 									<ul id='cat-collection' class='cat-collection'>
-										<#list report.categoryTestMap?keys as category>
-											<#assign testList = report.categoryTestMap[category]>
-											<#assign passed = 0, failed = 0, others = 0>
-											<#list testList as test>
-												<#if test.status == "pass">
-													<#assign passed = passed + 1>
-												<#elseif test.status == "fail">
-													<#assign failed = failed + 1>
-												<#else>
-													<#assign others = others + 1>
-												</#if>
-											</#list>
+										<#list dashboard.dashBoardCategories as category>	
+											<#assign others = category.total-(category.passed+category.failed)>
 											<li class='category-item displayed'>
 												<div class='cat-head'>
 													<span class='category-name'>${category}</span>
 												</div>
 												<div class='category-status-counts'>
-													<#if (passed > 0)>
-														<span class='pass label dot'>Pass: ${passed}</span>
+													<#if (category.passed > 0)>
+														<span class='pass label dot'>Pass: ${category.passed}</span>
 													</#if>
-													<#if (failed > 0)>
-														<span class='fail label dot'>Fail: ${failed}</span>
+													<#if (category.failed > 0)>
+														<span class='fail label dot'>Fail: ${category.failed}</span>
 													</#if>
 													<#if (others > 0)>
 														<span class='other label dot'>Others: ${others}</span>
@@ -501,9 +448,9 @@
 												<div class='cat-body'>
 													<div class='category-status-counts'>
 														<div class='button-group'>
-															<a href='#!' class='pass label filter'>Pass <span class='icon'>${passed}</span></a>
-															<a href='#!' class='fail label filter'>Fail <span class='icon'>${failed}</span></a>
-															<a href='#!' class='other label filter'>Others <span class='icon'>${others}</span></a>
+															<a href='#!' class='pass label filter'>Pass <span class='icon'>${category.passed}</span></a>
+															<a href='#!' class='fail label filter'>Fail <span class='icon'>${category.failed}</span></a>
+															<a href='#!' class='other label filter'>Others <span class='icon'>${category.others}</span></a>
 														</div>
 													</div>
 													<div class='cat-tests'>
@@ -516,9 +463,9 @@
 																</tr>
 															</thead>
 															<tbody>
-																<#list testList as test>
+																<#list category.testCases as test>
 																	<tr class='${test.status}'>
-																		<td>${test.startedTime?datetime?string(dateTimeFormat)}</td>
+																		<td>${test.time?datetime?string(dateTimeFormat)}</td>
 																		<td><span class='category-link linked' extentid='${test.id?string}'>${test.name}</span></td>
 																		<td><div class='status label capitalize ${test.status}'>${test.status}</div></td>
 																	</tr>
@@ -544,96 +491,9 @@
 						</div>
 					</div>
 				</div>
-			</#if>
 			<!-- /categories -->
 			
-			<!-- exceptions -->
-			<#if report.exceptionTestMap?? && (report.exceptionTestMap?size != 0)>
-				<div id='exceptions-view' class='row _addedTable hide'>
-					<div class='col _addedCell1'>
-						<div class='contents'>
-							<div class='card-panel heading'>
-								<h5>${resourceBundle.getString("exceptions.heading")}</h5>
-							</div>
-							<div class='card-panel filters'>
-								<div class='search' alt='Search tests' title='Search tests'>
-									<div class='input-field left'>
-										<input id='searchTests' type='text' class='validate' placeholder='Search tests...'>
-									</div>
-									<a href="#" class='btn-floating btn-small waves-effect waves-light blue lighten-1'>
-										<i class='mdi-action-search'></i>
-									</a>
-								</div>
-							</div>
-							<div class='card-panel no-padding-h no-padding-v'>
-								<div class='wrapper'>
-									<ul id='exception-collection' class='exception-collection'>
-										<#list report.exceptionTestMap?keys as exception>
-											<#assign testList = report.exceptionTestMap[exception]>
-											<li class='exception-item displayed'>
-												<div class='exception-head'>
-													<span class='exception-name'>${exception}</span>
-												</div>
-												<div class='exception-test-count'>
-													<span class='fail label'>${testList?size}</span>
-												</div>
-												<div class='exception-body'>
-													<div class='exception-tests'>
-														<table class='bordered'>
-															<thead>
-																<tr>
-																	<th>${resourceBundle.getString("exceptions.th.runDate")}</th>
-																	<th>${resourceBundle.getString("exceptions.th.testName")}</th>
-																	<th>${resourceBundle.getString("exceptions.th.exception")}</th>
-																</tr>
-															</thead>
-															<tbody>
-                                                               <#list testList as exceptionInfo>
-                                                                   <#assign test = exceptionInfo.test>
-                                                                   <tr class='${test.status}'>
-                                                                       <td>${test.startedTime?datetime?string(dateTimeFormat)}</td>
-                                                                       <td><span class='exception-link linked' extentid='${test.id?string}'>${test.name}</span></td>
-                                                                       <td><pre class='exception-message'>${exceptionInfo.stackTrace}</pre></td>
-                                                                   </tr>
-                                                               </#list>
-                                                            </tbody>
-														</table>
-													</div>
-												</div> 
-											</li>
-										</#list>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id='exception-details-wrapper' class='col _addedCell2'>
-						<div class='contents'>
-							<div class='card-panel details-view'>
-								<h5 class='exception-name'></h5>
-								<div class='exception-container'>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</#if>
-			<!-- /exceptions -->
 			
-			<!-- testrunner logs -->
-			<#if report.testRunnerLogList?? && (report.testRunnerLogList?size != 0)>
-				<div id='testrunner-logs-view' class='row hide'>
-					<div class='col s12'>
-						<div class='card-panel'>
-							<h5>${resourceBundle.getString("logs.heading")}</h5>
-							<#list report.testRunnerLogList as trLog>
-								<p>${trLog}</p>
-							</#list>
-						</div>
-					</div>
-				</div>
-			</#if>
-			<!-- /testrunner logs -->
 			<footer id='report-footer'>
 				Created By <a href='https://github.com/sachinkmr'>Sachin Kumar</a>. Suite uses <a href='http://extentreports.relevantcodes.com/'>Extent Reports</a> and <a href='https://github.com/yasserg/crawler4j'>Crawler4j</a>.
 			</footer>

@@ -13,7 +13,7 @@ import java.util.Map;
 
 import com.relevantcodes.extentreports.model.SystemProperties;
 
-class SystemInfo {
+public class SystemInfo {
 	private SystemProperties systemProperties;
 
 	public Map<String, String> getInfo() {

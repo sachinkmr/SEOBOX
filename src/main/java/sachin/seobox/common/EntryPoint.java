@@ -12,27 +12,27 @@ import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.reporter.ExtentReporterNG;
 
 public class EntryPoint {
-	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
+    protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
-	public static void main(String[] args) {
-		System.setProperty("SiteAddress", "http://www.liptontea.com/");
-		try {
-			if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
-				throw new SEOException("Site url is missing");
-			}
-			List<String> suites = new ArrayList<>();
-			suites.add(HelperUtils.getResourceFile("testng.xml"));
-			TestNG testng = new TestNG();
-			testng.setTestSuites(suites);
-			testng.addListener(new ExtentReporterNG());
-			testng.setUseDefaultListeners(false);
-			testng.setPreserveOrder(true);
-			testng.setVerbose(0);
-			testng.run();
-		} catch (SEOException e) {
-			System.out.println(e);
-			logger.error("\n\n\nError occured:  " + e + "\n\n");
-			System.out.println("Error in application: " + e);
-		}
+    public static void main(String[] args) {
+	System.setProperty("SiteAddress", "http://www.liptontea.com/");
+	try {
+	    if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
+		throw new SEOException("Site url is missing");
+	    }
+	    List<String> suites = new ArrayList<>();
+	    suites.add(HelperUtils.getResourceFile("testng.xml"));
+	    TestNG testng = new TestNG();
+	    testng.setTestSuites(suites);
+	    testng.addListener(new ExtentReporterNG());
+	    testng.setUseDefaultListeners(false);
+	    testng.setPreserveOrder(true);
+	    testng.setVerbose(0);
+	    testng.run();
+	} catch (SEOException e) {
+	    System.out.println(e);
+	    logger.error("\n\n\nError occured:  " + e + "\n\n");
+	    System.out.println("Error in application: " + e);
 	}
+    }
 }

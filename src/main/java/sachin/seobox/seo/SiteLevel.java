@@ -136,7 +136,7 @@ public class SiteLevel {
 	}
 
 	@Test(description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
+			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = false)
 	public void brokenLinksSitemapXML() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();

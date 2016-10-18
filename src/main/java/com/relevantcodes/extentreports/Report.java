@@ -317,7 +317,7 @@ abstract class Report extends LogSettings {
 		return systemInfo;
 	}
 
-	protected Map<String, String> getSystemInfoMap() {
+	public Map<String, String> getSystemInfoMap() {
 		return getSystemInfo().getInfo();
 	}
 
