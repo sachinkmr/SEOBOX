@@ -19,7 +19,7 @@ import sachin.seobox.crawler.CrawlerConfig;
 public class TestInitializer {
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-	@BeforeSuite(enabled = true)
+	@BeforeSuite(enabled = false)
 	public void init() {
 		int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		CrawlerConfig control = new CrawlerConfig();
@@ -35,7 +35,6 @@ public class TestInitializer {
 		} catch (Exception e) {
 			logger.debug("Error in controller", e);
 			System.out.println("Error in application: " + e);
-
 		} finally {
 			System.gc();
 		}

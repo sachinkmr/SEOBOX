@@ -140,8 +140,9 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 2XX status code", groups = { "HTTP Status Codes" }, enabled = true)
-	public void get2xxStatusCodeAllLinks() {
+	@Test(description = "Status code of external links on site. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
+			"HTTP Status Codes" }, enabled = true)
+	public void verifyStatusCodeExternalLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -151,12 +152,29 @@ public class LinkLevel {
 				WebURL webUrl = page.getPage().getWebURL();
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
-				if (statusCode >= 200 && statusCode < 300) {
-					test.log(
-							LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
-									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
+				if (!webUrl.isInternalLink())
+					if (statusCode >= 200 && statusCode < 300) {
+						test.log(
+								LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 300 && statusCode < 400) {
+						test.log(LogStatus.WARNING,
+								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+										+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+										+ webUrl.getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 400 && statusCode < 500) {
+						test.log(LogStatus.FAIL,
+								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+										+ page.getPage().getWebURL().getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 500) {
+						test.log(LogStatus.FATAL,
+								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+										+ page.getPage().getWebURL().getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					}
 			} catch (Exception e) {
 				logger.debug("Error ", e);
 			}
@@ -164,8 +182,10 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 2XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
-	public void get2xxStatusCodeInternalLinks() {
+	@Test(description = "status code for internal links. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
+			"HTTP Status Codes" }, enabled = true)
+
+	public void verifyStatusCodeInternalLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -175,10 +195,29 @@ public class LinkLevel {
 				WebURL webUrl = page.getPage().getWebURL();
 				logger.debug("Verifying for: ", webUrl);
 				int statusCode = page.getPage().getStatusCode();
-				if (webUrl.isInternalLink() && statusCode >= 200 && statusCode < 300) {
-					test.log(LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL(),
-							"<b>Status Code: </b>" + statusCode);
-				}
+				if (webUrl.isInternalLink())
+					if (statusCode >= 200 && statusCode < 300) {
+						test.log(LogStatus.PASS,
+								"Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Parent: </b>"
+										+ page.getPage().getWebURL().getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 300 && statusCode < 400) {
+						test.log(LogStatus.WARNING,
+								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+										+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+										+ webUrl.getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 400 && statusCode < 500) {
+						test.log(LogStatus.FAIL,
+								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+										+ page.getPage().getWebURL().getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					} else if (statusCode >= 500) {
+						test.log(LogStatus.FATAL,
+								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+										+ page.getPage().getWebURL().getParentUrl(),
+								"<b>Status Code: </b>" + statusCode);
+					}
 			} catch (Exception e) {
 				logger.debug("Error ", e);
 			}
@@ -186,7 +225,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 3XX status code", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 3XX status code", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get3xxStatusCodeAllLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -211,7 +250,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 3XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 3XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get3xxStatusCodeInternalLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -236,7 +275,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 4XX status code", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 4XX status code", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get4xxStatusCodeAllLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -261,7 +300,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 4XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 4XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get4xxStatusCodeInternalLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -286,7 +325,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 5XX status code", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 5XX status code", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get5xxStatusCodeAllLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -310,7 +349,7 @@ public class LinkLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "get 5XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = true)
+	@Test(description = "get 5XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
 	public void get5xxStatusCodeInternalLinks() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -331,6 +370,7 @@ public class LinkLevel {
 				logger.debug("Error ", e);
 			}
 		}
+		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
 	@Test(description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {

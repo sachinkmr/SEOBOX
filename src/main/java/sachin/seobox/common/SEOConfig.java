@@ -66,10 +66,10 @@ public class SEOConfig {
 		String PROPERTIES_LOC = "CrawlerConfigFile";
 		try {
 			if (!new File(PROPERTIES_LOC).exists()) {
-				System.out.println("Loading default config file");
+				LoggerFactory.getLogger(SEOConfig.class).info("Loading default config file");
 				PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties");
 			} else {
-				System.out.println("Loading user's config file");
+				LoggerFactory.getLogger(SEOConfig.class).info("Loading user's config file");
 				PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties", PROPERTIES_LOC);
 			}
 			FileInputStream in = new FileInputStream(new File(PROPERTIES_LOC));

@@ -64,9 +64,9 @@ public class ComplexReportFactory {
 
 	public void closeReport() {
 		if (reporter != null) {
-			reporter.flush();
 			reporter.close();
 			reporter = null;
 		}
+		factory = null;
 	}
 }
