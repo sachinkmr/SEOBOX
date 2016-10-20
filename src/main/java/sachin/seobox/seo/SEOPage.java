@@ -1,7 +1,6 @@
 package sachin.seobox.seo;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import sachin.seobox.parameters.URI;
 public class SEOPage implements Serializable {
 
     private static final long serialVersionUID = -12L;
-    private byte[] html;
     private int htmlDocID;
     private final int statusCode;
     private List<Element> h1Tags;
@@ -51,19 +49,17 @@ public class SEOPage implements Serializable {
 	String str = (page.getParseData() instanceof HtmlParseData) ? ((HtmlParseData) page.getParseData()).getHtml()
 		: null;
 	if (str != null) {
-	    html = str.getBytes(Charset.forName("UTF-8"));
-	    page.setContentData(null);
-	    page.setParseData(null);
 	    htmlDocID = str.hashCode();
 	}
 	if (!page.getWebURL().isInternalLink()) {
-	    html = null;
+	    page.setContentData(null);
+	    page.setParseData(null);
 	}
 
     }
 
     public String getHtml() {
-	return new String(html, Charset.forName("UTF-8"));
+	return page.getParseData() instanceof HtmlParseData ? ((HtmlParseData) page.getParseData()).getHtml() : null;
 
     }
 

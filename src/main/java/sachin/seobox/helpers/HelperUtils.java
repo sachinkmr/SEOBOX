@@ -116,8 +116,7 @@ public class HelperUtils {
     public static ExtentTest getTestLogger(Method caller) {
 	System.out.println("Executing: " + caller.getName());
 	ExtentTest test = ComplexReportFactory.getInstance().getTest(caller.getName());
-	test.setDescription(
-		"<b>Test Case Description: </b>" + caller.getAnnotationsByType(Test.class)[0].description());
+	test.setDescription(caller.getAnnotationsByType(Test.class)[0].description());
 	test.setStartedTime(getTestCaseTime(System.currentTimeMillis()));
 	test.assignCategory(caller.getAnnotationsByType(Test.class)[0].groups());
 	return test;

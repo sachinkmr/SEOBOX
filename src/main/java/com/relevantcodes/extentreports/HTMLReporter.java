@@ -15,15 +15,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.relevantcodes.extentreports.model.Test;
-import com.relevantcodes.extentreports.view.Icon;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.BeansWrapperBuilder;
@@ -42,43 +39,24 @@ import sachin.seobox.reporter.DashBoard;
  */
 public class HTMLReporter extends LogSettings implements IReporter {
     protected static final Logger logger = Logger.getLogger(HTMLReporter.class.getName());
-
-    private Report report;
-
-    private Map<String, Object> templateMap;
-
+    // private Map<String, Object> templateMap;
     private String templateName = "Extent.ftl";
-
     // path of the html file
     private String filePath;
+
+    private Report report;
 
     @Override
     public void start(Report report) {
 	this.report = report;
+	// ResourceBundle resourceBundle = ResourceBundle
+	// .getBundle("com.relevantcodes.extentreports.view.resources.localized",
+	// getDocumentLocale());
 
-	// prevent re-initialization
-	if (templateMap != null) {
-	    return;
-	}
+	// templateMap.put("report", this);
+	// templateMap.put("Icon", new Icon(report.getNetworkMode()));
+	// templateMap.put("resourceBundle", resourceBundle);
 
-	ResourceBundle resourceBundle = ResourceBundle
-		.getBundle("com.relevantcodes.extentreports.view.resources.localized", getDocumentLocale());
-
-	templateMap = new HashMap<>();
-	templateMap.put("report", this);
-	templateMap.put("Icon", new Icon(report.getNetworkMode()));
-	templateMap.put("resourceBundle", resourceBundle);
-
-	BeansWrapperBuilder builder = new BeansWrapperBuilder(Configuration.VERSION_2_3_23);
-	BeansWrapper beansWrapper = builder.build();
-
-	try {
-	    TemplateHashModel fieldTypeModel = (TemplateHashModel) beansWrapper.getEnumModels()
-		    .get(LogStatus.class.getName());
-	    templateMap.put("LogStatus", fieldTypeModel);
-	} catch (TemplateModelException e) {
-	    e.printStackTrace();
-	}
     }
 
     @Override
@@ -87,8 +65,17 @@ public class HTMLReporter extends LogSettings implements IReporter {
 	    Template template = getConfig().getTemplate(templateName);
 	    BufferedWriter out = new BufferedWriter(new FileWriter(new File(filePath)));
 	    try {
+		Map<String, Object> templateMap = new HashMap<>();
+		BeansWrapperBuilder builder = new BeansWrapperBuilder(Configuration.VERSION_2_3_23);
+		BeansWrapper beansWrapper = builder.build();
+		try {
+		    TemplateHashModel fieldTypeModel = (TemplateHashModel) beansWrapper.getEnumModels()
+			    .get(LogStatus.class.getName());
+		    templateMap.put("LogStatus", fieldTypeModel);
+		} catch (TemplateModelException e) {
+		    e.printStackTrace();
+		}
 		DashBoard db = new DashBoard();
-		db.getDashBoard();
 		templateMap.put("dashboard", db);
 		template.process(templateMap, out);
 	    } catch (TemplateException e) {
@@ -124,9 +111,9 @@ public class HTMLReporter extends LogSettings implements IReporter {
     public synchronized void addTest(Test test) {
     }
 
-    public Map<String, String> getConfigurationMap() {
-	return report.getConfigurationMap();
-    }
+    // public Map<String, String> getConfigurationMap() {
+    // return report.getConfigurationMap();
+    // }
 
     // public Map<String, List<Test>> getCategoryTestMap() {
     // return report.getCategoryTestMap();
@@ -183,10 +170,6 @@ public class HTMLReporter extends LogSettings implements IReporter {
 
     public HTMLReporter(String filePath) {
 	this.filePath = filePath;
-    }
-
-    private Locale getDocumentLocale() {
-	return report.getDocumentLocale();
     }
 
     @Deprecated

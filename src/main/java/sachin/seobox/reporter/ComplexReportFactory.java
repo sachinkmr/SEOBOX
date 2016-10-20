@@ -1,25 +1,36 @@
 package sachin.seobox.reporter;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.relevantcodes.extentreports.DisplayOrder;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.relevantcodes.extentreports.NetworkMode;
+import com.relevantcodes.extentreports.model.Log;
+import com.relevantcodes.extentreports.view.Icon;
 
 import sachin.seobox.common.SEOConfig;
 import sachin.seobox.helpers.HelperUtils;
+import sachin.seobox.helpers.StreamUtils;
 
 public class ComplexReportFactory {
     private static ComplexReportFactory factory;
     private ExtentReports reporter;
-    // private Map<String, ExtentTest> nameToTestMap;
+    private StreamUtils stream = new StreamUtils();
+    private SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
+    File file = new File(SEOConfig.outputDirectory + File.separator + "methods");
 
     private ComplexReportFactory() {
 	// nameToTestMap = new HashMap<>();
+	file.mkdirs();
 	reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
-	reporter.loadConfig(new File(HelperUtils.getResourceFile("extent-config.xml")));
+	// reporter.loadConfig(new
+	// File(HelperUtils.getResourceFile("extent-config.xml")));
     }
 
     public synchronized static ComplexReportFactory getInstance() {
@@ -35,11 +46,6 @@ public class ComplexReportFactory {
 
     public ExtentTest getTest(String testName, String testDescription) {
 	return reporter.startTest(testName, testDescription);
-	// if (!nameToTestMap.containsKey(testName)) {
-	// ExtentTest test = reporter.startTest(testName, testDescription);
-	// nameToTestMap.put(testName, test);
-	// }
-	// return nameToTestMap.get(testName);
     }
 
     public ExtentTest getTest(String testName) {
@@ -58,13 +64,30 @@ public class ComplexReportFactory {
 	    test.log(LogStatus.INFO, "END", "Test Case Completed.");
 	    test.setEndedTime(HelperUtils.getTestCaseTime(System.currentTimeMillis()));
 	    reporter.endTest(test);
-	    // reporter.flush();
+	    Icon ic = new Icon();
+	    JSONObject json = new JSONObject();
+	    String id = test.getTest().getId().toString();
+	    json.put("id", id);
+	    json.put("name", test.getTest().getName());
+	    JSONArray arr1 = new JSONArray();
+	    for (Log log : test.getTest().getLogList()) {
+		JSONObject arr = new JSONObject();
+		arr.put("iconClass", ic.getIcon(log.getLogStatus()));
+		arr.put("status", log.getLogStatus().name());
+		arr.put("time", df.format(log.getTimestamp()));
+		arr.put("step", log.getStepName());
+		arr.put("detail", log.getDetails());
+		arr1.put(arr);
+	    }
+	    json.put("logs", arr1);
+	    File file1 = new File(file, id + ".json");
+	    stream.writeJSON(file1, json);	   
 	}
     }
 
     public void closeReport() {
 	if (reporter != null) {
-	    reporter.flush();
+	    
 	    reporter.close();
 	    reporter = null;
 	}

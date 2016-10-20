@@ -10,7 +10,6 @@ package com.relevantcodes.extentreports;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -28,7 +26,6 @@ import com.relevantcodes.extentreports.converters.TimeConverter;
 import com.relevantcodes.extentreports.model.Log;
 import com.relevantcodes.extentreports.model.SuiteTimeInfo;
 import com.relevantcodes.extentreports.model.Test;
-import com.relevantcodes.extentreports.model.TestAttribute;
 import com.relevantcodes.extentreports.utils.DateTimeUtil;
 
 // Report abstract
@@ -37,10 +34,10 @@ abstract class Report extends LogSettings {
     private static final String INTERNAL_WARNING = "Close was called before test could end safely using EndTest.";
 
     /**
-     * <p>
-     * Default protocol for style and script resources for the HTML report
-     */
-    private static final String DEFAULT_PROTOCOL = "https";
+//     * <p>
+//     * Default protocol for style and script resources for the HTML report
+//     */
+//    private static final String DEFAULT_PROTOCOL = "https";
 
     /**
      * <p>
@@ -49,7 +46,7 @@ abstract class Report extends LogSettings {
      * user provides their own configuration using
      * <code>loadConfig(args)</code>.
      */
-    private final String CONFIG_FILE = "extent-config.xml";
+//    private final String CONFIG_FILE = "extent-config.xml";
 
     /**
      * <p>
@@ -183,22 +180,10 @@ abstract class Report extends LogSettings {
      */
     private Boolean terminated = false;
 
-    // /**
-    // * <p>
-    // * A map of categories and tests assigned
-    // */
-    // // private Map<String, List<Test>> categoryTestMap;
-
-    // /**
-    // * <p>
-    // * A map of exception headline and tests assigned
-    // */
-    // private Map<String, List<ExceptionInfo>> exceptionTestMap;
-
     /**
      * Map of user defined configuration created from extent-config.xml
      */
-    private Map<String, String> configurationMap;
+//    private Map<String, String> configurationMap;
 
     /**
      * <p>
@@ -209,7 +194,7 @@ abstract class Report extends LogSettings {
      * Note: If user does not load a configuration file, the report uses the
      * default configuration from the above path
      */
-    private Map<String, String> defaultConfiguration;
+//    private Map<String, String> defaultConfiguration;
 
     /**
      * <p>
@@ -232,7 +217,7 @@ abstract class Report extends LogSettings {
     protected SuiteTimeInfo suiteTimeInfo;
     protected SystemInfo systemInfo;
     protected List<ExtentTest> testList = new ArrayList<>();
-    protected File configFile = null;
+//    protected File configFile = null;
 
     public List<ExtentTest> getTestList() {
 	return testList;
@@ -250,7 +235,7 @@ abstract class Report extends LogSettings {
 	return logStatusList;
     }
 
-    protected Date getStartedTime() {
+    public Date getStartedTime() {
 	return startedTime;
     }
 
@@ -286,26 +271,26 @@ abstract class Report extends LogSettings {
 	return testRunnerLogList;
     }
 
-    protected Map<String, String> getConfigurationMap() {
-	return configurationMap;
-    }
+//    protected Map<String, String> getConfigurationMap() {
+//	return configurationMap;
+//    }
 
-    protected Map<String, List<Test>> getCategoryTestMap() {
-	Iterator<TestAttribute> catIter = test.categoryIterator();
-	Map<String, List<Test>> categoryTestMap = new TreeMap<>();
-	// add each category and associated test
-	while (catIter.hasNext()) {
-	    TestAttribute category = catIter.next();
-	    if (!categoryTestMap.containsKey(category.getName())) {
-		List<Test> testList = new ArrayList<>();
-		testList.add(test);
-		categoryTestMap.put(category.getName(), testList);
-	    } else {
-		categoryTestMap.get(category.getName()).add(test);
-	    }
-	}
-	return categoryTestMap;
-    }
+//    protected Map<String, List<Test>> getCategoryTestMap() {
+//	Iterator<TestAttribute> catIter = test.categoryIterator();
+//	Map<String, List<Test>> categoryTestMap = new TreeMap<>();
+//	// add each category and associated test
+//	while (catIter.hasNext()) {
+//	    TestAttribute category = catIter.next();
+//	    if (!categoryTestMap.containsKey(category.getName())) {
+//		List<Test> testList = new ArrayList<>();
+//		testList.add(test);
+//		categoryTestMap.put(category.getName(), testList);
+//	    } else {
+//		categoryTestMap.get(category.getName()).add(test);
+//	    }
+//	}
+//	return categoryTestMap;
+//    }
 
     // protected Map<String, List<ExceptionInfo>> getExceptionTestMap() {
     // return exceptionTestMap;
@@ -465,46 +450,46 @@ abstract class Report extends LogSettings {
 	}
     }
 
-    protected Map<String, String> loadConfig(Configuration config) {
-	configurationMap = config.getConfigurationMap();
-
-	// if user is using an out-dated version of the configuration file,
-	// use default configuration for keys that are not available
-	if (defaultConfiguration != null) {
-	    for (Map.Entry<String, String> entry : defaultConfiguration.entrySet()) {
-		if (!configurationMap.containsKey(entry.getKey())) {
-		    configurationMap.put(entry.getKey(), entry.getValue());
-		}
-	    }
-	}
-
-	updateBaseDefaultSettings(configurationMap);
-
-	return configurationMap;
-    }
-
-    /**
-     * Updates LogSettings with custom values
-     * 
-     * @param configurationMap
-     */
-    private void updateBaseDefaultSettings(Map<String, String> configurationMap) {
-	if (configurationMap.get("dateFormat") != null && !configurationMap.get("dateFormat").isEmpty()) {
-	    setLogDateFormat(configurationMap.get("dateFormat"));
-	} else {
-	    configurationMap.put("dateFormat", getLogDateFormat());
-	}
-
-	if (configurationMap.get("timeFormat") != null && !configurationMap.get("timeFormat").isEmpty()) {
-	    setLogTimeFormat(configurationMap.get("timeFormat"));
-	} else {
-	    configurationMap.put("timeFormat", getLogTimeFormat());
-	}
-
-	if (configurationMap.get("protocol") == null || configurationMap.get("protocol").isEmpty()) {
-	    configurationMap.put("protocol", DEFAULT_PROTOCOL);
-	}
-    }
+//    protected Map<String, String> loadConfig(Configuration config) {
+//	configurationMap = config.getConfigurationMap();
+//
+//	// if user is using an out-dated version of the configuration file,
+//	// use default configuration for keys that are not available
+//	if (defaultConfiguration != null) {
+//	    for (Map.Entry<String, String> entry : defaultConfiguration.entrySet()) {
+//		if (!configurationMap.containsKey(entry.getKey())) {
+//		    configurationMap.put(entry.getKey(), entry.getValue());
+//		}
+//	    }
+//	}
+//
+//	updateBaseDefaultSettings(configurationMap);
+//
+//	return configurationMap;
+////    }
+//
+//    /**
+//     * Updates LogSettings with custom values
+//     * 
+//     * @param configurationMap
+//     */
+//    private void updateBaseDefaultSettings(Map<String, String> configurationMap) {
+//	if (configurationMap.get("dateFormat") != null && !configurationMap.get("dateFormat").isEmpty()) {
+//	    setLogDateFormat(configurationMap.get("dateFormat"));
+//	} else {
+//	    configurationMap.put("dateFormat", getLogDateFormat());
+//	}
+//
+//	if (configurationMap.get("timeFormat") != null && !configurationMap.get("timeFormat").isEmpty()) {
+//	    setLogTimeFormat(configurationMap.get("timeFormat"));
+//	} else {
+//	    configurationMap.put("timeFormat", getLogTimeFormat());
+//	}
+//
+//	if (configurationMap.get("protocol") == null || configurationMap.get("protocol").isEmpty()) {
+//	    configurationMap.put("protocol", DEFAULT_PROTOCOL);
+//	}
+//    }
 
     protected void setTestRunnerLogs(String logs) {
 	testRunnerLogList.add(logs);
@@ -593,10 +578,10 @@ abstract class Report extends LogSettings {
     }
 
     protected Report() {
-	String resourceFile = Report.class.getPackage().getName().replace(".", "/") + "/resources/" + CONFIG_FILE;
-
-	URL url = getClass().getClassLoader().getResource(resourceFile);
-	defaultConfiguration = loadConfig(new Configuration(url));
+//	String resourceFile = Report.class.getPackage().getName().replace(".", "/") + "/resources/" + CONFIG_FILE;
+//
+//	URL url = getClass().getClassLoader().getResource(resourceFile);
+//	defaultConfiguration = loadConfig(new Configuration(url));
 
 	// exceptionTestMap = new TreeMap<>();
 	systemInfo = new SystemInfo();
