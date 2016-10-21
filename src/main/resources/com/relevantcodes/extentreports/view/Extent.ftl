@@ -64,7 +64,7 @@
 					</div>
 					<div class='col l2 m4 s12'>
 						<div class='card suite-total-time-current'> 
-							<span class='panel-name'><b>Total Time Taken (Current Run)</b></span> 
+							<span class='panel-name'><b>Test Case Execution Time</b></span> 
 							<span class='suite-total-time-current-value panel-lead'>${dashboard.runDuration}</span> 
 						</div> 
 					</div>

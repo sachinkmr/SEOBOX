@@ -19,7 +19,7 @@ import sachin.seobox.crawler.CrawlerConfig;
 public class TestInitializer {
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-	@BeforeSuite(enabled = false)
+	@BeforeSuite(enabled = true)
 	public void init() {
 		int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		CrawlerConfig control = new CrawlerConfig();
@@ -28,6 +28,7 @@ public class TestInitializer {
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 		robotstxtConfig.setEnabled(false);
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+		long start = System.currentTimeMillis();
 		try {
 			System.out.println("Please wait crawling site");
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
@@ -35,9 +36,8 @@ public class TestInitializer {
 		} catch (Exception e) {
 			logger.debug("Error in controller", e);
 			System.out.println("Error in application: " + e);
-		} finally {
-			System.gc();
 		}
+		SEOConfig.crawlingTime = System.currentTimeMillis() - start;
 		System.out.println("\nExecuting Test Cases");
 		System.out.println("---------------------------------------");
 	}
@@ -46,6 +46,5 @@ public class TestInitializer {
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
-		System.gc();
 	}
 }

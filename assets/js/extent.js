@@ -550,12 +550,12 @@ function drawLegend(chart, id) {
 	var pieData = [{
 			  value: percentage,
 			  color:"#3F9F3F",
-			  label:'Passed Percentage'
+			  label:'Passed'
 			},
 			{
 			  value : 100-percentage,
 			  color : "#eceff5",
-			  label:'Failed Percentage'
+			  label:'Failed'
 			}];	
 		var ctx =  $('#percentage').get(0).getContext('2d');
 		var stepChart1 = new Chart(ctx).Doughnut(pieData, options);	

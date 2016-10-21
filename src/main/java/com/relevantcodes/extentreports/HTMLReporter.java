@@ -38,173 +38,142 @@ import sachin.seobox.reporter.DashBoard;
  *
  */
 public class HTMLReporter extends LogSettings implements IReporter {
-    protected static final Logger logger = Logger.getLogger(HTMLReporter.class.getName());
-    // private Map<String, Object> templateMap;
-    private String templateName = "Extent.ftl";
-    // path of the html file
-    private String filePath;
+	protected static final Logger logger = Logger.getLogger(HTMLReporter.class.getName());
+	private String templateName = "Extent.ftl";
+	private String filePath;
+	Map<String, Object> templateMap = new HashMap<>();
+	private Report report;
 
-    private Report report;
-
-    @Override
-    public void start(Report report) {
-	this.report = report;
-	// ResourceBundle resourceBundle = ResourceBundle
-	// .getBundle("com.relevantcodes.extentreports.view.resources.localized",
-	// getDocumentLocale());
-
-	// templateMap.put("report", this);
-	// templateMap.put("Icon", new Icon(report.getNetworkMode()));
-	// templateMap.put("resourceBundle", resourceBundle);
-
-    }
-
-    @Override
-    public synchronized void flush() {
-	try {
-	    Template template = getConfig().getTemplate(templateName);
-	    BufferedWriter out = new BufferedWriter(new FileWriter(new File(filePath)));
-	    try {
-		Map<String, Object> templateMap = new HashMap<>();
+	@Override
+	public void start(Report report) {
 		BeansWrapperBuilder builder = new BeansWrapperBuilder(Configuration.VERSION_2_3_23);
 		BeansWrapper beansWrapper = builder.build();
 		try {
-		    TemplateHashModel fieldTypeModel = (TemplateHashModel) beansWrapper.getEnumModels()
-			    .get(LogStatus.class.getName());
-		    templateMap.put("LogStatus", fieldTypeModel);
+			TemplateHashModel fieldTypeModel = (TemplateHashModel) beansWrapper.getEnumModels()
+					.get(LogStatus.class.getName());
+			templateMap.put("LogStatus", fieldTypeModel);
 		} catch (TemplateModelException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-		DashBoard db = new DashBoard();
-		templateMap.put("dashboard", db);
-		template.process(templateMap, out);
-	    } catch (TemplateException e) {
-		e.printStackTrace();
-	    }
-	    out.close();
-	} catch (IOException e) {
-	    logger.log(Level.SEVERE, "Template not found", e);
 	}
-    }
 
-    private Configuration getConfig() {
-	Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
+	@Override
+	public synchronized void flush() {
+		try {
+			Template template = getConfig().getTemplate(templateName);
+			BufferedWriter out = new BufferedWriter(new FileWriter(new File(filePath)));
+			try {
+				DashBoard db = new DashBoard();
+				templateMap.put("dashboard", db);
+				template.process(templateMap, out);
+			} catch (TemplateException e) {
+				e.printStackTrace();
+			}
+			out.close();
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "Template not found", e);
+		}
+	}
 
-	cfg.setClassForTemplateLoading(HTMLReporter.class, "view");
-	cfg.setDefaultEncoding("UTF-8");
+	private Configuration getConfig() {
+		Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
+		cfg.setClassForTemplateLoading(HTMLReporter.class, "view");
+		cfg.setDefaultEncoding("UTF-8");
+		return cfg;
+	}
 
-	return cfg;
-    }
+	@Override
+	public void stop() {
 
-    @Override
-    public void stop() {
+	}
 
-    }
+	@Override
+	public void setTestRunnerLogs() {
 
-    @Override
-    public void setTestRunnerLogs() {
+	}
 
-    }
+	@Override
+	public synchronized void addTest(Test test) {
+	}
 
-    // adds tests as HTML source
-    @Override
-    public synchronized void addTest(Test test) {
-    }
+	public SystemInfo getSystemInfo() {
+		return report.getSystemInfo();
+	}
 
-    // public Map<String, String> getConfigurationMap() {
-    // return report.getConfigurationMap();
-    // }
+	public Map<String, String> getSystemInfoMap() {
+		return report.getSystemInfoMap();
+	}
 
-    // public Map<String, List<Test>> getCategoryTestMap() {
-    // return report.getCategoryTestMap();
-    // }
+	public Date getStartedTime() {
+		return new Date(report.getSuiteTimeInfo().getSuiteStartTimestamp());
+	}
 
-    // public Map<String, List<ExceptionInfo>> getExceptionTestMap() {
-    // return report.getExceptionTestMap();
-    // }
+	public String getRunDuration() {
+		return report.getRunDuration();
+	}
 
-    public SystemInfo getSystemInfo() {
-	return report.getSystemInfo();
-    }
+	public String getRunDurationOverall() {
+		return report.getRunDurationOverall();
+	}
 
-    public Map<String, String> getSystemInfoMap() {
-	return report.getSystemInfoMap();
-    }
+	public List<String> getTestRunnerLogList() {
+		return report.getTestRunnerLogList();
+	}
 
-    public List<ExtentTest> getTestList() {
-	return report.getTestList();
-    }
+	public List<LogStatus> getLogStatusList() {
+		return report.getLogStatusList();
+	}
 
-    public Date getStartedTime() {
-	return new Date(report.getSuiteTimeInfo().getSuiteStartTimestamp());
-    }
+	public String getMongoDBObjectID() {
+		String id = report.getMongoDBObjectID();
 
-    public String getRunDuration() {
-	return report.getRunDuration();
-    }
+		if (id == null)
+			id = "";
 
-    public String getRunDurationOverall() {
-	return report.getRunDurationOverall();
-    }
+		return id;
+	}
 
-    public List<String> getTestRunnerLogList() {
-	return report.getTestRunnerLogList();
-    }
+	public UUID getReportId() {
+		return report.getId();
+	}
 
-    public List<LogStatus> getLogStatusList() {
-	return report.getLogStatusList();
-    }
-
-    public String getMongoDBObjectID() {
-	String id = report.getMongoDBObjectID();
-
-	if (id == null)
-	    id = "";
-
-	return id;
-    }
-
-    public UUID getReportId() {
-	return report.getId();
-    }
-
-    public HTMLReporter(String filePath) {
-	this.filePath = filePath;
-    }
-
-    @Deprecated
-    public class Config {
-	@Deprecated
-	public Config insertJs(String js) {
-	    return this;
+	public HTMLReporter(String filePath) {
+		this.filePath = filePath;
 	}
 
 	@Deprecated
-	public Config insertCustomStyles(String styles) {
-	    return this;
-	}
+	public class Config {
+		@Deprecated
+		public Config insertJs(String js) {
+			return this;
+		}
 
-	@Deprecated
-	public Config addCustomStylesheet(String cssFilePath) {
-	    return this;
-	}
+		@Deprecated
+		public Config insertCustomStyles(String styles) {
+			return this;
+		}
 
-	@Deprecated
-	public Config reportHeadline(String headline) {
-	    return this;
-	}
+		@Deprecated
+		public Config addCustomStylesheet(String cssFilePath) {
+			return this;
+		}
 
-	@Deprecated
-	public Config reportName(String name) {
-	    return this;
-	}
+		@Deprecated
+		public Config reportHeadline(String headline) {
+			return this;
+		}
 
-	@Deprecated
-	public Config documentTitle(String title) {
-	    return this;
-	}
+		@Deprecated
+		public Config reportName(String name) {
+			return this;
+		}
 
-	public Config() {
+		@Deprecated
+		public Config documentTitle(String title) {
+			return this;
+		}
+
+		public Config() {
+		}
 	}
-    }
 }
