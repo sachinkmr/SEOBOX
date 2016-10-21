@@ -61,11 +61,22 @@ public class SEOConfig {
 		} else {
 			outputDirectory = outputDirectory1;
 		}
+		site = System.getProperty("SiteAddress");
+		user = System.getProperty("Username");
+		pass = System.getProperty("Password");
 
+		String host = "";
+		try {
+			host = new URL(site).getHost().replaceAll("www.", "");
+		} catch (MalformedURLException e) {
+			LoggerFactory.getLogger(SEOConfig.class).debug("Error in loading config file", e);
+		}
 		reportPath = outputDirectory + File.separator + "SEOBOX_Report.html";
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 		storage.mkdirs();
 		crawlStorageFolder = storage.getAbsolutePath();
+		dataLocation = crawlStorageFolder + File.separator + host + File.separator + "urls";
+		new File(dataLocation).mkdirs();
 		PROPERTIES = new Properties();
 		SKIPPED_URLS = new ArrayList<>();
 		String PROPERTIES_LOC = "CrawlerConfigFile";
@@ -87,18 +98,7 @@ public class SEOConfig {
 		} catch (IOException e) {
 			LoggerFactory.getLogger(SEOConfig.class).debug("Error in loading config file", e);
 		}
-		site = System.getProperty("SiteAddress");
-		user = System.getProperty("Username");
-		pass = System.getProperty("Password");
 
-		String host = "";
-		try {
-			host = new URL(site).getHost().replaceAll("www.", "");
-		} catch (MalformedURLException e) {
-			LoggerFactory.getLogger(SEOConfig.class).debug("Error in loading config file", e);
-		}
-		dataLocation = crawlStorageFolder + File.separator + host + File.separator + "urls";
-		new File(dataLocation).mkdirs();
 		pattern = Pattern.compile(PROPERTIES.getProperty("crawler.domainRegex", "."), Pattern.CASE_INSENSITIVE);
 		shouldVisitPattern = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", "."),
 				Pattern.CASE_INSENSITIVE);

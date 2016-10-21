@@ -295,17 +295,7 @@ $('#cat-details-wrapper, #exception-details-wrapper').click(function(evt) {
 });
 
 
-/* view test info [TEST] */
-$('.test').click(function() {
-    var t = $(this);
 
-    $('#test-collection .test').removeClass('active');
-    $('#test-details-wrapper .test-body').html('');
-
-    var el = t.addClass('active').find('.test-body').clone();
-    $('#test-details-wrapper .details-name').html(t.find('.test-name').html());
-    $('#test-details-wrapper .details-container').append($(el));
-});
 
 /* move up and down to browse tests */
 $(window).keydown(function(e) {
@@ -445,24 +435,18 @@ $('#clear-filters').click(function() {
 $(document).ready(function() {
     /* init */
     $('select').material_select();
-
-
     /* select the first category item in categories view by default */
     $('.category-item').eq(0).click();
-
        /* select the first test in test's view by default */
     $('.test').eq(0).click();
-
     /* bind the search functionality on Tests, Categories and Exceptions view */
     $('#test-collection .test').dynamicTestSearch('#test-view #searchTests');
-    $('#cat-collection .category-item').dynamicTestSearch('#categories-view #searchTests');
- 
+    $('#cat-collection .category-item').dynamicTestSearch('#categories-view #searchTests'); 
     /* if only header row is available for test, hide the table [TEST] */
     $('.table-results').filter(function() {
         return ($(this).find('tr').length == 1);
     }).hide(0);
-
-    
+	$('.details-container .test-body .test-steps table.table-results').css('display','table');
 });
 
 /* action to perform when 'Clear Filters' option is selected [TEST] */
@@ -563,3 +547,29 @@ function drawLegend(chart, id) {
 		$('ul.doughnut-legend').addClass('right'); 
 	$('.pass-percentage.panel-lead').text(percentage+ '%');
     $('#dashboard-view .determinate').attr('style', 'width:' + percentage+ '%');
+
+/* view test info [TEST] */
+$('.test').click(function() {
+	var t = $(this);	
+	$('#test-collection .test').removeClass('active');
+	$('#test-details-wrapper .test-body').html('');
+	var el = t.addClass('active').find('.test-body').clone();
+   $('#test-details-wrapper .details-name').html(t.find('.test-name').html());
+   $('#test-details-wrapper .details-container').append($(el));
+	$('.details-container .test-body .test-steps table.table-results').css('display','table');
+   var id=t.attr('extentid')+".json";
+   	$.ajax({
+		url: "methods/"+id, 
+		dataType: 'json',
+		type: 'GET', 
+		success: function(result){
+			$.each(result.logs, function(index,log) {
+			$('.details-container .test-body .test-steps table.table-results tbody').append('<tr></tr>');
+			$('.details-container .test-body .test-steps table.table-results tbody tr').append("<td class='status "+log[1]+"' title='"+log[1]+"' alt='"+log[1]+"'><i class='"+log[0]+"'></i></td>");
+			$('.details-container .test-body .test-steps table.table-results tbody tr').append("<td class='timestamp'>"+log[2]+"</td>");
+			$('.details-container .test-body .test-steps table.table-results tbody tr').append("<td class='step-name>"+log[3]+"</td>");
+			$('.details-container .test-body .test-steps table.table-results tbody tr').append("<td class='step-details'>"+log[4]+"</td>");
+		});
+		}
+	});	
+});
