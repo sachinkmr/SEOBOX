@@ -8,7 +8,7 @@
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-4level] - %msg%n"/>
     </Console>
 
-    <RollingFile name="RollingFile" fileName="${log-path}/log4j.log" filePattern="${log-path}/log4j-%d{yyyy-MM-dd}.log">
+    <RollingFile name="RollingFile" fileName="${log-path}/log4j.log" filePattern="${log-path}/${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
         
         <PatternLayout>
 				<pattern>%d{yyyy-mm-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
@@ -18,7 +18,7 @@
 					modulate="true" />
 					-->
 			<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
-			<SizeBasedTriggeringPolicy size="5 MB"/> <!-- Or every 5 MB -->
+			<SizeBasedTriggeringPolicy size="15 MB"/> <!-- Or every 5 MB -->
 		</Policies>
     </RollingFile>             
   </appenders>

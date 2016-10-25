@@ -303,18 +303,10 @@
 																<th>Details</th>
 															</tr>
 														</thead>
-														<tbody>
-														<#-- 	<#list test.logList as log>
-																<tr>
-																	<td class='status ${log.logStatus}' title='${log.logStatus}' alt='${log.logStatus}'><i class='${Icon.getIcon(log.logStatus)}'></i></td>
-																	<td class='timestamp'>${log.timestamp?datetime?string(timeFormat)}</td>
-																	<td class='step-name'>${log.stepName}</td>
-																	<td class='step-details'>${log.details}</td>
-																</tr>
-															</#list>  -->
+														<tbody>													
 														</tbody>
-													</table>													
-													<script></script>
+													</table>	
+												<#--	<a id="loadMore" class="waves-effect waves-light btn hide" idval="" style="margin:20px auto;">Load More Results</a> -->
 												</div>
 											</div>
 										</li>
@@ -456,6 +448,8 @@
 			<input type='hidden' id='unknownSteps' name='unknownSteps' value='${dashboard.unknownSteps}'>
 			<input type='hidden' id='otherTests' name='otherTests' value='${dashboard.otherTests}'>
 			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
+			<input type='hidden' id='pageNo' name='pageNo' value='0'>
+			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
 		</div>
 		<!--
 		
