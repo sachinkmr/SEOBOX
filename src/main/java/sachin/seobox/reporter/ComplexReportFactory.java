@@ -33,7 +33,7 @@ public class ComplexReportFactory {
 
     private ComplexReportFactory() {
 	mongo = new MongoClient("localhost", 27017);
-	mongoDB = mongo.getDatabase("SEOBOX");
+	mongoDB = mongo.getDatabase(SEOConfig.REPORT_TIME_STAMP);
 	tests.mkdirs();
 	reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
     }
@@ -85,7 +85,7 @@ public class ComplexReportFactory {
 	    json.append("logCount", test.getTest().getLogList().size());
 	    json.append("logs", logs);
 	    try {
-		getMongoDB().getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(json);
+		getMongoDB().getCollection(id).insertMany(logs);
 	    } catch (Exception ex) {
 		LoggerFactory.getLogger(ComplexReportFactory.class).error("Error: " + ex);
 	    }
@@ -95,7 +95,7 @@ public class ComplexReportFactory {
     }
 
     public MongoDatabase getMongoDB() {
-	return this.mongoDB;
+	return mongo.getDatabase(SEOConfig.REPORT_TIME_STAMP);
     }
 
     public void closeReport() {
