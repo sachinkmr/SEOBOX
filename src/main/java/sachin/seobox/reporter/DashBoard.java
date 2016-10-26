@@ -52,6 +52,14 @@ public class DashBoard {
 	return this.startedTime;
     }
 
+    public String getDbHost() {
+	return SEOConfig.MONGODB_HOST;
+    }
+    
+    public int getDbPort() {
+	return SEOConfig.MONGODB_PORT+1000;
+    }
+
     public String getRunDuration() {
 	return this.currentSuiteRunDuration;
     }

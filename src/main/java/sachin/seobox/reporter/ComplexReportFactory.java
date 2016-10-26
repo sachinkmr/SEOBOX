@@ -29,11 +29,9 @@ public class ComplexReportFactory {
     private SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
     private File tests = new File(new File(SEOConfig.dataLocation).getParentFile(), "tests");
     private final MongoClient mongo;
-    private MongoDatabase mongoDB;
 
     private ComplexReportFactory() {
-	mongo = new MongoClient("localhost", 27017);
-	mongoDB = mongo.getDatabase(SEOConfig.REPORT_TIME_STAMP);
+	mongo = new MongoClient(SEOConfig.MONGODB_HOST, SEOConfig.MONGODB_PORT);	
 	tests.mkdirs();
 	reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
     }

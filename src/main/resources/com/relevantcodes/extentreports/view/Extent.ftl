@@ -306,7 +306,7 @@
 														<tbody>													
 														</tbody>
 													</table>	
-												<#--	<a id="loadMore" class="waves-effect waves-light btn hide" idval="" style="margin:20px auto;">Load More Results</a> -->
+													<button id="loadMore" class="waves-effect waves-light btn hide" style="margin:20px auto;" data-clickable="false">Load More Results</button>
 												</div>
 											</div>
 										</li>
@@ -450,8 +450,10 @@
 			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
+			<input type='hidden' id='dbhost' name='dbhost' value='${dashboard.dbHost}'>
+			<input type='hidden' id='dbhost' name='dbhost' value='${dashboard.dbPort}'>
 		</div>
-		<!--
+		<#--
 		
 		<script src='https://cdn.rawgit.com/anshooarora/extentreports/ab0f4299b133bfa234cec0b1e0ac08a692a7640a/cdn/extent.js' type='text/javascript'></script>
 		
@@ -462,7 +464,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='assets/js/extent.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/2e1d2e2094a49a0a0f04460a0f4f68effeb8faff/SEOBOX/js/extent.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));

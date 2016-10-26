@@ -50,7 +50,8 @@ public class SEOConfig {
     public static final String outputDirectory;
     public static long crawlingTime;
     public static final String REPORT_TIME_STAMP;
-
+    public static final String MONGODB_HOST;
+    public static final int MONGODB_PORT;
     static {
 	site = System.getProperty("SiteAddress");
 	user = System.getProperty("Username");
@@ -111,6 +112,9 @@ public class SEOConfig {
 		"https://search.google.com/structured-data/testing-tool/validate");
 	PAGE_SPEED_URL = PROPERTIES.getProperty("page.speed.url",
 		"https://www.googleapis.com/pagespeedonline/v3beta1/runPagespeed");
+
+	MONGODB_HOST = PROPERTIES.getProperty("mongodb.host", "10.207.61.56");
+	MONGODB_PORT = Integer.parseInt(PROPERTIES.getProperty("mongodb.port", "27017"));
 	caseSensitive = Boolean.parseBoolean(PROPERTIES.getProperty("crawler.caseSensitiveUrl", "false"));
 	URL_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.url.word.count", "115"));
 	H1_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.h1.word.count", "70"));

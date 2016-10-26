@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="WARN">
-<Properties>
+	<Properties>
 		<Property name="log-path">Logs</Property>
 	</Properties>
-  <appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-4level] - %msg%n"/>
-    </Console>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%-4level] - %msg%n" />
+		</Console>
 
-    <RollingFile name="RollingFile" fileName="${log-path}/log4j.log" filePattern="${log-path}/${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
-        
-        <PatternLayout>
+		<RollingFile name="RollingFile" fileName="${log-path}/log4j.log"
+			filePattern="${log-path}/${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+
+			<PatternLayout>
 				<pattern>%d{yyyy-mm-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
-		</PatternLayout>
-        <Policies>
-			<!-->	<TimeBasedTriggeringPolicy interval="1"
-					modulate="true" />
-					-->
-			<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
-			<SizeBasedTriggeringPolicy size="15 MB"/> <!-- Or every 5 MB -->
-		</Policies>
-    </RollingFile>             
-  </appenders>
+			</PatternLayout>
+			<Policies>
+				<!--> <TimeBasedTriggeringPolicy interval="1" modulate="true" /> -->
+				<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+				<SizeBasedTriggeringPolicy size="15 MB" /> <!-- Or every 5 MB -->
+			</Policies>
+		</RollingFile>
+	</appenders>
 
-  <loggers>     
-    <root level="debug">
-      <appender-ref ref="Console" level="warn"/>
-       <appender-ref ref="RollingFile" level="info"/>
-    </root>    
-  </loggers>
+	<loggers>
+		<root level="debug">
+			<appender-ref ref="Console" level="warn" />
+			<appender-ref ref="RollingFile" level="info" />
+		</root>
+	</loggers>
 </configuration>
