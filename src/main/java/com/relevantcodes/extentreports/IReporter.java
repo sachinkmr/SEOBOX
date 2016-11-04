@@ -12,7 +12,9 @@ import com.relevantcodes.extentreports.model.Test;
 
 public interface IReporter {
 	void start(Report report);
+
 	void stop();
+
 	void flush();
 
 	void addTest(Test test);

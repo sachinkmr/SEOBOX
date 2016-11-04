@@ -30,17 +30,17 @@ public class SiteMapUtils {
 			add = SEOConfig.PROPERTIES.getProperty("seo.sitemapFile");
 		}
 		Request request = Request.Get(add)
-			.addHeader("user-agent",
-				SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-					"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-			.connectTimeout(
-				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-			.socketTimeout(
-				Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+				.addHeader("user-agent",
+						SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+								"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+				.connectTimeout(
+						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+				.socketTimeout(
+						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
-		    String login = data[1] + ":" + data[2];
-		    String base64login = new String(Base64.encodeBase64(login.getBytes()));
-		    request.addHeader("Authorization", "Basic " + base64login);
+			String login = data[1] + ":" + data[2];
+			String base64login = new String(Base64.encodeBase64(login.getBytes()));
+			request.addHeader("Authorization", "Basic " + base64login);
 		}
 		return request.execute();
 	}
