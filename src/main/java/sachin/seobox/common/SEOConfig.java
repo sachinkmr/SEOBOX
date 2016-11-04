@@ -66,13 +66,15 @@ public class SEOConfig {
 		REPORT_TIME_STAMP = HelperUtils.generateUniqueString();
 		String outputDirectory1 = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator
 				+ host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
+		System.out.println(outputDirectory1);
+		System.out.println(System.getenv("JENKINS_URL"));
 		if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
 			outputDirectory = outputDirectory1.substring(0, outputDirectory1.indexOf("jenkins")) + File.separator
 					+ "SEOBOX" + File.separator + "Reports";
 		} else {
 			outputDirectory = outputDirectory1;
 		}
-
+		System.out.println(outputDirectory);
 		reportPath = outputDirectory + File.separator + "SEOBOX_Report.html";
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 		storage.mkdirs();
