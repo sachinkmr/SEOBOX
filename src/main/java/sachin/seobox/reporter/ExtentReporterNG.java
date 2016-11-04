@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.LoggerFactory;
 import org.testng.IReporter;
 import org.testng.ISuite;
 import org.testng.xml.XmlSuite;
@@ -21,11 +20,6 @@ public class ExtentReporterNG implements IReporter {
 		System.out.println("\nGenerating Report, Please Wait.....");
 		System.out.println("----------------------------------------------------------");
 		ComplexReportFactory.getInstance().closeReport();
-		try {
-			FileUtils.copyDirectoryToDirectory(new File("assets"), new File(SEOConfig.outputDirectory));
-		} catch (IOException e1) {
-			LoggerFactory.getLogger(ExtentReporterNG.class).error("Unable to copy assets.", e1);
-		}
 		try {
 			File file = new File(SEOConfig.reportPath);
 			Document doc = Jsoup.parse(file, "UTF-8");

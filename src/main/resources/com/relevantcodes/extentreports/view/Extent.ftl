@@ -306,6 +306,7 @@
 														<tbody>													
 														</tbody>
 													</table>	
+													<button id="loadMore" class="waves-effect waves-light btn hide" style="margin:20px auto;" data-clickable="false">Load More Results</button>
 												<#--	<a id="loadMore" class="waves-effect waves-light btn hide" idval="" style="margin:20px auto;">Load More Results</a> -->
 												</div>
 											</div>

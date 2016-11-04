@@ -568,13 +568,15 @@ $('#dashboard-view .determinate').attr('style', 'width:' + percentage + '%');
 
 var page = parseInt($('#testDataCount #pageNo').val('0').val());
 var limit = 200;
-var totalLogs = -1;
+var totalLogs = limit;
 
+var id;
 
 /* view test info [TEST] */
 $('.test').click(function () {
     var t = $(this);
-    totalLogs = -1;
+    totalLogs = limit;
+	id = t.attr('extentid');
     page = parseInt($('#testDataCount #pageNo').val('0').val());
     $('#test-collection .test').removeClass('active');
     $('#test-details-wrapper .test-body').html('');
@@ -582,11 +584,22 @@ $('.test').click(function () {
     $('#test-details-wrapper .details-name').html(t.find('.test-name').html());
     $('#test-details-wrapper .details-container').append($(el));
     $('.details-container .test-body .test-steps table.table-results').css('display', 'table');
-    var id = t.attr('extentid');
-    fetchResults(id);
+
+$('.details-container #loadMore').bind('click', function(){
+		if($(this).attr('data-clickable')=='true'){
+			fetchResults();
+		}
+	});
+    fetchResults();
 });
 
-function fetchResults(id) {
+function fetchResults() {
+$('.details-container #loadMore').html('<i class="material-icons left">loop</i> Loading Results...');	
+	$('.details-container #loadMore').attr('data-clickable', 'false');
+	$('.details-container #loadMore').removeClass('hide');
+	if(totalLogs<limit){		
+		return;
+	}
     $.ajax({
         url: "/SEOBOX/FetchRecord",
         dataType: 'json',
@@ -601,8 +614,12 @@ function fetchResults(id) {
                 var ic = "<td class='status " + log.status.toLowerCase() + "' title='" + log.status + "' alt='" + log.status + "'><i class='" + log.icon + "'></i></td><td class='timestamp'>" + log.time + "</td><td class='step-name'>" + log.step + "</td><td class='step-details'>" + log.detail + "</td>";
                 $('.details-container .test-body .test-steps table.table-results tbody tr:last-child').html(ic);
             });
-            if (page < result.totalRecords) {
-                fetchResults(id);            	
+           if(totalLogs<limit){
+					$('.details-container #loadMore').addClass('hide');
+				}
+				$('.details-container #loadMore').attr('data-clickable', 'true');
+				$('.details-container #loadMore').html('Load More Results');
+                  	
             }
         }
     });
