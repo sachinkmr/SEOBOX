@@ -30,9 +30,7 @@ public class EntryPoint {
 			testng.setVerbose(0);
 			testng.run();
 		} catch (SEOException e) {
-			System.out.println(e);
-			logger.error("\n\n\nError occured:  " + e + "\n\n");
-			System.out.println("Error in application: " + e);
+			logger.error("\n\nError in application: " + e + "\n\n");
 		}
 	}
 }
