@@ -588,7 +588,7 @@ $('.test').click(function () {
 
 function fetchResults(id) {
     $.ajax({
-        url: "/SEOBOX-WEB/FetchRecord",
+        url: "/SEOBOX/FetchRecord",
         dataType: 'json',
         data: {id: id, report: $('#testDataCount #report').val(), limit: limit, skip: (page)},
         type: 'POST',

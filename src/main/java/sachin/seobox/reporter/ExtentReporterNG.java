@@ -12,8 +12,6 @@ import org.testng.IReporter;
 import org.testng.ISuite;
 import org.testng.xml.XmlSuite;
 
-import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
-
 import sachin.seobox.common.SEOConfig;
 
 public class ExtentReporterNG implements IReporter {
@@ -32,7 +30,7 @@ public class ExtentReporterNG implements IReporter {
 			File file = new File(SEOConfig.reportPath);
 			Document doc = Jsoup.parse(file, "UTF-8");
 			doc.select("div.report-name").html(SEOConfig.site);
-			FileUtils.writeStringToFile(file, new HtmlCompressor().compress(doc.outerHtml()), "UTF-8");
+			FileUtils.writeStringToFile(file, doc.outerHtml(), "UTF-8");
 		} catch (IOException e) {
 		}
 		String path = SEOConfig.reportPath;

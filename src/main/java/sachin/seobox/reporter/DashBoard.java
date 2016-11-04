@@ -1,6 +1,5 @@
 package sachin.seobox.reporter;
 
-import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -20,14 +17,13 @@ import com.relevantcodes.extentreports.model.Log;
 import com.relevantcodes.extentreports.model.TestAttribute;
 
 import sachin.seobox.common.SEOConfig;
-import sachin.seobox.helpers.StreamUtils;
 
 public class DashBoard {
+	private static DashBoard dashBoard;
 	private int totalTests;
 	private int totalSteps;
 	private int passedTests;
 	private int failedTests;
-	private int otherTests;
 	private int fatalTests;
 	private int warningTests;
 	private int errorTests;
@@ -35,7 +31,6 @@ public class DashBoard {
 	private int unknownTests;
 	private int passedSteps;
 	private int failedSteps;
-	private int otherSteps;
 	private int fatalSteps;
 	private int warningSteps;
 	private int errorSteps;
@@ -47,6 +42,13 @@ public class DashBoard {
 	private String currentSuiteRunDuration;
 	private String runDurationOverall;
 	private Date startedTime;
+
+	public synchronized static DashBoard getInstance() {
+		if (null == dashBoard) {
+			dashBoard = new DashBoard();
+		}
+		return dashBoard;
+	}
 
 	public Date getStartedTime() {
 		return this.startedTime;
@@ -88,90 +90,162 @@ public class DashBoard {
 		return totalSteps;
 	}
 
-	public DashBoard() {
+	void addTest(ExtentTest test) {
+		TestCase tc = new TestCase();
+		tc.setId(test.getTest().getId().toString());
+		tc.setName(test.getTest().getName());
+		tc.setStatus(test.getRunStatus());
+		tc.setTime(test.getStartedTime());
+		tc.setEndedTime(test.getEndedTime());
+		tc.setRunDuration(test.getTest().getRunDuration());
+		tc.setDesc(test.getDescription());
+		for (TestAttribute attr : test.getTest().getCategoryList()) {
+			DashBoardCategory cat = new DashBoardCategory(attr.getName());
+			if (dashBoardCategories.contains(cat)) {
+				cat = dashBoardCategories.remove(dashBoardCategories.indexOf(cat));
+			}
+			if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
+				cat.setPassed(cat.getPassed() + 1);
+			} else if (test.getRunStatus().name().equalsIgnoreCase("fail")
+					|| test.getRunStatus().name().equalsIgnoreCase("fatal")
+					|| test.getRunStatus().name().equalsIgnoreCase("error")) {
+				cat.setFailed(cat.getFailed() + 1);
+			}
+			tc.setCats(attr.getName());
+			cat.setTotal(cat.getTotal() + 1);
+			cat.getTestCases().add(tc);
+			dashBoardCategories.add(cat);
+		}
+		this.totalSteps += test.getTest().getLogList().size();
+		this.totalTests++;
+		if (test.getRunStatus().name().equalsIgnoreCase("fail")) {
+			failedTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
+			passedTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("fatal")) {
+			fatalTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("error")) {
+			errorTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("skip")) {
+			skippedTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("warning")) {
+			warningTests++;
+		} else if (test.getRunStatus().name().equalsIgnoreCase("unknown")) {
+			unknownTests++;
+		}
+		for (Log log : test.getTest().getLogList()) {
+			if (log.getLogStatus().name().equalsIgnoreCase("fail")) {
+				failedSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("pass")) {
+				passedSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("fatal")) {
+				fatalSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("error")) {
+				errorSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("skip")) {
+				skippedSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("warning")) {
+				warningSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("unknown")) {
+				unknownSteps++;
+			} else if (log.getLogStatus().name().equalsIgnoreCase("info")) {
+				infoSteps++;
+			}
+		}
+
+		LogStatus status = test.getRunStatus();
+		if (status == LogStatus.FATAL || status == LogStatus.ERROR || status == LogStatus.WARNING
+				|| status == LogStatus.UNKNOWN) {
+			if (!logStatusList.contains(status)) {
+				logStatusList.add(status);
+			}
+		}
+	}
+
+	private DashBoard() {
 		dashBoardCategories = new ArrayList<>();
 		logStatusList = new ArrayList<>();
 		ExtentReports report = ComplexReportFactory.getInstance().getExtentReport();
 		currentSuiteRunDuration = report.getRunDuration();
 		runDurationOverall = report.getRunDurationOverall();
 		startedTime = report.getStartedTime();
-		StreamUtils stream = new StreamUtils();
-		File[] tests = new File(new File(SEOConfig.dataLocation).getParentFile(), "tests").listFiles();
-		for (File testFile : tests) {
-			ExtentTest test = stream.readTestCase(testFile);
-			TestCase tc = new TestCase();
-			tc.setId(test.getTest().getId().toString());
-			tc.setName(test.getTest().getName());
-			tc.setStatus(test.getRunStatus());
-			tc.setTime(test.getStartedTime());
-			tc.setEndedTime(test.getEndedTime());
-			tc.setRunDuration(test.getTest().getRunDuration());
-			tc.setDesc(test.getDescription());
-			for (TestAttribute attr : test.getTest().getCategoryList()) {
-				DashBoardCategory cat = new DashBoardCategory(attr.getName());
-				if (dashBoardCategories.contains(cat)) {
-					cat = dashBoardCategories.remove(dashBoardCategories.indexOf(cat));
-				}
-				if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
-					cat.setPassed(cat.getPassed() + 1);
-				} else if (test.getRunStatus().name().equalsIgnoreCase("fail")
-						|| test.getRunStatus().name().equalsIgnoreCase("fatal")
-						|| test.getRunStatus().name().equalsIgnoreCase("error")) {
-					cat.setFailed(cat.getFailed() + 1);
-				}
-				tc.setCats(attr.getName());
-				cat.setTotal(cat.getTotal() + 1);
-				cat.getTestCases().add(tc);
-				dashBoardCategories.add(cat);
-			}
-			this.totalSteps += test.getTest().getLogList().size();
-			if (test.getRunStatus().name().equalsIgnoreCase("fail")) {
-				failedTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
-				passedTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("fatal")) {
-				fatalTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("error")) {
-				errorTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("skip")) {
-				skippedTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("warning")) {
-				warningTests++;
-			} else if (test.getRunStatus().name().equalsIgnoreCase("unknown")) {
-				unknownTests++;
-			}
-			for (Log log : test.getTest().getLogList()) {
-				if (log.getLogStatus().name().equalsIgnoreCase("fail")) {
-					failedSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("pass")) {
-					passedSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("fatal")) {
-					fatalSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("error")) {
-					errorSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("skip")) {
-					skippedSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("warning")) {
-					warningSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("unknown")) {
-					unknownSteps++;
-				} else if (log.getLogStatus().name().equalsIgnoreCase("info")) {
-					infoSteps++;
-				}
-			}
-
-			LogStatus status = test.getRunStatus();
-			if (status == LogStatus.FATAL || status == LogStatus.ERROR || status == LogStatus.WARNING
-					|| status == LogStatus.UNKNOWN) {
-				if (!logStatusList.contains(status)) {
-					logStatusList.add(status);
-				}
-			}
-		}
-		this.totalTests = tests.length;
-		otherSteps = skippedSteps + warningSteps + unknownSteps + infoSteps;
-		otherTests = skippedTests + warningTests + unknownTests;
-		FileUtils.deleteQuietly(tests[0].getParentFile());
+		// StreamUtils stream = new StreamUtils();
+		// File[] tests = new File(new
+		// File(SEOConfig.dataLocation).getParentFile(), "tests").listFiles();
+		// for (File testFile : tests) {
+		// ExtentTest test = stream.readTestCase(testFile);
+		// TestCase tc = new TestCase();
+		// tc.setId(test.getTest().getId().toString());
+		// tc.setName(test.getTest().getName());
+		// tc.setStatus(test.getRunStatus());
+		// tc.setTime(test.getStartedTime());
+		// tc.setEndedTime(test.getEndedTime());
+		// tc.setRunDuration(test.getTest().getRunDuration());
+		// tc.setDesc(test.getDescription());
+		// for (TestAttribute attr : test.getTest().getCategoryList()) {
+		// DashBoardCategory cat = new DashBoardCategory(attr.getName());
+		// if (dashBoardCategories.contains(cat)) {
+		// cat = dashBoardCategories.remove(dashBoardCategories.indexOf(cat));
+		// }
+		// if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
+		// cat.setPassed(cat.getPassed() + 1);
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("fail")
+		// || test.getRunStatus().name().equalsIgnoreCase("fatal")
+		// || test.getRunStatus().name().equalsIgnoreCase("error")) {
+		// cat.setFailed(cat.getFailed() + 1);
+		// }
+		// tc.setCats(attr.getName());
+		// cat.setTotal(cat.getTotal() + 1);
+		// cat.getTestCases().add(tc);
+		// dashBoardCategories.add(cat);
+		// }
+		// this.totalSteps += test.getTest().getLogList().size();
+		// if (test.getRunStatus().name().equalsIgnoreCase("fail")) {
+		// failedTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
+		// passedTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("fatal")) {
+		// fatalTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("error")) {
+		// errorTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("skip")) {
+		// skippedTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("warning")) {
+		// warningTests++;
+		// } else if (test.getRunStatus().name().equalsIgnoreCase("unknown")) {
+		// unknownTests++;
+		// }
+		// for (Log log : test.getTest().getLogList()) {
+		// if (log.getLogStatus().name().equalsIgnoreCase("fail")) {
+		// failedSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("pass")) {
+		// passedSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("fatal")) {
+		// fatalSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("error")) {
+		// errorSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("skip")) {
+		// skippedSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("warning")) {
+		// warningSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("unknown")) {
+		// unknownSteps++;
+		// } else if (log.getLogStatus().name().equalsIgnoreCase("info")) {
+		// infoSteps++;
+		// }
+		// }
+		//
+		// LogStatus status = test.getRunStatus();
+		// if (status == LogStatus.FATAL || status == LogStatus.ERROR || status
+		// == LogStatus.WARNING
+		// || status == LogStatus.UNKNOWN) {
+		// if (!logStatusList.contains(status)) {
+		// logStatusList.add(status);
+		// }
+		// }
+		// }
+		// this.totalTests = tests.length;
+		// FileUtils.deleteQuietly(tests[0].getParentFile());
 	}
 
 	public String getReportName() {
@@ -239,7 +313,7 @@ public class DashBoard {
 	}
 
 	public int getOtherTests() {
-		return otherTests;
+		return skippedTests + warningTests + unknownTests;
 	}
 
 	public int getPassedSteps() {
@@ -251,7 +325,7 @@ public class DashBoard {
 	}
 
 	public int getOtherSteps() {
-		return otherSteps;
+		return skippedSteps + warningSteps + unknownSteps + infoSteps;
 	}
 
 }

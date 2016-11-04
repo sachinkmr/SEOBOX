@@ -85,17 +85,15 @@ public class ComplexReportFactory {
 			json.append("logCount", test.getTest().getLogList().size());
 			json.append("logs", logs);
 			try {
-				getMongoDB().getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(json);
+				mongo.getDatabase("SEOBOX").getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(json);
 			} catch (Exception ex) {
 				LoggerFactory.getLogger(ComplexReportFactory.class).error("Error: " + ex);
 			}
-			stream.writeTestCase(new File(tests, id + ".test"), test);
+			json = null;
+			DashBoard.getInstance().addTest(test);
+			// stream.writeTestCase(new File(tests, id + ".test"), test);
 			test = null;
 		}
-	}
-
-	public MongoDatabase getMongoDB() {
-		return this.mongoDB;
 	}
 
 	public void closeReport() {

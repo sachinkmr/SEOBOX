@@ -63,7 +63,10 @@ public class HTMLReporter extends LogSettings implements IReporter {
 			Template template = getConfig().getTemplate(templateName);
 			BufferedWriter out = new BufferedWriter(new FileWriter(new File(filePath)));
 			try {
-				templateMap.put("dashboard", new DashBoard());
+				// templateMap.put("dashboard",
+				// ComplexReportFactory.getInstance().getDashboard());
+				templateMap.put("dashboard", DashBoard.getInstance());
+				// templateMap.put("dashboard", new DashBoard());
 				template.process(templateMap, out);
 			} catch (TemplateException e) {
 				e.printStackTrace();
