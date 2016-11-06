@@ -17,34 +17,34 @@ import sachin.seobox.crawler.Crawler;
 import sachin.seobox.crawler.CrawlerConfig;
 
 public class TestInitializer {
-	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
+    protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-	@BeforeSuite(enabled = true)
-	public void init() {
-		int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
-		CrawlerConfig control = new CrawlerConfig();
-		CrawlConfig config = control.getConfig();
-		PageFetcher pageFetcher = new PageFetcher(config);
-		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		robotstxtConfig.setEnabled(false);
-		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-		long start = System.currentTimeMillis();
-		try {
-			System.out.println("Please wait crawling site");
-			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
-			controller.start(Crawler.class, numberOfCrawlers);
-		} catch (Exception e) {
-			logger.debug("Error in controller", e);
-			System.out.println("Error in application: " + e);
-		}
-		SEOConfig.crawlingTime = System.currentTimeMillis() - start;
-		System.out.println("\nExecuting Test Cases");
-		System.out.println("---------------------------------------");
+    @BeforeSuite(enabled = false)
+    public void init() {
+	int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
+	CrawlerConfig control = new CrawlerConfig();
+	CrawlConfig config = control.getConfig();
+	PageFetcher pageFetcher = new PageFetcher(config);
+	RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+	robotstxtConfig.setEnabled(false);
+	RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+	long start = System.currentTimeMillis();
+	try {
+	    System.out.println("Please wait crawling site");
+	    CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+	    controller.start(Crawler.class, numberOfCrawlers);
+	} catch (Exception e) {
+	    logger.debug("Error in controller", e);
+	    System.out.println("Error in application: " + e);
 	}
+	SEOConfig.crawlingTime = System.currentTimeMillis() - start;
+	System.out.println("\nExecuting Test Cases");
+	System.out.println("---------------------------------------");
+    }
 
-	@AfterSuite(enabled = true)
-	public void afterSuite() {
-		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
-		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
-	}
+    @AfterSuite(enabled = false)
+    public void afterSuite() {
+	FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
+	FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
+    }
 }

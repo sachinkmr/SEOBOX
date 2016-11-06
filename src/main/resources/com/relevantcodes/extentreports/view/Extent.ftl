@@ -306,7 +306,7 @@
 														<tbody>													
 														</tbody>
 													</table>	
-													<button id="loadMore" class="waves-effect waves-light btn hide" style="margin:20px auto;" data-clickable="false">Load More Results</button>
+													<button id="loadMore" class="waves-effect waves-light btn hide loadMore" style="margin:20px auto;" data-clickable="false">Load More Results</button>
 												<#--	<a id="loadMore" class="waves-effect waves-light btn hide" idval="" style="margin:20px auto;">Load More Results</a> -->
 												</div>
 											</div>
@@ -463,7 +463,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='assets/js/extent.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/29ac36c3f4004c2ab3f5d86d36a1491eb0def2ad/SEOBOX/js/extent-web.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
