@@ -19,6 +19,17 @@
 		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css'>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
+		<style type="text/css">
+			div.card-panel div#percentage-block{
+				position: relative;
+			}
+			
+			div.card-panel div#percentage-block span.pass-percentage.panel-lead{
+				position: absolute;
+    			top: 30%;
+    			left: 55%;
+			}
+		</style>
 	</head>
 	
 	<body class='extent default hide-overflow' onload="_updateCurrentStage(-1)">
@@ -453,7 +464,7 @@
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
 		</div>
 		<!--
-		
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
 		<script src='https://cdn.rawgit.com/anshooarora/extentreports/ab0f4299b133bfa234cec0b1e0ac08a692a7640a/cdn/extent.js' type='text/javascript'></script>
 		
 		-->
@@ -463,7 +474,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/29ac36c3f4004c2ab3f5d86d36a1491eb0def2ad/SEOBOX/js/extent-web.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));

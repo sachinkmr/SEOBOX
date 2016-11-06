@@ -2,8 +2,6 @@ package sachin.seobox.reporter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
@@ -65,28 +63,21 @@ public class ComplexReportFactory {
 	    test.setEndedTime(HelperUtils.getTestCaseTime(System.currentTimeMillis()));
 	    reporter.endTest(test);
 	    Icon ic = new Icon();
-	    Document json = new Document("name", test.getTest().getName());
 	    String id = test.getTest().getId().toString();
-	    json.append("id", id);
-	    List<Document> logs = new ArrayList<>();
 	    for (Log log : test.getTest().getLogList()) {
 		Document arr = new Document("icon", ic.getIcon(log.getLogStatus()));
 		arr.append("status", log.getLogStatus().name());
 		arr.append("time", df.format(log.getTimestamp()));
 		arr.append("step", log.getStepName());
 		arr.append("detail", log.getDetails());
-		logs.add(arr);
+		arr.append("id", id);
+		try {
+		    mongo.getDatabase("SEOBOX").getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(arr);
+		} catch (Exception ex) {
+		    LoggerFactory.getLogger(ComplexReportFactory.class).error("Error: " + ex);
+		}
 	    }
-	    json.append("logCount", test.getTest().getLogList().size());
-	    json.append("logs", logs);
-	    try {
-		mongo.getDatabase("SEOBOX").getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(json);
-	    } catch (Exception ex) {
-		LoggerFactory.getLogger(ComplexReportFactory.class).error("Error: " + ex);
-	    }
-	    json = null;
 	    DashBoard.getInstance().addTest(test);
-	    // stream.writeTestCase(new File(tests, id + ".test"), test);
 	    test = null;
 	}
     }
