@@ -1,6 +1,5 @@
 package sachin.seobox.reporter;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 
 import org.bson.Document;
@@ -22,12 +21,10 @@ public class ComplexReportFactory {
 	private static ComplexReportFactory factory;
 	private ExtentReports reporter;
 	private SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
-	private File tests = new File(new File(SEOConfig.dataLocation).getParentFile(), "tests");
 	private final MongoClient mongo;
 
 	private ComplexReportFactory() {
 		mongo = new MongoClient(SEOConfig.MONGODB_HOST, SEOConfig.MONGODB_PORT);
-		tests.mkdirs();
 		reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
 	}
 
