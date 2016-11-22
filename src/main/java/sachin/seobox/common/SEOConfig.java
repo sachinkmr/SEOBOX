@@ -75,7 +75,7 @@ public class SEOConfig {
 	    outputDirectory = outputDirectory1;
 	}
 	// System.out.println(outputDirectory);
-	reportPath = outputDirectory + File.separator + "SEOBOX_Report.html";
+	reportPath = outputDirectory + File.separator + "Report.html";
 	File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 	storage.mkdirs();
 	crawlStorageFolder = storage.getAbsolutePath();

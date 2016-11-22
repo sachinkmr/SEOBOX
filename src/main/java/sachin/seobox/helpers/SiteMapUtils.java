@@ -22,97 +22,99 @@ import org.jdom2.input.SAXBuilder;
 import sachin.seobox.common.SEOConfig;
 
 public class SiteMapUtils {
-	public static Response getSiteMapXMLResponse(String... data)
-			throws ParseException, ClientProtocolException, IOException {
-		String add = HelperUtils.getSiteAddress(data[0]) + "sitemap.xml";
-		if (SEOConfig.PROPERTIES.getProperty("seo.sitemapFile") != null
-				&& !SEOConfig.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
-			add = SEOConfig.PROPERTIES.getProperty("seo.sitemapFile");
-		}
-		Request request = Request.Get(add)
-				.addHeader("user-agent",
-						SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-								"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-				.connectTimeout(
-						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-				.socketTimeout(
-						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
-		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
-			String login = data[1] + ":" + data[2];
-			String base64login = new String(Base64.encodeBase64(login.getBytes()));
-			request.addHeader("Authorization", "Basic " + base64login);
-		}
-		return request.execute();
-	}
 
-	/**
-	 * Method to read and fetch All URLs from sitemap XML based on regex
-	 * 
-	 */
-	public static Set<String> getURLFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
-		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
-		String str1 = xml.substring(xml.indexOf(">") + 1, xml.length());
-		String str2 = str1.substring(str1.indexOf(">") + 1, str1.length());
-		return extractUrls(str2);
+    public static Response getSiteMapXMLResponse(String... data)
+	    throws ParseException, ClientProtocolException, IOException {
+	String add = HelperUtils.getSiteAddress(data[0]) + "sitemap.xml";
+	if (SEOConfig.PROPERTIES.getProperty("seo.sitemapFile") != null
+		&& !SEOConfig.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+	    add = SEOConfig.PROPERTIES.getProperty("seo.sitemapFile");
 	}
+	Request request = Request.Get(add)
+		.addHeader("user-agent",
+			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+		.connectTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+		.socketTimeout(
+			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+	    String login = data[1] + ":" + data[2];
+	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
+	    request.addHeader("Authorization", "Basic " + base64login);
+	}
+	return request.execute();
+    }
 
-	/**
-	 * Returns a list with all links contained in the input
-	 */
-	private static Set<String> extractUrls(String text) {
-		Set<String> containedUrls = new HashSet<>();
-		String urlRegex = "((https?|ftp|gopher|telnet|file|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-		Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-		Matcher urlMatcher = pattern.matcher(text);
-		while (urlMatcher.find()) {
-			String url = text.substring(urlMatcher.start(0), urlMatcher.end(0));
-			containedUrls.add(url.contains("<") ? url.substring(0, url.indexOf("<")) : url);
-		}
-		return containedUrls;
-	}
+    /**
+     * Method to read and fetch All URLs from sitemap XML based on regex
+     * 
+     * @return set containing links from sitemap
+     */
+    public static Set<String> getURLFromSitemapXML(String... data)
+	    throws ParseException, ClientProtocolException, IOException, JDOMException {
+	String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
+	String str1 = xml.substring(xml.indexOf(">") + 1, xml.length());
+	String str2 = str1.substring(str1.indexOf(">") + 1, str1.length());
+	return extractUrls(str2);
+    }
 
-	/**
-	 * Method to read and fetch All URLs within loc tag from sitemap XML suing
-	 * SAX Parsing
-	 * 
-	 */
-	public static Set<String> getLocURLsFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
-		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
-		StringReader sr = new StringReader(xml);
-		SAXBuilder saxReader = new SAXBuilder();
-		Document doc = saxReader.build(sr);
-		Element root = doc.getRootElement();
-		Set<String> list = new HashSet<>();
-		for (Element url : root.getChildren("url", root.getNamespace())) {
-			list.add(url.getChildText("loc", root.getNamespace()));
-		}
-		return list;
+    /**
+     * Returns a list with all links contained in the input
+     */
+    private static Set<String> extractUrls(String text) {
+	Set<String> containedUrls = new HashSet<>();
+	String urlRegex = "((https?|ftp|gopher|telnet|file|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+	Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+	Matcher urlMatcher = pattern.matcher(text);
+	while (urlMatcher.find()) {
+	    String url = text.substring(urlMatcher.start(0), urlMatcher.end(0));
+	    containedUrls.add(url.contains("<") ? url.substring(0, url.indexOf("<")) : url);
 	}
+	return containedUrls;
+    }
 
-	/**
-	 * Method to read and fetch All URLs within loc tag and their alternative
-	 * urls from sitemap XML suing SAX Parsing
-	 * 
-	 */
-	public static Set<String> getLocURLsWithAltUrlsFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
-		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
-		StringReader sr = new StringReader(xml);
-		SAXBuilder saxReader = new SAXBuilder();
-		Document doc = saxReader.build(sr);
-		Element root = doc.getRootElement();
-		Set<String> list = new HashSet<>();
-		Namespace ns = Namespace.getNamespace("xhtml", "http://www.w3.org/1999/xhtml");
-		for (Element url : root.getChildren("url", root.getNamespace())) {
-			list.add(url.getChildText("loc", url.getNamespace()));
-			if (!url.getChildren("link", ns).isEmpty()) {
-				for (Element link : url.getChildren("link", ns)) {
-					list.add(link.getAttributeValue("href"));
-				}
-			}
-		}
-		return list;
+    /**
+     * Method to read and fetch All URLs within loc tag from sitemap XML suing
+     * SAX Parsing
+     * 
+     */
+    public static Set<String> getLocURLsFromSitemapXML(String... data)
+	    throws ParseException, ClientProtocolException, IOException, JDOMException {
+	String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
+	StringReader sr = new StringReader(xml);
+	SAXBuilder saxReader = new SAXBuilder();
+	Document doc = saxReader.build(sr);
+	Element root = doc.getRootElement();
+	Set<String> list = new HashSet<>();
+	for (Element url : root.getChildren("url", root.getNamespace())) {
+	    list.add(url.getChildText("loc", root.getNamespace()));
 	}
+	return list;
+    }
+
+    /**
+     * Method to read and fetch All URLs within loc tag and their alternative
+     * urls from sitemap XML suing SAX Parsing
+     * 
+     */
+    public static Set<String> getLocURLsWithAltUrlsFromSitemapXML(String... data)
+	    throws ParseException, ClientProtocolException, IOException, JDOMException {
+	String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
+	StringReader sr = new StringReader(xml);
+	SAXBuilder saxReader = new SAXBuilder();
+	Document doc = saxReader.build(sr);
+	Element root = doc.getRootElement();
+	Set<String> list = new HashSet<>();
+	Namespace ns = Namespace.getNamespace("xhtml", "http://www.w3.org/1999/xhtml");
+	for (Element url : root.getChildren("url", root.getNamespace())) {
+	    list.add(url.getChildText("loc", url.getNamespace()));
+	    if (!url.getChildren("link", ns).isEmpty()) {
+		for (Element link : url.getChildren("link", ns)) {
+		    list.add(link.getAttributeValue("href"));
+		}
+	    }
+	}
+	return list;
+    }
 }
