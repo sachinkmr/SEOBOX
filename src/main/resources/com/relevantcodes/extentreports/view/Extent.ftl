@@ -462,6 +462,8 @@
 			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
+			<input type='hidden' id='host' name='host' value='${dashboard.host}'>
+			<input type='hidden' id='port' name='port' value='${dashboard.port}'>
 		</div>
 		<!--
 		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
@@ -474,7 +476,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/ae9bf3744790d613c0485dc8cac5cd20951a0e84/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));

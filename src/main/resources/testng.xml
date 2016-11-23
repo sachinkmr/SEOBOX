@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="SEOBOX">
-	<test name="SEOBOX Automation Test"  parallel="methods" thread-count="3">
-		<!--<class name="sachin.seobox.seo.Link" />
-			<class name="sachin.seobox.seo.Page" /> 
+	<test name="SEOBOX Automation Test" parallel="methods"
+		thread-count="3">
+		<!--<class name="sachin.seobox.seo.Link" /> <class name="sachin.seobox.seo.Page" 
+			/> <class name="sachin.seobox.common.TestInitializer" /> <class name="sachin.seobox.seo.SiteLevel" 
+			/> parallel="methods" thread-count="3" -->
+		<classes>
 			<class name="sachin.seobox.common.TestInitializer" />
-			<class name="sachin.seobox.seo.SiteLevel" />	
-			parallel="methods" thread-count="3"
-			-->
-		<classes>	
-			<class name="sachin.seobox.common.TestInitializer" />				
 			<class name="sachin.seobox.seo.LinkLevel" />
-			 <class name="sachin.seobox.seo.SiteLevel" />			
+			<class name="sachin.seobox.seo.SiteLevel" />
 			<class name="sachin.seobox.seo.PageLevel" />
 		</classes>
 	</test>

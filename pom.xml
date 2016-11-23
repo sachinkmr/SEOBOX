@@ -26,12 +26,12 @@
 			</plugin>
 		</plugins>
 	</build>
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>fluent-hc</artifactId>
 			<version>4.5.2</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -87,7 +87,7 @@
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
 			<version>1.13</version>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<description>WebSite SEO and Performance Validator</description>
 </project>
