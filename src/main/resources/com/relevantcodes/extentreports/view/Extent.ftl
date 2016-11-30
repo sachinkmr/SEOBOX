@@ -20,6 +20,9 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
+			th{
+				font-weight:bolder;
+			}
 			div.card-panel div#percentage-block{
 				position: relative;
 			}
@@ -154,7 +157,7 @@
 						<div class='col l8 m6 s12'>
 							<div class='card-panel'>
 								<span class='label info outline right'><b>Categories</b></span>
-								<table>
+								<table class="striped">
 									<thead>
 										<tr>
 											<th>CATEGORY NAME</th>
@@ -189,7 +192,7 @@
 					<div class='col l4 m12 s12'>
 						<div class='card-panel'>
 							<span class='label info outline right'><b>Environment</b></span>
-							<table>
+							<table class="striped">
 								<thead>
 									<tr>
 										<th>PARAM</th>
@@ -305,7 +308,7 @@
 													</div>
 												</div>												
 												<div class='test-steps'>
-													<table class='bordered table-results'>
+													<table class='bordered table-results striped'>
 														<thead>
 															<tr>
 																<th>Status</th>
@@ -396,7 +399,7 @@
 														</div>
 													</div>
 													<div class='cat-tests'>
-														<table class='bordered'>
+														<table class='bordered striped'>
 															<thead>
 																<tr>
 																	<th>RunDate</th>

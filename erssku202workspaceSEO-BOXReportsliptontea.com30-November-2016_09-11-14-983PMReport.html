@@ -1,0 +1,81 @@
+[1mdiff --git a/src/main/java/com/relevantcodes/extentreports/HTMLReporter.java b/src/main/java/com/relevantcodes/extentreports/HTMLReporter.java[m
+[1mindex c95b7dd..3310b25 100644[m
+[1m--- a/src/main/java/com/relevantcodes/extentreports/HTMLReporter.java[m
+[1m+++ b/src/main/java/com/relevantcodes/extentreports/HTMLReporter.java[m
+[36m@@ -21,6 +21,7 @@[m [mimport java.util.logging.Level;[m
+ import java.util.logging.Logger;[m
+ [m
+ import com.relevantcodes.extentreports.model.Test;[m
+[32m+[m[32mimport com.seobox.reporter.DashBoard;[m
+ [m
+ import freemarker.ext.beans.BeansWrapper;[m
+ import freemarker.ext.beans.BeansWrapperBuilder;[m
+[36m@@ -29,7 +30,6 @@[m [mimport freemarker.template.Template;[m
+ import freemarker.template.TemplateException;[m
+ import freemarker.template.TemplateHashModel;[m
+ import freemarker.template.TemplateModelException;[m
+[31m-import sachin.seobox.reporter.DashBoard;[m
+ [m
+ /**[m
+  * Concrete HTMLReporter class[m
+[1mdiff --git a/src/main/java/com/relevantcodes/extentreports/Report.java b/src/main/java/com/relevantcodes/extentreports/Report.java[m
+[1mindex 5837cbb..d8d0640 100644[m
+[1m--- a/src/main/java/com/relevantcodes/extentreports/Report.java[m
+[1m+++ b/src/main/java/com/relevantcodes/extentreports/Report.java[m
+[36m@@ -27,8 +27,7 @@[m [mimport com.relevantcodes.extentreports.model.Log;[m
+ import com.relevantcodes.extentreports.model.SuiteTimeInfo;[m
+ import com.relevantcodes.extentreports.model.Test;[m
+ import com.relevantcodes.extentreports.utils.DateTimeUtil;[m
+[31m-[m
+[31m-import sachin.seobox.common.SEOConfig;[m
+[32m+[m[32mimport com.seobox.common.SEOConfig;[m
+ [m
+ // Report abstract[m
+ abstract class Report extends LogSettings {[m
+[1mdiff --git a/src/main/java/com/seobox/common/EntryPoint.java b/src/main/java/com/seobox/common/EntryPoint.java[m
+[1mindex f8b0581..d289673 100644[m
+[1m--- a/src/main/java/com/seobox/common/EntryPoint.java[m
+[1m+++ b/src/main/java/com/seobox/common/EntryPoint.java[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-package sachin.seobox.common;[m
+[32m+[m[32mpackage com.seobox.common;[m
+ [m
+ import java.util.ArrayList;[m
+ import java.util.List;[m
+[36m@@ -7,30 +7,30 @@[m [mimport org.slf4j.Logger;[m
+ import org.slf4j.LoggerFactory;[m
+ import org.testng.TestNG;[m
+ [m
+[31m-import sachin.seobox.exception.SEOException;[m
+[31m-import sachin.seobox.helpers.HelperUtils;[m
+[31m-import sachin.seobox.reporter.ExtentReporterNG;[m
+[32m+[m[32mimport com.seobox.exception.SEOException;[m
+[32m+[m[32mimport com.seobox.helpers.HelperUtils;[m
+[32m+[m[32mimport com.seobox.reporter.ExtentReporterNG;[m
+ [m
+ public class EntryPoint {[m
+[31m-    protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);[m
+[32m+[m	[32mprotected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);[m
+ [m
+[31m-    public static void main(String[] args) {[m
+[31m-	System.setProperty("SiteAddress", "http://www.liptontea.com/");[m
+[31m-	try {[m
+[31m-	    if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {[m
+[31m-		throw new SEOException("Site url is missing");[m
+[31m-	    }[m
+[31m-	    List<String> suites = new ArrayList<>();[m
+[31m-	    suites.add(HelperUtils.getResourceFile("testng.xml"));[m
+[31m-	    TestNG testng = new TestNG();[m
+[31m-	    testng.setTestSuites(suites);[m
+[31m-	    testng.addListener(new ExtentReporterNG());[m
+[31m-	    testng.setUseDefaultListeners(false);[m
+[31m-	    testng.setPreserveOrder(true);[m
+[31m-	    testng.setVerbose(0);[m
+[31m-	    testng.run();[m
+[31m-	} catch (SEOException e) {[m
+[31m-	    logger.error("\n\nError in application: " + e + "\n\n");[m
+[32m+[m	[32mpublic static void main(String[] args) {[m
+[32m+[m		[32mSystem.setProperty("SiteAddress", "http://www.liptontea.com/");[m
+[32m+[m		[32mtry {[m
+[32m+[m			[32mif (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {[m
+[32m+[m				[32mthrow new SEOException("Sit

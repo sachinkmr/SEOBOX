@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import com.relevantcodes.extentreports.DisplayOrder;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -22,10 +23,12 @@ public class ComplexReportFactory {
 	private ExtentReports reporter;
 	private SimpleDateFormat df = new SimpleDateFormat("h:mm:ss a");
 	private final MongoClient mongo;
+	private final MongoDatabase mongoDB;
 
 	private ComplexReportFactory() {
 		mongo = new MongoClient(SEOConfig.MONGODB_HOST, SEOConfig.MONGODB_PORT);
 		reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
+		mongoDB = mongo.getDatabase("SEOBOX");
 	}
 
 	public synchronized static ComplexReportFactory getInstance() {
@@ -70,7 +73,7 @@ public class ComplexReportFactory {
 				arr.append("test_id", id);
 				arr.append("test_name", test.getTest().getName());
 				try {
-					mongo.getDatabase("SEOBOX").getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(arr);
+					mongoDB.getCollection(SEOConfig.REPORT_TIME_STAMP).insertOne(arr);
 				} catch (Exception ex) {
 					LoggerFactory.getLogger(ComplexReportFactory.class).error("Error: " + ex);
 				}
@@ -78,6 +81,10 @@ public class ComplexReportFactory {
 			DashBoard.getInstance().addTest(test);
 			test = null;
 		}
+	}
+
+	public MongoDatabase getMongoDB() {
+		return mongoDB;
 	}
 
 	public void closeReport() {
