@@ -25,7 +25,7 @@
 	<loggers>
 		<root level="debug">
 			<appender-ref ref="Console" level="warn" />
-			<appender-ref ref="RollingFile" level="info" />
+			<appender-ref ref="RollingFile" level="debug" />
 		</root>
 	</loggers>
 </configuration>

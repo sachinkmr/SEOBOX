@@ -87,7 +87,7 @@ public class PageLevel {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
-		if (null != SEOConfig.user || !SEOConfig.user.trim().isEmpty()) {
+		if (null != SEOConfig.user && !SEOConfig.user.trim().isEmpty()) {
 			test.log(LogStatus.SKIP, "Skipping test because site has authentication", "");
 		} else {
 			for (File file : pages) {
@@ -95,7 +95,7 @@ public class PageLevel {
 				try {
 					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 							&& page.getPage().getContentType().contains("text/html")) {
-						String key = Integer.toString(page.getPage().getWebURL().hashCode());
+						String key = HelperUtils.getUUID();
 						JSONObject mobile = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
 								"mobile");
 						JSONObject desktop = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
@@ -103,23 +103,27 @@ public class PageLevel {
 						org.bson.Document arr = new org.bson.Document("mobile", mobile.toString());
 						arr.append("desktop", desktop.toString());
 						arr.append("key", key);
+						arr.append("report", SEOConfig.REPORT_TIME_STAMP);
 						ComplexReportFactory.getInstance().getMongoDB().getCollection("pageSpeed").insertOne(arr);
 						boolean status = false;
 						String d = desktop.getJSONObject("ruleGroups").toString();
 						String m = mobile.getJSONObject("ruleGroups").toString();
 						LogStatus logStatus = status ? LogStatus.PASS : LogStatus.FAIL;
-						test.log(logStatus,
-								"<b>Mobile</b><br/><a href='#' class='mobile googlePageSpeed' data-key='" + key
-										+ "' data-viewtype='mobile'>"
-										+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", "<br/>") + "</a>",
-								"<b>Desktop</b><br/><a href='#' class='mobile googlePageSpeed' data-key='" + key
-										+ "' data-viewtype='desktop'>"
-										+ d.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", "<br/>") + "</a>");
+						test.log(logStatus, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
+								"<b>Desktop: </b>"
+										+ d.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
+												": ")
+										+ "<br/><b>Mobile: </b>"
+										+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
+												": ")
+										+ "<br/><a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
+										+ key + "'>View Details</a>");
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
 					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
 				}
+				break;
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);

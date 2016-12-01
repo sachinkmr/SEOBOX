@@ -20,8 +20,12 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
-			th{
-				font-weight:bolder;
+			html,body {
+				text-rendering: optimizeLegibility !important;
+				-webkit-font-smoothing: antialiased !important;
+			}
+			html, html a {
+			    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 			}
 			div.card-panel div#percentage-block{
 				position: relative;
@@ -32,6 +36,13 @@
     			top: 30%;
     			left: 55%;
 			}
+			
+			.container {
+    			padding-left: 0px; 
+			}
+			.report-info{
+				display:block;
+			}
 		</style>
 	</head>
 	
@@ -41,22 +52,24 @@
 				<img src="https://cdn.rawgit.com/sachinkmr/Content/master/SEOBOX/Images/logo.png" alt='SEOBOX' title="SEOBOX" class="responsive-img">
 				<a href='#' data-activates='slide-out' class='button-collapse hide-on-large-only'><i class='mdi-navigation-apps'></i></a>
 			</div>
-			<div class="blue darken-2 report-info">
-				<div class='report-name'></div> <div class='report-headline'>Site SEO and Performance Validator</div>				
-			</div>			
+			<div class="blue darken-2 report-info right">
+				<div class='report-name left'></div>
+				<!-- nav -->
+				<nav>			
+					<ul id='slide-out' class='right'>
+						<li class='analysis waves-effect active'>
+							<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
+						</li>
+						<li class='analysis waves-effect'><a href='#!' class='categories-view' onclick="_updateCurrentStage(1)"><i class='mdi-maps-local-offer'></i> Test Categories</a></li>
+						<li class='analysis waves-effect'><a href='#!' class='test-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-dashboard'></i> Test Cases</a></li>				
+					</ul>			
+				</nav>
+		<!-- /nav -->		
+			</div>	
+					
 		</header>
 		
-		<!-- nav -->
-		<nav>			
-			<ul id='slide-out' class='side-nav fixed hide-on-med-and-down'>
-				<li class='analysis waves-effect active'>
-					<a href='#!' onclick="_updateCurrentStage(-1)" class='dashboard-view'><i class='mdi-action-track-changes'></i></i> Dashboard</a>
-				</li>
-				<li class='analysis waves-effect'><a href='#!' class='categories-view' onclick="_updateCurrentStage(1)"><i class='mdi-maps-local-offer'></i>Test Categories</a></li>
-				<li class='analysis waves-effect'><a href='#!' class='test-view' onclick="_updateCurrentStage(0)"><i class='mdi-action-dashboard'></i>Test Cases</a></li>				
-			</ul>			
-		</nav>
-		<!-- /nav -->
+		
 		
 		<!-- container -->
 		<div class='container'>
@@ -479,7 +492,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/ae9bf3744790d613c0485dc8cac5cd20951a0e84/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/e7cbdc720dac904390c7be7bbeea31733ff13790/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));

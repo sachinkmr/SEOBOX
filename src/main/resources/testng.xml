@@ -5,11 +5,12 @@
 		thread-count="3">
 		<!--<class name="sachin.seobox.seo.Link" /> <class name="sachin.seobox.seo.Page" 
 			/> <class name="sachin.seobox.common.TestInitializer" /> <class name="sachin.seobox.seo.SiteLevel" 
-			/> parallel="methods" thread-count="3" -->
-		<classes>
-			<class name="sachin.seobox.common.TestInitializer" />
+			/> parallel="methods" thread-count="3" 
 			<class name="sachin.seobox.seo.LinkLevel" />
 			<class name="sachin.seobox.seo.SiteLevel" />
+			-->
+		<classes>
+			<class name="sachin.seobox.common.TestInitializer" />			
 			<class name="sachin.seobox.seo.PageLevel" />
 		</classes>
 	</test>

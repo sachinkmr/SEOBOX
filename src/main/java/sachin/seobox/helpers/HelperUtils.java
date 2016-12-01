@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -28,99 +29,111 @@ import sachin.seobox.reporter.ComplexReportFactory;
 
 public class HelperUtils {
 
-    protected static final Logger logger = LoggerFactory.getLogger(HelperUtils.class);
+	protected static final Logger logger = LoggerFactory.getLogger(HelperUtils.class);
 
-    /**
-     * Method returns the unique string based on time stamp
-     *
-     *
-     * @return unique string
-     */
-    public static String generateUniqueString() {
-	DateFormat df = new SimpleDateFormat("dd-MMMM-yyyy");
-	DateFormat df1 = new SimpleDateFormat("hh-mm-ss-SSaa");
-	Calendar calobj = Calendar.getInstance();
-	String time = df1.format(calobj.getTime());
-	String date = df.format(calobj.getTime());
-	return date + "_" + time;
-    }
-
-    /**
-     * Method to get current time.
-     *
-     * @return Date date object of current time
-     *
-     **/
-    public static Date getTime(long millis) {
-	Calendar calendar = Calendar.getInstance();
-	calendar.setTimeInMillis(millis);
-	return calendar.getTime();
-    }
-
-    public static Response getLinkResponse(String... data) throws ParseException, ClientProtocolException, IOException {
-	Request request = Request.Get(data[0])
-		.addHeader("user-agent",
-			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-		.addHeader("Accept-Encoding",
-			"gzip, compress, deflate, br, identity, exi, pack200-gzip, bzip2, lzma, peerdist, sdch, xpress, xz")
-		.connectTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-		.socketTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
-	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
-	    String login = data[1] + ":" + data[2];
-	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
-	    request.addHeader("Authorization", "Basic " + base64login);
+	/**
+	 * Method returns the unique string based on time stamp
+	 *
+	 *
+	 * @return unique string
+	 */
+	public static String generateUniqueString() {
+		DateFormat df = new SimpleDateFormat("dd-MMMM-yyyy");
+		DateFormat df1 = new SimpleDateFormat("hh-mm-ss-SSaa");
+		Calendar calobj = Calendar.getInstance();
+		String time = df1.format(calobj.getTime());
+		String date = df.format(calobj.getTime());
+		return date + "_" + time;
 	}
-	return request.execute();
-    }
 
-    public static String getResourceFile(String fileName) {
-	File file = null;
-	try {
-	    String str = IOUtils.toString(HelperUtils.class.getClassLoader().getResourceAsStream(fileName));
-	    file = new File(new File(SEOConfig.dataLocation).getParentFile(), fileName);
-	    FileUtils.write(file, str, "utf-8");
-	} catch (IOException e) {
-	    e.printStackTrace();
+	/**
+	 * Method to get current time.
+	 *
+	 * @return Date date object of current time
+	 *
+	 **/
+	public static Date getTime(long millis) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(millis);
+		return calendar.getTime();
 	}
-	return file.getAbsolutePath();
-    }
 
-    public static String getSiteAddress(String address) {
-	String add = URLCanonicalizer.getCanonicalURL(address);
-	WebURL url = new WebURL();
-	url.setURL(add);
-	String domain = url.getDomain();
-	String site = add.substring(0, add.indexOf(domain) + domain.length() + 1);
-	return site;
-    }
-
-    public static String getResourceFile(String fileName, String pROPERTIES_LOC) {
-	File file = null;
-	try {
-	    String str = FileUtils.readFileToString(new File(pROPERTIES_LOC), "UTF-8");
-	    file = new File(SEOConfig.crawlStorageFolder, fileName);
-	    FileUtils.write(file, str, "utf-8");
-	} catch (IOException e) {
-	    e.printStackTrace();
+	public static Response getLinkResponse(String... data) throws ParseException, ClientProtocolException, IOException {
+		Request request = Request.Get(data[0])
+				.addHeader("user-agent",
+						SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+								"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+				.addHeader("Accept-Encoding",
+						"gzip, compress, deflate, br, identity, exi, pack200-gzip, bzip2, lzma, peerdist, sdch, xpress, xz")
+				.connectTimeout(
+						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+				.socketTimeout(
+						Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+			String login = data[1] + ":" + data[2];
+			String base64login = new String(Base64.encodeBase64(login.getBytes()));
+			request.addHeader("Authorization", "Basic " + base64login);
+		}
+		return request.execute();
 	}
-	return file.getAbsolutePath();
-    }
 
-    public static ExtentTest getTestLogger(Method caller) {
-	System.out.println("Executing: " + caller.getName());
-	ExtentTest test = ComplexReportFactory.getInstance().getTest(caller.getName());
-	test.setDescription(caller.getAnnotationsByType(Test.class)[0].description());
-	test.setStartedTime(getTestCaseTime(System.currentTimeMillis()));
-	test.assignCategory(caller.getAnnotationsByType(Test.class)[0].groups());
-	return test;
-    }
+	public static String getResourceFile(String fileName) {
+		File file = null;
+		try {
+			String str = IOUtils.toString(HelperUtils.class.getClassLoader().getResourceAsStream(fileName));
+			file = new File(new File(SEOConfig.dataLocation).getParentFile(), fileName);
+			FileUtils.write(file, str, "utf-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file.getAbsolutePath();
+	}
 
-    public static Date getTestCaseTime(long millis) {
-	Calendar calendar = Calendar.getInstance();
-	calendar.setTimeInMillis(millis);
-	return calendar.getTime();
-    }
+	public static String getSiteAddress(String address) {
+		String add = URLCanonicalizer.getCanonicalURL(address);
+		WebURL url = new WebURL();
+		url.setURL(add);
+		String domain = url.getDomain();
+		String site = add.substring(0, add.indexOf(domain) + domain.length() + 1);
+		return site;
+	}
+
+	public static String getResourceFile(String fileName, String pROPERTIES_LOC) {
+		File file = null;
+		try {
+			String str = FileUtils.readFileToString(new File(pROPERTIES_LOC), "UTF-8");
+			file = new File(SEOConfig.crawlStorageFolder, fileName);
+			FileUtils.write(file, str, "utf-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file.getAbsolutePath();
+	}
+
+	public static ExtentTest getTestLogger(Method caller) {
+		System.out.println("Executing: " + caller.getName());
+		ExtentTest test = ComplexReportFactory.getInstance().getTest(caller.getName());
+		test.setDescription(caller.getAnnotationsByType(Test.class)[0].description());
+		test.setStartedTime(getTestCaseTime(System.currentTimeMillis()));
+		test.assignCategory(caller.getAnnotationsByType(Test.class)[0].groups());
+		return test;
+	}
+
+	public static Date getTestCaseTime(long millis) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(millis);
+		return calendar.getTime();
+	}
+
+	public static String getUUID() {
+		String str = new String("");
+		for (char a : UUID.randomUUID().toString().replaceAll("-", "").toCharArray()) {
+			if (Character.isDigit(a)) {
+				str += Character.toString(Character.toChars(97 + Character.getNumericValue(a))[0]);
+			} else {
+				str += Character.toString(a);
+			}
+		}
+		return str;
+	}
 }
