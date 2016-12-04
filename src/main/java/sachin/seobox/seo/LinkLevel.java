@@ -379,7 +379,8 @@ public class LinkLevel {
 			for (File file : pages) {
 				SEOPage page = streamUtils.readFile(file);
 				try {
-					logger.debug("Verifying for: ", page.getPage().getWebURL());
+					// logger.debug("Verifying for: ",
+					// page.getPage().getWebURL());
 					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 							&& page.getPage().getContentType().contains("text/html")) {
 						String url = page.getPage().getWebURL().getURL();
