@@ -67,7 +67,8 @@ public class SEOConfig {
 				+ host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
 		if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
 			outputDirectory = outputDirectory1.substring(0, outputDirectory1.indexOf("jenkins")) + File.separator
-					+ "SEOBOX" + File.separator + "Reports";
+					+ "SEOBOX" + File.separator + "Reports" + File.separator + host + File.separator
+					+ REPORT_TIME_STAMP;
 		} else {
 			outputDirectory = outputDirectory1;
 		}
