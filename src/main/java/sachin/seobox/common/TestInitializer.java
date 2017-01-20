@@ -19,7 +19,7 @@ import sachin.seobox.crawler.CrawlerConfig;
 public class TestInitializer {
 	protected static final Logger logger = LoggerFactory.getLogger(TestInitializer.class);
 
-	@BeforeSuite(enabled = false)
+	@BeforeSuite(enabled = true)
 	public void init() {
 		int numberOfCrawlers = Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		CrawlerConfig control = new CrawlerConfig();
@@ -42,7 +42,7 @@ public class TestInitializer {
 		System.out.println("---------------------------------------");
 	}
 
-	@AfterSuite(enabled = false)
+	@AfterSuite(enabled = true)
 	public void afterSuite() {
 		FileUtils.deleteQuietly(new File("CrawlerConfigFile"));
 		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));

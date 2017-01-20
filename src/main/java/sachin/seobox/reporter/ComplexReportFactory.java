@@ -26,7 +26,7 @@ public class ComplexReportFactory {
 	private final MongoDatabase mongoDB;
 
 	private ComplexReportFactory() {
-		mongo = new MongoClient(SEOConfig.MONGODB_HOST, SEOConfig.MONGODB_PORT);
+		mongo = new MongoClient("localhost", 27017);
 		reporter = new ExtentReports(SEOConfig.reportPath, true, DisplayOrder.OLDEST_FIRST, NetworkMode.ONLINE);
 		mongoDB = mongo.getDatabase("SEOBOX");
 	}

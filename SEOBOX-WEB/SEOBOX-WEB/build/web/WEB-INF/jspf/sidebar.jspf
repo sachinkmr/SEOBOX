@@ -1,0 +1,22 @@
+<nav class="navbar-side" role="navigation">                        
+    <ul id="side" class="nav navbar-nav side-nav">
+        <!-- begin SIDE NAV logo -->
+        <li class="logo">
+            <img class=" img-responsive  hidden-xs" src="${pageContext.request.contextPath}/assets/img/logo.png" alt="SEO" id='seo-img'>             
+            <!--     <a href="${pageContext.request.contextPath}" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#">
+                             <img class="img-responsive img-circle hidden-xs" src="assets/img/logo.png" alt="SEO" id='seo-img'/>
+                         </a>-->
+            <div class="clearfix"></div>
+        </li>        
+        <li class="panel">
+            <a href="${pageContext.request.contextPath}/HistoryPage" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#">
+                <i class="fa fa-archive"></i>Archives
+            </a>            
+        </li>
+        <li class="panel">
+            <a href="${pageContext.request.contextPath}/UserGuide" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#">
+                <i class="fa fa-book"></i>User Guide
+            </a>            
+        </li>  
+    </ul>
+</nav>

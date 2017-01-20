@@ -1,0 +1,6 @@
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrapValidator.min.js"></script>  
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/allPages.js"></script>      

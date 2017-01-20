@@ -4,8 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +50,15 @@ public class DashBoard {
 		return dashBoard;
 	}
 
+	public String getIp() {
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+
+		}
+		return "10.207.16.9";
+	}
+
 	public Date getStartedTime() {
 		return this.startedTime;
 	}
@@ -67,11 +76,14 @@ public class DashBoard {
 	}
 
 	public Map<String, String> getSystemInfo() {
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new LinkedHashMap<>();
 		map.put("Web Site", SEOConfig.site);
 		try {
-			map.put("Machine", InetAddress.getLocalHost().getHostName());
-			map.put("IP Address", InetAddress.getLocalHost().getHostAddress());
+			if (System.getProperty("machine") != null && !System.getProperty("machine").isEmpty()) {
+				map.put("Requester IP", System.getProperty("machine"));
+			} else {
+				map.put("Machine", InetAddress.getLocalHost().getHostName());
+			}
 		} catch (UnknownHostException e) {
 		}
 		return map;

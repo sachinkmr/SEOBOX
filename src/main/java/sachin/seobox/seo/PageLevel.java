@@ -76,7 +76,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -121,7 +121,7 @@ public class PageLevel {
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 				}
 				break;
 			}
@@ -153,7 +153,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error occoured " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -183,7 +183,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -213,7 +213,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -243,7 +243,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -288,7 +288,7 @@ public class PageLevel {
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 				}
 			}
 		} else {
@@ -318,7 +318,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -343,7 +343,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -380,7 +380,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -411,7 +411,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -448,7 +448,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -479,7 +479,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -515,7 +515,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -550,7 +550,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -588,7 +588,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -626,7 +626,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -655,7 +655,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -685,7 +685,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -720,7 +720,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -755,7 +755,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -791,7 +791,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -820,7 +820,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -848,7 +848,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -876,7 +876,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -912,7 +912,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -948,7 +948,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -975,7 +975,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -1003,7 +1003,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -1031,7 +1031,6 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -1059,7 +1058,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -1096,7 +1095,7 @@ public class PageLevel {
 				}
 			} catch (Exception e) {
 				logger.debug("Error " + e);
-				test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
@@ -1127,7 +1126,7 @@ public class PageLevel {
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 				}
 			}
 			for (String key : map.keySet()) {
@@ -1169,7 +1168,7 @@ public class PageLevel {
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
+
 				}
 			}
 			for (String key : map.keySet()) {
@@ -1213,7 +1212,6 @@ public class PageLevel {
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL(), "");
 				}
 			}
 			for (String key : map.keySet()) {
