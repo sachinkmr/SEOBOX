@@ -495,7 +495,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/e7cbdc720dac904390c7be7bbeea31733ff13790/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/b800b4b674655d07d6e03542c41c8568e60af514/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
