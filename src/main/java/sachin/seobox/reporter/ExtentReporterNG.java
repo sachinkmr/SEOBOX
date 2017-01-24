@@ -33,6 +33,6 @@ public class ExtentReporterNG implements IReporter {
 		} else {
 			System.out.println("Report Generated: " + SEOConfig.reportPath);
 		}
-		FileUtils.deleteQuietly(new File(SEOConfig.crawlStorageFolder));
+
 	}
 }

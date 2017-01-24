@@ -16,7 +16,7 @@ public class EntryPoint {
 
 	public static void main(String[] args) {
 		// System.setProperty("SiteAddress",
-		// "http://d2showcase.unileversolutions.com/us/en/home.html");
+		// "http://www.dove.com/in/home.html");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		try {

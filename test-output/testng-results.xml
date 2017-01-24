@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="2553" started-at="2017-01-24T08:05:52Z" finished-at="2017-01-24T08:05:55Z">
+    <groups>
+      <group name="Page Speed">
+        <method signature="PageLevel.verifyPageSpeed()[pri:0, instance:sachin.seobox.seo.PageLevel@460ebd80]" name="verifyPageSpeed" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Page Speed -->
+    </groups>
+    <test name="Default test" duration-ms="2553" started-at="2017-01-24T08:05:52Z" finished-at="2017-01-24T08:05:55Z">
+      <class name="sachin.seobox.seo.PageLevel">
+        <test-method status="PASS" signature="getPages()[pri:0, instance:sachin.seobox.seo.PageLevel@460ebd80]" name="getPages" is-config="true" duration-ms="60" started-at="2017-01-24T13:35:52Z" finished-at="2017-01-24T13:35:53Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getPages -->
+        <test-method status="PASS" signature="verifyPageSpeed()[pri:0, instance:sachin.seobox.seo.PageLevel@460ebd80]" name="verifyPageSpeed" duration-ms="2476" started-at="2017-01-24T13:35:53Z" description="Verify page based on Google PageSpeed Insights" finished-at="2017-01-24T13:35:55Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyPageSpeed -->
+        <test-method status="PASS" signature="afterClass()[pri:0, instance:sachin.seobox.seo.PageLevel@460ebd80]" name="afterClass" is-config="true" duration-ms="0" started-at="2017-01-24T13:35:55Z" finished-at="2017-01-24T13:35:55Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterClass -->
+      </class> <!-- sachin.seobox.seo.PageLevel -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

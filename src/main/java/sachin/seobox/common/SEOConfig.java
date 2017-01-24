@@ -81,6 +81,9 @@ public class SEOConfig {
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp");
 		storage.mkdirs();
 		crawlStorageFolder = storage.getAbsolutePath();
+		// dataLocation = crawlStorageFolder + File.separator + host +
+		// File.separator + REPORT_TIME_STAMP + File.separator
+		// + "urls";
 		dataLocation = crawlStorageFolder + File.separator + host + File.separator + "urls";
 		new File(dataLocation).mkdirs();
 		PROPERTIES = new Properties();

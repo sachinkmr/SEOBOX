@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -44,7 +45,7 @@ public class PageLevel {
 		streamUtils = null;
 	}
 
-	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" })
+	@Test(description = "Verify that site does have all og tags", groups = { "OG Tags" }, enabled = false)
 	public void verifyOGTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -95,7 +96,8 @@ public class PageLevel {
 				try {
 					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 							&& page.getPage().getContentType().contains("text/html")) {
-						String key = HelperUtils.getUUID();
+						// String key = HelperUtils.getUUID();
+						String key = UUID.randomUUID().toString();
 						JSONObject mobile = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
 								"mobile");
 						JSONObject desktop = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
@@ -103,8 +105,11 @@ public class PageLevel {
 						org.bson.Document arr = new org.bson.Document("mobile", mobile.toString());
 						arr.append("desktop", desktop.toString());
 						arr.append("key", key);
-						arr.append("report", SEOConfig.REPORT_TIME_STAMP);
-						ComplexReportFactory.getInstance().getMongoDB().getCollection("pageSpeed").insertOne(arr);
+						String id = test.getTest().getId().toString();
+						arr.append("test_id", id);
+						arr.append("test_name", test.getTest().getName());
+						ComplexReportFactory.getInstance().getMongoDB().getCollection(SEOConfig.REPORT_TIME_STAMP)
+								.insertOne(arr);
 						boolean status = false;
 						String d = desktop.getJSONObject("ruleGroups").toString();
 						String m = mobile.getJSONObject("ruleGroups").toString();
@@ -117,7 +122,7 @@ public class PageLevel {
 										+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 												": ")
 										+ "<br/><a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
-										+ key + "'>View Details</a>");
+										+ key + "' data-test-id='" + id + "'>View Details</a>");
 					}
 				} catch (Exception e) {
 					logger.debug("Error " + e);
@@ -129,7 +134,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" })
+	@Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" }, enabled = false)
 	public void verifyNOODPTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -159,7 +164,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page has NOYDIR Robots meta tags", groups = { "Robots Tags" })
+	@Test(description = "Verify that page has NOYDIR Robots meta tags", groups = { "Robots Tags" }, enabled = false)
 	public void verifyNOYDIRTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -189,7 +194,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page has NOINDEX Robots meta tags", groups = { "Robots Tags" })
+	@Test(description = "Verify that page has NOINDEX Robots meta tags", groups = { "Robots Tags" }, enabled = false)
 	public void verifyNOINDEXTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -219,7 +224,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page has NOFOLLOW Robots meta tags", groups = { "Robots Tags" })
+	@Test(description = "Verify that page has NOFOLLOW Robots meta tags", groups = { "Robots Tags" }, enabled = false)
 	public void verifyNOFOLLOWTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -250,7 +255,7 @@ public class PageLevel {
 	}
 
 	@Test(description = "Verify that multilingual site does have HREF Language Tag in head tag", groups = {
-			"HREF Language Tags" })
+			"HREF Language Tags" }, enabled = false)
 	public void verifyHREFLanguageTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -297,7 +302,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page has only one H1 Tag", groups = { "H1 Tag" })
+	@Test(description = "Verify that page has only one H1 Tag", groups = { "H1 Tag" }, enabled = false)
 	public void verifyMultipleH1Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -324,7 +329,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that page do not has missing H1 Tag", groups = { "H1 Tag" })
+	@Test(description = "Verify that page do not has missing H1 Tag", groups = { "H1 Tag" }, enabled = false)
 	public void verifyMissingH1Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -349,7 +354,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that H1 Tag is not over character", groups = { "H1 Tag" })
+	@Test(description = "Verify that H1 Tag is not over character", groups = { "H1 Tag" }, enabled = false)
 	public void verifyOverCharacterH1Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -386,7 +391,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that H1 Tag is not blank", groups = { "H1 Tag" })
+	@Test(description = "Verify that H1 Tag is not blank", groups = { "H1 Tag" }, enabled = false)
 	public void verifyBlankH1Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -417,7 +422,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that H2 Tag is not over character", groups = { "H2 Tag" })
+	@Test(description = "Verify that H2 Tag is not over character", groups = { "H2 Tag" }, enabled = false)
 	public void verifyOverCharacterH2Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -454,7 +459,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that H2 Tag is not blank", groups = { "H2 Tag" })
+	@Test(description = "Verify that H2 Tag is not blank", groups = { "H2 Tag" }, enabled = false)
 	public void verifyBlankH2Tags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -485,7 +490,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that image alt text is not missing", groups = { "Image Alt Text" })
+	@Test(description = "Verify that image alt text is not missing", groups = { "Image Alt Text" }, enabled = false)
 	public void verifyImageAltText() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -521,7 +526,8 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that Content and HTML Ratio does not exceed on page", groups = { "Content-HTML" })
+	@Test(description = "Verify that Content and HTML Ratio does not exceed on page", groups = {
+			"Content-HTML" }, enabled = false)
 	public void contentAndHTMLRatio() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -556,7 +562,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify Internal outgoing links count on the page", groups = { "Links" })
+	@Test(description = "Verify Internal outgoing links count on the page", groups = { "Links" }, enabled = false)
 	public void verifyInternalOutgoingLinksCount() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -594,7 +600,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify External outgoing links count on the page", groups = { "Links" })
+	@Test(description = "Verify External outgoing links count on the page", groups = { "Links" }, enabled = false)
 	public void verifyExternalOutgoingLinksCount() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -633,7 +639,7 @@ public class PageLevel {
 
 	}
 
-	@Test(description = "Verify missing title tag on page", groups = { "Title Tag" })
+	@Test(description = "Verify missing title tag on page", groups = { "Title Tag" }, enabled = false)
 	public void verifyMissingTitle() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -661,7 +667,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify multiple title tag on page", groups = { "Title Tag" })
+	@Test(description = "Verify multiple title tag on page", groups = { "Title Tag" }, enabled = false)
 	public void verifyMultipleTitle() {
 
 		Method caller = new Object() {
@@ -691,7 +697,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify minimum length for title tag", groups = { "Title Tag" })
+	@Test(description = "Verify minimum length for title tag", groups = { "Title Tag" }, enabled = false)
 	public void verifyTitleMinimumLength() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -726,7 +732,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify maximum length for title tag", groups = { "Title Tag" })
+	@Test(description = "Verify maximum length for title tag", groups = { "Title Tag" }, enabled = false)
 	public void verifyTitleMaximumLength() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -761,7 +767,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify length for description tag", groups = { "Meta Description" })
+	@Test(description = "Verify length for description tag", groups = { "Meta Description" }, enabled = false)
 	public void verifyDescriptionLength() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -797,7 +803,8 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that description tag content is not blank", groups = { "Meta Description" })
+	@Test(description = "Verify that description tag content is not blank", groups = {
+			"Meta Description" }, enabled = false)
 	public void verifyBlankDescription() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -826,7 +833,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify for missing description for page", groups = { "Meta Description" })
+	@Test(description = "Verify for missing description for page", groups = { "Meta Description" }, enabled = false)
 	public void verifyMissingDescription() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -854,7 +861,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify for multiple description for page", groups = { "Meta Description" })
+	@Test(description = "Verify for multiple description for page", groups = { "Meta Description" }, enabled = false)
 	public void verifyMultipleDescription() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -882,7 +889,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify length for canonical tag", groups = { "Canonical Tag" })
+	@Test(description = "Verify length for canonical tag", groups = { "Canonical Tag" }, enabled = false)
 	public void verifyCanonicalLength() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -918,7 +925,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify for blank canonical tag url", groups = { "Canonical Tag" })
+	@Test(description = "Verify for blank canonical tag url", groups = { "Canonical Tag" }, enabled = false)
 	public void verifyBlankCanonicalURL() {
 
 		Method caller = new Object() {
@@ -954,7 +961,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify for missing canonical tags for page", groups = { "Canonical Tag" })
+	@Test(description = "Verify for missing canonical tags for page", groups = { "Canonical Tag" }, enabled = false)
 	public void verifyMissingCanonicalTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -981,7 +988,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify for multiple canonical tags for page", groups = { "Canonical Tag" })
+	@Test(description = "Verify for multiple canonical tags for page", groups = { "Canonical Tag" }, enabled = false)
 	public void verifyMultipleCanonicalTags() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1009,7 +1016,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that if page has tables", groups = { "Div instead of Table" })
+	@Test(description = "Verify that if page has tables", groups = { "Div instead of Table" }, enabled = false)
 	public void useDivInsteadOfTable() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1036,7 +1043,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that if page has frames", groups = { "No Frames" })
+	@Test(description = "Verify that if page has frames", groups = { "No Frames" }, enabled = false)
 	public void verifyFrames() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1064,7 +1071,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that if page has flash content", groups = { "No Flash" })
+	@Test(description = "Verify that if page has flash content", groups = { "No Flash" }, enabled = false)
 	public void verifyFlash() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1102,7 +1109,7 @@ public class PageLevel {
 	}
 
 	@Test(description = "Verify that site does not have duplicate meta description values", groups = {
-			"Meta Description" })
+			"Meta Description" }, enabled = false)
 	public void verifyDuplicateDescription() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1144,7 +1151,8 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that site does not have duplicate title values", groups = { "Title Tag" })
+	@Test(description = "Verify that site does not have duplicate title values", groups = {
+			"Title Tag" }, enabled = false)
 	public void verifyDuplicateTitle() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -1187,7 +1195,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(description = "Verify that pages do not have duplicate content", groups = { "Content-HTML" })
+	@Test(description = "Verify that pages do not have duplicate content", groups = { "Content-HTML" }, enabled = false)
 	public void verifyDuplicateBodyContent() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
