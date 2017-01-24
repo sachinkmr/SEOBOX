@@ -1,11 +1,17 @@
 package sachin.seobox.common;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -93,6 +99,26 @@ public class SEOConfig {
 		} else {
 			LoggerFactory.getLogger(SEOConfig.class).info("Loading default config file");
 			PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties");
+		}
+
+		// Loading crawler Config file
+		LoggerFactory.getLogger(SEOConfig.class).info(PROPERTIES_LOC);
+		try {
+			Scanner in = new Scanner(new FileInputStream(new File(PROPERTIES_LOC)));
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			while (in.hasNext()) {
+				out.write(in.nextLine().replace("\\", "\\\\").getBytes());
+				out.write("\n".getBytes());
+			}
+			InputStream is = new ByteArrayInputStream(out.toByteArray());
+			PROPERTIES.load(is);
+			in.close();
+			String[] sites = PROPERTIES.getProperty("crawler.skipDomains").trim().split(",");
+			for (String site : sites) {
+				SKIPPED_URLS.add(new URL(site).getHost().replaceAll("www.", ""));
+			}
+		} catch (IOException e) {
+			LoggerFactory.getLogger(SEOConfig.class).error("Error in loading config file", e);
 		}
 
 		ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css)))", Pattern.CASE_INSENSITIVE);
