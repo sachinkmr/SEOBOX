@@ -18,7 +18,7 @@
 		<title>SEOBOX Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
-		<link href='https://cdn.rawgit.com/sachinkmr/Content/c8c9ba03e45ef6144ff7865daf6f216b3379e351/SEOBOX/css/extent-seo.css' type='text/css' rel='stylesheet' />	
+		<link href='https://cdn.rawgit.com/sachinkmr/Content/b9b3378eb9c97032a4861819f11ae30948101c27/SEOBOX/css/extent-seo.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
 			html,body {
 				text-rendering: optimizeLegibility !important;
