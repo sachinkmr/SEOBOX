@@ -262,11 +262,4 @@ public class DashBoard {
 		return skippedSteps + warningSteps + unknownSteps + infoSteps;
 	}
 
-	public String getHost() {
-		return SEOConfig.MONGODB_HOST;
-	}
-
-	public int getPort() {
-		return SEOConfig.MONGODB_PORT;
-	}
 }

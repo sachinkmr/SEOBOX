@@ -474,8 +474,6 @@
 			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
-			<input type='hidden' id='host' name='host' value='${dashboard.host}'>
-			<input type='hidden' id='port' name='port' value='${dashboard.port}'>
 		</div>
 		<!--
 		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
