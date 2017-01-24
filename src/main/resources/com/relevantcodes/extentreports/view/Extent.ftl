@@ -475,6 +475,24 @@
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
 		</div>
+		<div id="pageSpeedModal" class="modal modal-fixed-footer">
+		    <div class="modal-content">
+		      <h4>Google PageSpeed Insights </h4>
+		      <p></p>
+		    </div>
+		    <div class="modal-footer">
+		      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><strong>Close</strong></a>
+		    </div>
+		</div>
+		<div id="pageStructureModal" class="modal modal-fixed-footer">
+		    <div class="modal-content">
+		      <h4>Google Page Structured Report</h4>
+		      <p></p>
+		    </div>
+		    <div class="modal-footer">
+		      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><strong>Close</strong></a>
+		    </div>
+		</div>
 		<!--
 		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
 		<script src='https://cdn.rawgit.com/anshooarora/extentreports/ab0f4299b133bfa234cec0b1e0ac08a692a7640a/cdn/extent.js' type='text/javascript'></script>
@@ -494,6 +512,9 @@
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
 			}
+			$(document).ready(function() {
+			  $('.modal-trigger').leanModal();
+			});
 		</script>
 	</body>
 </html>
