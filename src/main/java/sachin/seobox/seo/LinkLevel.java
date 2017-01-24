@@ -158,10 +158,9 @@ public class LinkLevel {
 										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Status Code: </b>" + statusCode);
 					} else if (statusCode >= 300 && statusCode < 400) {
-						test.log(LogStatus.WARNING,
-								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
-										+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
-										+ webUrl.getParentUrl(),
+						test.log(
+								LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
+										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
 								"<b>Status Code: </b>" + statusCode);
 					} else if (statusCode >= 400 && statusCode < 500) {
 						test.log(LogStatus.FAIL,
@@ -201,7 +200,7 @@ public class LinkLevel {
 								"<b>Status Code: </b>" + statusCode);
 					} else if (statusCode >= 300 && statusCode < 400) {
 						test.log(LogStatus.WARNING,
-								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Redireted To: <b/>"
 										+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
 										+ webUrl.getParentUrl(),
 								"<b>Status Code: </b>" + statusCode);

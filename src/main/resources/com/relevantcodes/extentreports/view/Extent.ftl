@@ -261,7 +261,7 @@
 										<i class='mdi-maps-local-offer'></i>
 									</a>
 									<ul id='category-toggle' class='dropdown-content'>
-										<#list dashboard.dashBoardCategories as category>
+										<#list dashboard.dashBoardCategories?sort as category>
 											<li class='${category.name}'><a href='#!'>${category.name}</a></li>
 										</#list>
 										<li class='divider'></li>
@@ -290,7 +290,7 @@
 						<div class='card-panel no-padding-h no-padding-v no-margin-v'>
 							<div class='wrapper'>
 								<ul id='test-collection' class='test-collection'>
-									<#list dashboard.testCases as test>										
+									<#list dashboard.testCases?sort as test>										
 										<li class='collection-item test displayed active ${test.status}' extentid='${test.id?string}'>
 											<div class='test-head'>
 												<span class='test-name'>${test.name}</span>
@@ -382,7 +382,7 @@
 							<div class='card-panel no-padding-h no-padding-v'>
 								<div class='wrapper'>
 									<ul id='cat-collection' class='cat-collection'>
-										<#list dashboard.dashBoardCategories as category>	
+										<#list dashboard.dashBoardCategories?sort as category>	
 											<#assign others = category.total-(category.passed+category.failed)>
 											<li class='category-item displayed'>
 												<div class='cat-head'>
@@ -417,7 +417,7 @@
 																</tr>
 															</thead>
 															<tbody>
-																<#list category.testCases as test>
+																<#list category.testCases?sort as test>
 																	<tr class='${test.status}'>
 																		<td>${test.time?datetime?string(dateTimeFormat)}</td>
 																		<td><span class='category-link linked' extentid='${test.id?string}'>${test.name}</span></td>
