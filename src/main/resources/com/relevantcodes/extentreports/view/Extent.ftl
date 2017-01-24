@@ -18,7 +18,7 @@
 		<title>SEOBOX Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
-		<link href='https://cdn.rawgit.com/sachinkmr/Content/603c015f7c5df430482f89ab9e638beb34ffcfd2/SEOBOX/css/extent.css' type='text/css' rel='stylesheet' />	
+		<link href='https://cdn.rawgit.com/sachinkmr/Content/c8c9ba03e45ef6144ff7865daf6f216b3379e351/SEOBOX/css/extent-seo.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
 			html,body {
 				text-rendering: optimizeLegibility !important;
@@ -47,13 +47,9 @@
 	</head>
 	
 	<body class='extent default hide-overflow' onload="_updateCurrentStage(-1)">
-		<header>
-			<div class='logo-container left'>
-				<img src="https://cdn.rawgit.com/sachinkmr/Content/master/SEOBOX/Images/logo.png" alt='SEOBOX' title="SEOBOX" class="responsive-img">
-				<a href='#' data-activates='slide-out' class='button-collapse hide-on-large-only'><i class='mdi-navigation-apps'></i></a>
-			</div>
-			<div class="blue darken-2 report-info right">
-				<div class='report-name left'></div>
+		<header>			
+			<div class="blue darken-2 report-info">
+				<div class='report-name left'>SEOBOX</div>
 				<!-- nav -->
 				<nav>			
 					<ul id='slide-out' class='right'>
