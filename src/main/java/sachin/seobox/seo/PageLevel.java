@@ -23,6 +23,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import edu.uci.ics.crawler4j.url.WebURL;
 import sachin.seobox.common.SEOConfig;
+import sachin.seobox.exception.SEOException;
 import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.helpers.StreamUtils;
@@ -76,7 +77,7 @@ public class PageLevel {
 
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -110,24 +111,24 @@ public class PageLevel {
 			arr.append("test_name", test.getTest().getName());
 			ComplexReportFactory.getInstance().getMongoDB().getCollection(SEOConfig.REPORT_TIME_STAMP)
 				.insertOne(arr);
-			boolean status = false;
 			String d = desktop.getJSONObject("ruleGroups").toString();
 			String m = mobile.getJSONObject("ruleGroups").toString();
-			LogStatus logStatus = status ? LogStatus.PASS : LogStatus.FAIL;
+			LogStatus logStatus = HelperUtils.getPageSpeedTestStatus(m, d);
 			test.log(logStatus, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
 				"<a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
-					+ key + "' data-test-id='" + id + "' data-type='desktop'><b>Desktop: </b>"
+					+ key + "' data-test-id='" + id + "' data-type='desktop'><b>Desktop: </b></a>"
 					+ d.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 						": ")
-					+ "</a><br/><a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-type='mobile' data-key='"
-					+ key + "' data-test-id='" + id + "'><b>Mobile: </b>"
+					+ "<br/><a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-type='mobile' data-key='"
+					+ key + "' data-test-id='" + id + "'><b>Mobile: </b></a>"
 					+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
-						": ")
-					+ "</a>");
+						": "));
 		    }
+		} catch (SEOException e) {
+		    logger.debug("SEOException: ", e);
+		    test.log(LogStatus.SKIP, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(), e.getMessage());
 		} catch (Exception e) {
-		    logger.debug("Error " + e);
-
+		    logger.debug("Error ", e);
 		}
 		break;
 	    }
@@ -158,7 +159,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error occoured " + e);
+		logger.debug("Error occoured ", e);
 
 	    }
 	}
@@ -188,7 +189,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -218,7 +219,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -248,7 +249,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -293,7 +294,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error " + e);
+		    logger.debug("Error ", e);
 
 		}
 	    }
@@ -323,7 +324,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -348,7 +349,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -385,7 +386,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -416,7 +417,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -453,7 +454,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -484,7 +485,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -520,7 +521,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -556,7 +557,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -594,7 +595,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -632,7 +633,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -661,7 +662,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -691,7 +692,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -726,7 +727,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -761,7 +762,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -797,7 +798,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -827,7 +828,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -855,7 +856,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -883,7 +884,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -919,7 +920,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -955,7 +956,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -982,7 +983,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -1010,7 +1011,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -1038,7 +1039,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
@@ -1065,7 +1066,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -1102,7 +1103,7 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error " + e);
+		logger.debug("Error ", e);
 
 	    }
 	}
@@ -1133,7 +1134,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error " + e);
+		    logger.debug("Error ", e);
 
 		}
 	    }
@@ -1146,7 +1147,7 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate descriptions found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error " + e);
+	    logger.debug("Error ", e);
 	    test.log(LogStatus.FAIL, "Test Step Failed");
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
@@ -1176,7 +1177,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error " + e);
+		    logger.debug("Error ", e);
 
 		}
 	    }
@@ -1190,7 +1191,7 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate titles found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error " + e);
+	    logger.debug("Error ", e);
 	    test.log(LogStatus.FAIL, "Test Step Failed", e);
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
@@ -1220,7 +1221,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error " + e);
+		    logger.debug("Error ", e);
 		}
 	    }
 	    for (String key : map.keySet()) {
@@ -1233,7 +1234,7 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate body content found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error " + e);
+	    logger.debug("Error ", e);
 	    test.log(LogStatus.FAIL, "Test Step Failed", e);
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
