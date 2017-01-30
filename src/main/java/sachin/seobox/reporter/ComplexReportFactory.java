@@ -94,5 +94,6 @@ public class ComplexReportFactory {
 			reporter = null;
 		}
 		factory = null;
+		System.setProperty("Report", SEOConfig.reportPath);
 	}
 }
