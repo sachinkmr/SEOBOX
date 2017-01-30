@@ -18,6 +18,7 @@
 		<title>SEOBOX Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">	
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<link href='https://cdn.rawgit.com/sachinkmr/Content/b9b3378eb9c97032a4861819f11ae30948101c27/SEOBOX/css/extent-seo.css' type='text/css' rel='stylesheet' />	
 		<style type="text/css">
 			html,body {
@@ -36,14 +37,52 @@
     			top: 30%;
     			left: 55%;
 			}
-			
+			div#pageSpeedModal div.modal-content #resources .left table td{
+				border: none!important;
+				border-bottom:0px solid #ddd !important;
+			}
 			.container {
     			padding-left: 0px; 
 			}
 			.report-info{
 				display:block;
 			}
-		</style>
+			div#pageSpeedModal div.modal-content #resources .left table td{
+                border: none!important;
+                border-bottom:0px solid #ddd !important;
+            }
+			
+            #shouldFix h6, #passedInsight h6{
+				width:100%;
+				padding: 10px;
+				background: #333333;
+				border-radius: 4px;
+			}
+			#shouldFix a, #passedInsight a{
+				background-color: transparent ;
+				color: #039be5 ;
+				width:100%;
+			}
+			h6.google-heading >a{
+				color:white !important;
+
+			}
+			.google-info{
+				padding: 5px 15px;
+				padding-bottom: 20px;
+			}
+			.outer{
+				margin: 4px 0;
+			}
+			div#pageSpeedModal div.modal-content #shouldFix .google-info ul{
+				list-style-type:disc;
+				padding: 0 30px;
+				margin:2px auto;
+			}
+			div#pageSpeedModal div.modal-content #shouldFix .google-info ul li{
+				list-style-type:disc;
+			}
+          </style>
 	</head>
 	
 	<body class='extent default hide-overflow' onload="_updateCurrentStage(-1)">
@@ -475,25 +514,79 @@
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
 		</div>
+		<div id="pageSpeedModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Google PageSpeed Insights </h4>
+                <div class="accordionDiv">
+                    <h3> Page Resources</h3>
+                    <div>
+                        <div id='resources'>						
+                            <div class='left' style="width:49%" ><table class="bordered"></table></div>
+                            <div class='right'  style="width:49%" >
+                                <div>
+                                    <b>Resources destribution on page:</b><br/>							
+                                </div>
+                                <img alt='Page Resources' width='100%'/>
+                            </div>
+                        </div>
+                    </div>
+                    <h3> Should Fix</h3>
+                    <div>
+						<div>
+							<b>Following Rules are marked as failed. Click to view more.<br/></b>
+						</div>
+                        <div id='shouldFix' data-collapse="accordion">						
+
+                        </div>
+                    </div>
+                    <h3> Passed</h3>
+                    <div>
+						<div>
+							<b>Following Rules has been passed. Click to view more.<br/></b>
+						</div>
+                        <div id='passedInsight' data-collapse="accordion">						
+							
+                        </div>
+                    </div>				  
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><strong>Close</strong></a>
+            </div>
+        </div>
+        <div id="pageStructureModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Google Page Structured Report</h4>			  
+
+                <p> </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><strong>Close</strong></a>
+            </div>
+        </div>
 		<!--
 		<script src='https://cdn.rawgit.com/sachinkmr/Content/feec8a14753fa1f227e723c5b9796566c0da03bf/SEOBOX/js/extent-web.js' type='text/javascript'></script>
 		<script src='https://cdn.rawgit.com/anshooarora/extentreports/ab0f4299b133bfa234cec0b1e0ac08a692a7640a/cdn/extent.js' type='text/javascript'></script>
 		
 		-->
-		<script   src="https://code.jquery.com/jquery-2.2.0.min.js"   integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4="   crossorigin="anonymous"></script>
-		<script
-  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-  crossorigin="anonymous"></script>		
+		<script src="https://code.jquery.com/jquery-2.2.0.min.js"   integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4="   crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>		
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js' type='text/javascript'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.4/featherlight.min.js' type='text/javascript'></script>		
 		
-		<script src='https://cdn.rawgit.com/sachinkmr/Content/b800b4b674655d07d6e03542c41c8568e60af514/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
+		<script src='https://cdn.rawgit.com/sachinkmr/Content/15d28d675e3d4ed62814bed2993dd21427b9acfd/SEOBOX/js/extent-jsonp.js' type='text/javascript'></script>
 		<script>		
 			if($('.system-view>div>div.card-panel').css('height')>$('.category-summary-view>div>div.card-panel').css('height')){
 				$('.category-summary-view>div >div.card-panel').css('height',$('.system-view>div> div.card-panel').css('height'));
 			}
+			$(document).ready(function() {
+			  $('.modal-trigger').leanModal();
+			  $(".accordionDiv").accordion({
+		            collapsible: true,
+		            heightStyle: "content"
+		        });
+			});
 		</script>
 	</body>
 </html>
