@@ -11,13 +11,13 @@ package com.relevantcodes.extentreports;
 import com.relevantcodes.extentreports.model.Test;
 
 public interface IReporter {
-	void start(Report report);
+    void start(Report report);
 
-	void stop();
+    void stop();
 
-	void flush();
+    void flush();
 
-	void addTest(Test test);
+    void addTest(Test test);
 
-	void setTestRunnerLogs();
+    void setTestRunnerLogs();
 }

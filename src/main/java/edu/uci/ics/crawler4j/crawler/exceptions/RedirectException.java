@@ -9,14 +9,14 @@ import uk.org.lidalia.slf4jext.Level;
  * visited-already page, or redirecting to nothing
  */
 public class RedirectException extends Exception {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -5704975707626720596L;
-	public Level level;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5704975707626720596L;
+    public Level level;
 
-	public RedirectException(Level level, String msg) {
-		super(msg);
-		this.level = level;
-	}
+    public RedirectException(Level level, String msg) {
+	super(msg);
+	this.level = level;
+    }
 }

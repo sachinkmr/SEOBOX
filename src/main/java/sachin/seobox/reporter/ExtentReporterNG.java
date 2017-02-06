@@ -1,38 +1,49 @@
 package sachin.seobox.reporter;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.testng.IReporter;
-import org.testng.ISuite;
-import org.testng.xml.XmlSuite;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 
-public class ExtentReporterNG implements IReporter {
-
-	@Override
-	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-		System.out.println("\nGenerating Report, Please Wait.....");
-		System.out.println("----------------------------------------------------------");
-		ComplexReportFactory.getInstance().closeReport();
-
-		if (null != System.getenv("JENKINS_URL") && !System.getenv("JENKINS_URL").isEmpty()) {
-			String path = SEOConfig.reportPath.substring(0, SEOConfig.reportPath.indexOf("webapps\\") + 8);
-			try {
-				System.out.println("Report Generated: "
-						+ SEOConfig.reportPath.replace(path, "http://" + InetAddress.getLocalHost().getHostAddress()));
-			} catch (UnknownHostException e) {
-
-			}
-			FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "Config.properties"));
-			FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "CrawlerConfigFile"));
-		} else {
-			System.out.println("Report Generated: " + SEOConfig.reportPath);
-		}
-
+public class ExtentReporterNG {
+    public static void generateReport() {
+	System.out.println("\nGenerating Report, Please Wait.....");
+	System.out.println("----------------------------------------------------------");
+	ComplexReportFactory.getInstance().closeReport();
+	if (CrawlerConstants.ERROR && !CrawlerConstants.ERROR_TEXT.isEmpty()) {
+	    try {
+		File file = new File(CrawlerConstants.REPORT_PATH);
+		Document doc = Jsoup.parse(file, "UTF-8");
+		Element e = doc.select("div.loading").first();
+		e.attr("style", "display:block");
+		String errorText = "URL: <a href='" + CrawlerConstants.SITE + "'>" + CrawlerConstants.SITE + "</a><br/>"
+			+ CrawlerConstants.ERROR_TEXT;
+		e.select("#error").first().html(errorText);
+		FileUtils.writeStringToFile(file, doc.outerHtml(), "UTF-8");
+	    } catch (IOException e) {
+	    }
 	}
+	if ((null != System.getProperty("JENKINS") && !System.getProperty("JENKINS").isEmpty())
+		|| (null != System.getProperty("WEB") && !System.getProperty("WEB").isEmpty())) {
+	    String path = CrawlerConstants.REPORT_PATH.substring(0, CrawlerConstants.REPORT_PATH.indexOf("webapps\\") + 8);
+	    try {
+		System.out.println("Report Generated: "
+			+ CrawlerConstants.REPORT_PATH.replace(path, "http://" + InetAddress.getLocalHost().getHostAddress()));
+	    } catch (UnknownHostException e) {
+
+	    }
+	    FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "Config.properties"));
+	    FileUtils.deleteQuietly(new File(System.getProperty("user.dir"), "CrawlerConfigFile"));
+	} else {
+	    System.out.println("Report Generated: " + CrawlerConstants.REPORT_PATH);
+	}
+
+    }
 }

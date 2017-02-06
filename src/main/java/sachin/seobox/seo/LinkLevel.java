@@ -17,391 +17,399 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import edu.uci.ics.crawler4j.url.WebURL;
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.helpers.HelperUtils;
 import sachin.seobox.helpers.SiteMapUtils;
 import sachin.seobox.helpers.StreamUtils;
+import sachin.seobox.parameters.SEOPage;
 import sachin.seobox.reporter.ComplexReportFactory;
 
 public class LinkLevel {
 
-	protected final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
-	private File[] pages;
-	private StreamUtils streamUtils;
+    protected final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
+    private File[] pages;
+    private StreamUtils streamUtils;
 
-	@BeforeClass
-	public void getPages() {
-		pages = new File(SEOConfig.dataLocation).listFiles();
-		streamUtils = new StreamUtils();
-	}
+    @BeforeClass
+    public void getPages() {
+	pages = new File(CrawlerConstants.DATA_LOCATION).listFiles();
+	streamUtils = new StreamUtils();
+    }
 
-	@AfterClass
-	public void afterClass() {
-		pages = null;
-		streamUtils = null;
-	}
+    @AfterClass
+    public void afterClass() {
+	pages = null;
+	streamUtils = null;
+    }
 
-	@Test(description = "Verify that internal link response time is less than required", groups = {
-			"Links" }, enabled = true)
-	public void verifyLinkResponseTime() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+    @Test(description = "Verify that internal link response time is less than required", groups = {
+	    "Links" }, testName = "Link Response Time", enabled = true)
+    public void linkResponseTime() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()) {
-					int responseTime = page.getPage().getResponseTime();
-					if (responseTime <= SEOConfig.MAXIMUM_RESPONSE_TIME) {
-						test.log(LogStatus.PASS,
-								"Response time is less than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
-										+ SEOConfig.MAXIMUM_RESPONSE_TIME);
-					} else {
-						test.log(LogStatus.FAIL,
-								"Response time is greater than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
-										+ SEOConfig.MAXIMUM_RESPONSE_TIME);
-					}
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+		if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()) {
+		    int responseTime = page.getPage().getResponseTime();
+		    if (responseTime <= CrawlerConstants.MAXIMUM_RESPONSE_TIME) {
+			test.log(LogStatus.PASS,
+				"Response time is less than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
+					+ CrawlerConstants.MAXIMUM_RESPONSE_TIME);
+		    } else {
+			test.log(LogStatus.FAIL,
+				"Response time is greater than maximum response time.<br><b>URL: </b>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Link Response Time: </b>" + responseTime + "<br/><b>Max Response Time: </b>"
+					+ CrawlerConstants.MAXIMUM_RESPONSE_TIME);
+		    }
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "Verify that internal image size is less than required", groups = { "Links" }, enabled = true)
-	public void verifyImageSize() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
-				if (page.getPage().getStatusCode() == 200 && SEOConfig.IMAGE_PATTERN.matcher(webUrl.getURL()).find()) {
-					int size = page.getPage().getContentData().length;
-					if (size <= SEOConfig.MAXIMUM_IMAGE_SIZE) {
-						test.log(LogStatus.PASS,
-								"Image Size is less than required size.<br><b>URL: </b>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
-										+ SEOConfig.MAXIMUM_IMAGE_SIZE);
-					} else {
-						test.log(LogStatus.FAIL,
-								"Image Size is greater than required size.<br><b>URL: </b>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
-										+ SEOConfig.MAXIMUM_IMAGE_SIZE);
-					}
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+    @Test(description = "Verify that internal image size is less than required", testName = "Image Size", groups = {
+	    "Image" }, enabled = true)
+    public void imageSize() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
+		if (page.getPage().getStatusCode() == 200
+			&& CrawlerConstants.IMAGE_PATTERN.matcher(webUrl.getURL()).find()) {
+		    int size = page.getPage().getContentData().length;
+		    if (size <= CrawlerConstants.MAXIMUM_IMAGE_SIZE) {
+			test.log(LogStatus.PASS,
+				"Image Size is less than required size.<br><b>URL: </b>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
+					+ CrawlerConstants.MAXIMUM_IMAGE_SIZE);
+		    } else {
+			test.log(LogStatus.FAIL,
+				"Image Size is greater than required size.<br><b>URL: </b>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Image Size: </b>" + size + "<br/><b>Required Image Size: </b>"
+					+ CrawlerConstants.MAXIMUM_IMAGE_SIZE);
+		    }
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "Verify that compression is enabled. This verify for gzip in Content-Encoding header ", groups = {
-			"Links" }, enabled = false)
-	public void verifyCompression() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+    @Test(testName = "Link Compression", description = "Verify that compression is enabled. This verify for gzip in Content-Encoding header ", groups = {
+	    "Links" }, enabled = false)
+    public void linkCompression() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()
-						&& page.getPage().getContentEncoding() != null
-						&& !page.getPage().getContentEncoding().isEmpty()) {
-					if (page.getPage().getContentEncoding().contains("gzip")) {
-						test.log(LogStatus.PASS, "Content-Encoding header value is gzip.<br/><b>URL: <b/>"
-								+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
-					} else {
-						test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.<br/><b>URL: <b/>"
-								+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
-					}
-				} else {
-					test.log(LogStatus.FAIL,
-							"Content-Encoding header is not present in response.<br/><b>URL: <b/>" + webUrl.getURL());
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+		if (page.getPage().getStatusCode() == 200 && webUrl.isInternalLink()
+			&& page.getPage().getContentEncoding() != null
+			&& !page.getPage().getContentEncoding().isEmpty()) {
+		    if (page.getPage().getContentEncoding().contains("gzip")) {
+			test.log(LogStatus.PASS, "Content-Encoding header value is gzip.<br/><b>URL: <b/>"
+				+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
+		    } else {
+			test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.<br/><b>URL: <b/>"
+				+ webUrl.getURL() + "<br/><b>Parent: </b>" + webUrl.getParentUrl());
+		    }
+		} else {
+		    test.log(LogStatus.FAIL,
+			    "Content-Encoding header is not present in response.<br/><b>URL: <b/>" + webUrl.getURL());
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "Status code of external links on site. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
-			"HTTP Status Codes" }, enabled = true)
-	public void verifyStatusCodeExternalLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
-
-				int statusCode = page.getPage().getStatusCode();
-				if (!webUrl.isInternalLink())
-					if (statusCode >= 200 && statusCode < 300) {
-						test.log(
-								LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 300 && statusCode < 400) {
-						test.log(
-								LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
-										+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 400 && statusCode < 500) {
-						test.log(LogStatus.FAIL,
-								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-										+ page.getPage().getWebURL().getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 500) {
-						test.log(LogStatus.FATAL,
-								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-										+ page.getPage().getWebURL().getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+    @Test(testName = "Status Codes for External Links", description = "Status code of external links on site. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
+	    "HTTP Status Codes" }, enabled = true)
+    public void statusCodeExternalLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
+		if (!webUrl.isInternalLink()) {
+		    int statusCode = page.getPage().getStatusCode();
+		    if (statusCode >= 200 && statusCode < 300) {
+			test.log(
+				LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 300 && statusCode < 400) {
+			test.log(
+				LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
+					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 400 && statusCode < 500) {
+			test.log(LogStatus.FAIL,
+				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+					+ page.getPage().getWebURL().getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 500) {
+			test.log(LogStatus.FATAL,
+				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+					+ page.getPage().getWebURL().getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    }
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "status code for internal links. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
-			"HTTP Status Codes" }, enabled = true)
-	public void verifyStatusCodeInternalLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
-
-				int statusCode = page.getPage().getStatusCode();
-				if (webUrl.isInternalLink())
-					if (statusCode >= 200 && statusCode < 300) {
-						test.log(LogStatus.PASS,
-								"Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Parent: </b>"
-										+ page.getPage().getWebURL().getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 300 && statusCode < 400) {
-						test.log(LogStatus.WARNING,
-								"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Redireted To: <b/>"
-										+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
-										+ webUrl.getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 400 && statusCode < 500) {
-						test.log(LogStatus.FAIL,
-								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-										+ page.getPage().getWebURL().getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					} else if (statusCode >= 500) {
-						test.log(LogStatus.FATAL,
-								"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-										+ page.getPage().getWebURL().getParentUrl(),
-								"<b>Status Code: </b>" + statusCode);
-					}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+    @Test(testName = "Status Codes for Internal Links", description = "status code for internal links. To view, choose filter on right side.<br/>Passed: 2XX, Wanring: 3XX, Error: 4XX, Fatal: 5XX", groups = {
+	    "HTTP Status Codes" }, enabled = true)
+    public void statusCodeInternalLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
+		if (webUrl.isInternalLink()) {
+		    int statusCode = page.getPage().getStatusCode();
+		    if (statusCode >= 200 && statusCode < 300) {
+			test.log(LogStatus.PASS,
+				"Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Parent: </b>"
+					+ page.getPage().getWebURL().getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 300 && statusCode < 400) {
+			test.log(LogStatus.WARNING,
+				"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Redireted To: <b/>"
+					+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+					+ webUrl.getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 400 && statusCode < 500) {
+			test.log(LogStatus.FAIL,
+				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+					+ page.getPage().getWebURL().getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    } else if (statusCode >= 500) {
+			test.log(LogStatus.FATAL,
+				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
+					+ page.getPage().getWebURL().getParentUrl(),
+				"<b>Status Code: </b>" + statusCode);
+		    }
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 3XX status code", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get3xxStatusCodeAllLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+    @Test(testName = "3XX Status Codes", description = "get 3XX status code", groups = {
+	    "HTTP Status Codes" }, enabled = false)
+    public void get3xxStatusCodeAllLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				int statusCode = page.getPage().getStatusCode();
-				if (statusCode >= 300 && statusCode < 400) {
-					test.log(LogStatus.WARNING,
-							"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
-									+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
-									+ webUrl.getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+		int statusCode = page.getPage().getStatusCode();
+		if (statusCode >= 300 && statusCode < 400) {
+		    test.log(LogStatus.WARNING,
+			    "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+				    + page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+				    + webUrl.getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 3XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get3xxStatusCodeInternalLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+    @Test(testName = "3XX Status Code for Internal Links", description = "get 3XX status code for internal links", groups = {
+	    "HTTP Status Codes" }, enabled = false)
+    public void get3xxStatusCodeInternalLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				int statusCode = page.getPage().getStatusCode();
-				if (webUrl.isInternalLink() && statusCode >= 300 && statusCode < 400) {
-					test.log(LogStatus.WARNING,
-							"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
-									+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
-									+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+		int statusCode = page.getPage().getStatusCode();
+		if (webUrl.isInternalLink() && statusCode >= 300 && statusCode < 400) {
+		    test.log(LogStatus.WARNING,
+			    "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<b>Redireted To: <b/>"
+				    + page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
+				    + "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 4XX status code", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get4xxStatusCodeAllLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
+    @Test(testName = "4XX Status Codes", description = "get 4XX status code", groups = {
+	    "HTTP Status Codes" }, enabled = false)
+    public void get4xxStatusCodeAllLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
 
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				int statusCode = page.getPage().getStatusCode();
-				if (statusCode >= 400 && statusCode < 500) {
-					test.log(
-							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
-									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.error("error", e);
-			}
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		int statusCode = page.getPage().getStatusCode();
+		if (statusCode >= 400 && statusCode < 500) {
+		    test.log(
+			    LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+				    + "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.error("error", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 4XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get4xxStatusCodeInternalLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
+    @Test(testName = "4XX Status Code for Internal Links", description = "get 4XX status code for internal links", groups = {
+	    "HTTP Status Codes" }, enabled = false)
+    public void get4xxStatusCodeInternalLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
 
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				int statusCode = page.getPage().getStatusCode();
-				if (webUrl.isInternalLink() && statusCode >= 400 && statusCode < 500) {
-					test.log(
-							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
-									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.error("error", e);
-			}
+		int statusCode = page.getPage().getStatusCode();
+		if (webUrl.isInternalLink() && statusCode >= 400 && statusCode < 500) {
+		    test.log(
+			    LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+				    + "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.error("error", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 5XX status code", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get5xxStatusCodeAllLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				int statusCode = page.getPage().getStatusCode();
-				if (statusCode >= 500) {
-					test.log(
-							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
-									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+    @Test(testName = "", description = "get 5XX status code", groups = { "HTTP Status Codes" }, enabled = false)
+    public void get5xxStatusCodeAllLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		int statusCode = page.getPage().getStatusCode();
+		if (statusCode >= 500) {
+		    test.log(
+			    LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+				    + "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "get 5XX status code for internal links", groups = { "HTTP Status Codes" }, enabled = false)
-	public void get5xxStatusCodeInternalLinks() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
-		for (File file : pages) {
-			SEOPage page = streamUtils.readFile(file);
-			try {
-				WebURL webUrl = page.getPage().getWebURL();
+    @Test(testName = "", description = "get 5XX status code for internal links", groups = {
+	    "HTTP Status Codes" }, enabled = false)
+    public void get5xxStatusCodeInternalLinks() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		WebURL webUrl = page.getPage().getWebURL();
 
-				int statusCode = page.getPage().getStatusCode();
-				if (webUrl.isInternalLink() && statusCode >= 500) {
-					test.log(
-							LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
-									+ "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
-							"<b>Status Code: </b>" + statusCode);
-				}
-			} catch (Exception e) {
-				logger.debug("Error ", e);
-			}
+		int statusCode = page.getPage().getStatusCode();
+		if (webUrl.isInternalLink() && statusCode >= 500) {
+		    test.log(
+			    LogStatus.FAIL, "<b>URL:</b> " + page.getPage().getWebURL().getURL()
+				    + "<br/><b>Parent: </b>" + page.getPage().getWebURL().getParentUrl(),
+			    "<b>Status Code: </b>" + statusCode);
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    } catch (Exception e) {
+		logger.debug("Error ", e);
+	    }
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
-	@Test(description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" })
-	public void missingLinksInSitemapXML() {
-		Method caller = new Object() {
-		}.getClass().getEnclosingMethod();
-		ExtentTest test = HelperUtils.getTestLogger(caller);
+    @Test(testName = "Missing Links in Sitemap.xml", description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
+	    "SiteMap.xml" })
+    public void missingLinksInSitemapXML() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	try {
+	    Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConstants.SITE,
+		    CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
+	    for (File file : pages) {
+		SEOPage page = streamUtils.readFile(file);
 		try {
-			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(SEOConfig.site, SEOConfig.user,
-					SEOConfig.pass);
-			for (File file : pages) {
-				SEOPage page = streamUtils.readFile(file);
-				try {
-					// logger.debug("Verifying for: ",
-					// page.getPage().getWebURL());
-					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
-							&& page.getPage().getContentType().contains("text/html")) {
-						String url = page.getPage().getWebURL().getURL();
-						if (urlsInSiteMap.contains(url)) {
-							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
-						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
-						}
-					}
-				} catch (Exception e) {
-					logger.debug("Error " + e);
-					test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
-				}
+		    // logger.debug("Verifying for: ",
+		    // page.getPage().getWebURL());
+		    if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+			    && page.getPage().getContentType().contains("text/html")) {
+			String url = page.getPage().getWebURL().getURL();
+			if (urlsInSiteMap.contains(url)) {
+			    test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
+			} else {
+			    test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
 			}
-		} catch (ParseException | IOException | JDOMException e) {
-			logger.error("error in reading URLs from sitemap xml", e);
-			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
+		    }
 		} catch (Exception e) {
-			logger.debug("Error " + e);
-			test.log(LogStatus.FAIL, "Test Step Failed");
+		    logger.debug("Error " + e);
+		    test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL());
 		}
-		ComplexReportFactory.getInstance().closeTest(test);
+	    }
+	} catch (ParseException | IOException | JDOMException e) {
+	    logger.error("error in reading URLs from sitemap xml", e);
+	    test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
+	} catch (Exception e) {
+	    logger.debug("Error " + e);
+	    test.log(LogStatus.FAIL, "Test Step Failed");
 	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
 
 }

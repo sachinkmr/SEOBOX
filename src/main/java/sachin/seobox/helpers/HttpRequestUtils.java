@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.exception.SEOException;
 
 public class HttpRequestUtils {
@@ -68,9 +68,9 @@ public class HttpRequestUtils {
 	RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(false)
 		.setCookieSpec(CookieSpecs.IGNORE_COOKIES).setRedirectsEnabled(false)
 		.setSocketTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
 		.setConnectTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
 		.build();
 
 	RegistryBuilder<ConnectionSocketFactory> connRegistryBuilder = RegistryBuilder.create();
@@ -99,7 +99,7 @@ public class HttpRequestUtils {
 	HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 	clientBuilder.setDefaultRequestConfig(requestConfig);
 	clientBuilder.setConnectionManager(connectionManager);
-	clientBuilder.setUserAgent(SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+	clientBuilder.setUserAgent(CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
 		"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
 
 	CloseableHttpClient httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
@@ -124,12 +124,12 @@ public class HttpRequestUtils {
 	String add = URLCanonicalizer.getCanonicalURL(data[0]);
 	Request request = Request.Get(add)
 		.addHeader("user-agent",
-			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+			CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
 		.connectTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
 		.socketTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 	    String login = data[1] + ":" + data[2];
 	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
@@ -138,14 +138,14 @@ public class HttpRequestUtils {
 	return request.execute().returnResponse();
     }
 
-    public static JSONObject getStructuredData(String html) throws SEOException {
+    public static JSONObject getStructuredData(String html, String url) throws SEOException {
 	CloseableHttpClient client = HttpClients.createDefault();
 	JSONObject json = null;
 	try {
 	    HttpClientContext localContext = HttpClientContext.create();
-	    HttpPost httpPost = new HttpPost(SEOConfig.PAGE_STRUCTURE_URL);
-	    httpPost.addHeader("user-agent", SEOConfig.USER_AGENT);
-	    httpPost.addHeader("referer", SEOConfig.PAGE_STRUCTURE_URL);
+	    HttpPost httpPost = new HttpPost(CrawlerConstants.PAGE_STRUCTURE_URL);
+	    httpPost.addHeader("user-agent", CrawlerConstants.USER_AGENT);
+	    httpPost.addHeader("referer", CrawlerConstants.PAGE_STRUCTURE_URL);
 	    httpPost.addHeader("accept-encoding", "gzip, deflate, br");
 	    httpPost.addHeader("accept-language", "en-US,en;q=0.8");
 	    httpPost.addHeader("x-client-data", "CIW2yQEIpLbJAQjBtskB");
@@ -166,7 +166,7 @@ public class HttpRequestUtils {
 	    logger.debug("Unable to fatch structured data", e);
 	}
 	if (json == null) {
-	    throw new SEOException("Unable to fatch page structured data");
+	    throw new SEOException("Unable to fatch page structured data. url: " + url);
 	}
 	return json;
     }
@@ -175,14 +175,14 @@ public class HttpRequestUtils {
 	JSONObject json = null;
 	try {
 	    CloseableHttpClient client = HttpClients.createDefault();
-	    URIBuilder builder = new URIBuilder(SEOConfig.PAGE_SPEED_URL);
-	    builder.addParameter("key", SEOConfig.PAGE_SPEED_KEY);
+	    URIBuilder builder = new URIBuilder(CrawlerConstants.PAGE_SPEED_URL);
+	    builder.addParameter("key", CrawlerConstants.PAGE_SPEED_KEY);
 	    builder.addParameter("locale", "en_US");
 	    builder.addParameter("url", url);
 	    builder.addParameter("strategy", strategy);
 
 	    HttpGet httpget = new HttpGet(builder.build());
-	    httpget.addHeader("user-agent", SEOConfig.USER_AGENT);
+	    httpget.addHeader("user-agent", CrawlerConstants.USER_AGENT);
 	    CloseableHttpResponse response = client.execute(httpget);
 	    String str = EntityUtils.toString(response.getEntity(), "UTF-8");
 	    EntityUtils.consumeQuietly(response.getEntity());
@@ -204,7 +204,7 @@ public class HttpRequestUtils {
 	    logger.debug("Unable to fatch page speed data", e);
 	}
 	if (json == null) {
-	    throw new SEOException("Unable to fatch page speed data");
+	    throw new SEOException("Unable to fatch page speed data. url: " + url);
 	}
 	return json;
     }

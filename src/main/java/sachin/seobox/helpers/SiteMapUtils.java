@@ -19,25 +19,25 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 
 public class SiteMapUtils {
 
     public static Response getSiteMapXMLResponse(String... data)
 	    throws ParseException, ClientProtocolException, IOException {
 	String add = HelperUtils.getSiteAddress(data[0]) + "sitemap.xml";
-	if (SEOConfig.PROPERTIES.getProperty("seo.sitemapFile") != null
-		&& !SEOConfig.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
-	    add = SEOConfig.PROPERTIES.getProperty("seo.sitemapFile");
+	if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
+		&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+	    add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 	}
 	Request request = Request.Get(add)
 		.addHeader("user-agent",
-			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+			CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
 		.connectTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
 		.socketTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 	    String login = data[1] + ":" + data[2];
 	    String base64login = new String(Base64.encodeBase64(login.getBytes()));

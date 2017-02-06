@@ -24,33 +24,33 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class TextParseData implements ParseData {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2471233529223561658L;
-	private String textContent;
-	private Set<WebURL> outgoingUrls = new HashSet<>();
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2471233529223561658L;
+    private String textContent;
+    private Set<WebURL> outgoingUrls = new HashSet<>();
 
-	public String getTextContent() {
-		return textContent;
-	}
+    public String getTextContent() {
+	return textContent;
+    }
 
-	public void setTextContent(String textContent) {
-		this.textContent = textContent;
-	}
+    public void setTextContent(String textContent) {
+	this.textContent = textContent;
+    }
 
-	@Override
-	public Set<WebURL> getOutgoingUrls() {
-		return outgoingUrls;
-	}
+    @Override
+    public Set<WebURL> getOutgoingUrls() {
+	return outgoingUrls;
+    }
 
-	@Override
-	public void setOutgoingUrls(Set<WebURL> outgoingUrls) {
-		this.outgoingUrls = outgoingUrls;
-	}
+    @Override
+    public void setOutgoingUrls(Set<WebURL> outgoingUrls) {
+	this.outgoingUrls = outgoingUrls;
+    }
 
-	@Override
-	public String toString() {
-		return textContent;
-	}
+    @Override
+    public String toString() {
+	return textContent;
+    }
 }

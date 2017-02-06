@@ -21,5 +21,5 @@ package com.relevantcodes.extentreports;
  *
  */
 public enum LogLevel {
-	ALLOW_ALL, FAIL, WARNING, ERROR, ERRORS_AND_WARNINGS, OFF
+    ALLOW_ALL, FAIL, WARNING, ERROR, ERRORS_AND_WARNINGS, OFF
 }

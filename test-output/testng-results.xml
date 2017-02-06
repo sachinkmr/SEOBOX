@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="35" passed="35">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="695" started-at="2017-02-06T19:07:28Z" finished-at="2017-02-06T19:07:29Z">
+    <groups>
+      <group name="Canonical Tag">
+        <method signature="PageLevel.blankCanonicalURL()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankCanonicalURL" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.canonicalLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="canonicalLength" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.missingCanonicalTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingCanonicalTags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.multipleCanonicalTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleCanonicalTags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Canonical Tag -->
+      <group name="Div instead of Table">
+        <method signature="PageLevel.useDivInsteadOfTable()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="useDivInsteadOfTable" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Div instead of Table -->
+      <group name="No Flash">
+        <method signature="PageLevel.noFlash()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="noFlash" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- No Flash -->
+      <group name="Meta Description">
+        <method signature="PageLevel.blankDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankDescription" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.descriptionLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="descriptionLength" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.duplicateDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateDescription" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.missingDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingDescription" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.multipleDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleDescription" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Meta Description -->
+      <group name="H2 Tag">
+        <method signature="PageLevel.blankH2Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankH2Tags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.overCharacterH2Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="overCharacterH2Tags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- H2 Tag -->
+      <group name="Image">
+        <method signature="PageLevel.imageAltText()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="imageAltText" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.imageTitleText()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="imageTitleText" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Image -->
+      <group name="No Frames">
+        <method signature="PageLevel.noFrames()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="noFrames" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- No Frames -->
+      <group name="HREF Language Tags">
+        <method signature="PageLevel.HREFLanguageTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="HREFLanguageTags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- HREF Language Tags -->
+      <group name="Content-HTML">
+        <method signature="PageLevel.contentAndHTMLRatio()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="contentAndHTMLRatio" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.duplicateBodyContent()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateBodyContent" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Content-HTML -->
+      <group name="Robots Tags">
+        <method signature="PageLevel.NOFOLLOWTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOFOLLOWTags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.NOINDEXTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOINDEXTags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.NOODPTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOODPTags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.NOYDIRTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOYDIRTags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Robots Tags -->
+      <group name="Links">
+        <method signature="PageLevel.externalOutgoingLinksCount()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="externalOutgoingLinksCount" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.internalOutgoingLinksCount()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="internalOutgoingLinksCount" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Links -->
+      <group name="H1 Tag">
+        <method signature="PageLevel.blankH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankH1Tags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.missingH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingH1Tags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.multipleH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleH1Tags" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.overCharacterH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="overCharacterH1Tags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- H1 Tag -->
+      <group name="OG Tags">
+        <method signature="PageLevel.OGTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="OGTags" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- OG Tags -->
+      <group name="Title Tag">
+        <method signature="PageLevel.duplicateTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateTitle" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.missingTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingTitle" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.multipleTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleTitle" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.titleMaximumLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="titleMaximumLength" class="sachin.seobox.seo.PageLevel"/>
+        <method signature="PageLevel.titleMinimumLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="titleMinimumLength" class="sachin.seobox.seo.PageLevel"/>
+      </group> <!-- Title Tag -->
+    </groups>
+    <test name="Default test" duration-ms="695" started-at="2017-02-06T19:07:28Z" finished-at="2017-02-06T19:07:29Z">
+      <class name="sachin.seobox.seo.PageLevel">
+        <test-method status="PASS" signature="getPages()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="getPages" is-config="true" duration-ms="244" started-at="2017-02-07T00:37:28Z" finished-at="2017-02-07T00:37:28Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getPages -->
+        <test-method status="PASS" signature="HREFLanguageTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="HREFLanguageTags" duration-ms="264" started-at="2017-02-07T00:37:28Z" description="Verify that multilingual site does have HREF Language Tag in head tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- HREFLanguageTags -->
+        <test-method status="PASS" signature="NOFOLLOWTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOFOLLOWTags" duration-ms="5" started-at="2017-02-07T00:37:29Z" description="Verify that page has NO FOLLOW Robots meta tags" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- NOFOLLOWTags -->
+        <test-method status="PASS" signature="NOINDEXTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOINDEXTags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that page has NOINDEX Robots meta tags" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- NOINDEXTags -->
+        <test-method status="PASS" signature="NOODPTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOODPTags" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify that page has NOODP Robots meta tags" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- NOODPTags -->
+        <test-method status="PASS" signature="NOYDIRTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="NOYDIRTags" duration-ms="5" started-at="2017-02-07T00:37:29Z" description="Verify that page has NOYDIR Robots meta tags" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- NOYDIRTags -->
+        <test-method status="PASS" signature="OGTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="OGTags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that site does have all og tags" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- OGTags -->
+        <test-method status="PASS" signature="blankCanonicalURL()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankCanonicalURL" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify for blank canonical tag url" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- blankCanonicalURL -->
+        <test-method status="PASS" signature="blankDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankDescription" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that description tag content is not blank" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- blankDescription -->
+        <test-method status="PASS" signature="blankH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankH1Tags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that H1 Tag is not blank" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- blankH1Tags -->
+        <test-method status="PASS" signature="blankH2Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="blankH2Tags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that H2 Tag is not blank" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- blankH2Tags -->
+        <test-method status="PASS" signature="canonicalLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="canonicalLength" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify length for canonical tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- canonicalLength -->
+        <test-method status="PASS" signature="contentAndHTMLRatio()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="contentAndHTMLRatio" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that Content and HTML Ratio does not exceed on page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- contentAndHTMLRatio -->
+        <test-method status="PASS" signature="descriptionLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="descriptionLength" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify length for description tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- descriptionLength -->
+        <test-method status="PASS" signature="duplicateBodyContent()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateBodyContent" duration-ms="7" started-at="2017-02-07T00:37:29Z" description="Verify that pages do not have duplicate content" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateBodyContent -->
+        <test-method status="PASS" signature="duplicateDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateDescription" duration-ms="5" started-at="2017-02-07T00:37:29Z" description="Verify that site does not have duplicate meta description values" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateDescription -->
+        <test-method status="PASS" signature="duplicateTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="duplicateTitle" duration-ms="5" started-at="2017-02-07T00:37:29Z" description="Verify that site does not have duplicate title values" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- duplicateTitle -->
+        <test-method status="PASS" signature="externalOutgoingLinksCount()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="externalOutgoingLinksCount" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify External outgoing links count on the page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- externalOutgoingLinksCount -->
+        <test-method status="PASS" signature="imageAltText()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="imageAltText" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that image alt text is not missing" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- imageAltText -->
+        <test-method status="PASS" signature="imageTitleText()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="imageTitleText" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that image title text is not missing" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- imageTitleText -->
+        <test-method status="PASS" signature="internalOutgoingLinksCount()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="internalOutgoingLinksCount" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify Internal outgoing links count on the page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- internalOutgoingLinksCount -->
+        <test-method status="PASS" signature="missingCanonicalTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingCanonicalTags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify for missing canonical tags for page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- missingCanonicalTags -->
+        <test-method status="PASS" signature="missingDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingDescription" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify for missing description for page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- missingDescription -->
+        <test-method status="PASS" signature="missingH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingH1Tags" duration-ms="5" started-at="2017-02-07T00:37:29Z" description="Verify that page do not has missing H1 Tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- missingH1Tags -->
+        <test-method status="PASS" signature="missingTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="missingTitle" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify missing title tag on page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- missingTitle -->
+        <test-method status="PASS" signature="multipleCanonicalTags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleCanonicalTags" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify for multiple canonical tags for page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- multipleCanonicalTags -->
+        <test-method status="PASS" signature="multipleDescription()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleDescription" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify for multiple description for page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- multipleDescription -->
+        <test-method status="PASS" signature="multipleH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleH1Tags" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify that page has only one H1 Tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- multipleH1Tags -->
+        <test-method status="PASS" signature="multipleTitle()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="multipleTitle" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify multiple title tag on page" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- multipleTitle -->
+        <test-method status="PASS" signature="noFlash()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="noFlash" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify that if page has flash content" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- noFlash -->
+        <test-method status="PASS" signature="noFrames()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="noFrames" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify that if page has frames" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- noFrames -->
+        <test-method status="PASS" signature="overCharacterH1Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="overCharacterH1Tags" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify that H1 Tag is not over character" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- overCharacterH1Tags -->
+        <test-method status="PASS" signature="overCharacterH2Tags()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="overCharacterH2Tags" duration-ms="3" started-at="2017-02-07T00:37:29Z" description="Verify that H2 Tag is not over character" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- overCharacterH2Tags -->
+        <test-method status="PASS" signature="titleMaximumLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="titleMaximumLength" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify maximum length for title tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- titleMaximumLength -->
+        <test-method status="PASS" signature="titleMinimumLength()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="titleMinimumLength" duration-ms="4" started-at="2017-02-07T00:37:29Z" description="Verify minimum length for title tag" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- titleMinimumLength -->
+        <test-method status="PASS" signature="useDivInsteadOfTable()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="useDivInsteadOfTable" duration-ms="8" started-at="2017-02-07T00:37:29Z" description="Verify that if page has tables" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- useDivInsteadOfTable -->
+        <test-method status="PASS" signature="afterClass()[pri:0, instance:sachin.seobox.seo.PageLevel@2a798d51]" name="afterClass" is-config="true" duration-ms="0" started-at="2017-02-07T00:37:29Z" finished-at="2017-02-07T00:37:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterClass -->
+      </class> <!-- sachin.seobox.seo.PageLevel -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

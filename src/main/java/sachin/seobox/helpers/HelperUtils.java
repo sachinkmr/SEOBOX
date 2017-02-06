@@ -22,12 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
+import com.google.common.reflect.ClassPath;
+import com.google.common.reflect.ClassPath.ClassInfo;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import edu.uci.ics.crawler4j.url.WebURL;
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.reporter.ComplexReportFactory;
 
 public class HelperUtils {
@@ -64,14 +66,14 @@ public class HelperUtils {
     public static Response getLinkResponse(String... data) throws ParseException, ClientProtocolException, IOException {
 	Request request = Request.Get(data[0])
 		.addHeader("user-agent",
-			SEOConfig.PROPERTIES.getProperty("crawler.userAgentString",
+			CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
 		.addHeader("Accept-Encoding",
 			"gzip, compress, deflate, br, identity, exi, pack200-gzip, bzip2, lzma, peerdist, sdch, xpress, xz")
 		.connectTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
 		.socketTimeout(
-			Integer.parseInt(SEOConfig.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 	    String login = data[1] + ":" + data[2];
 	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
@@ -84,7 +86,7 @@ public class HelperUtils {
 	File file = null;
 	try {
 	    String str = IOUtils.toString(HelperUtils.class.getClassLoader().getResourceAsStream(fileName));
-	    file = new File(new File(SEOConfig.dataLocation).getParentFile(), fileName);
+	    file = new File(new File(CrawlerConstants.DATA_LOCATION).getParentFile(), fileName);
 	    FileUtils.write(file, str, "utf-8");
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -105,7 +107,7 @@ public class HelperUtils {
 	File file = null;
 	try {
 	    String str = FileUtils.readFileToString(new File(pROPERTIES_LOC), "UTF-8");
-	    file = new File(SEOConfig.crawlStorageFolder, fileName);
+	    file = new File(CrawlerConstants.CRAWL_STORAGE_FOLDER, fileName);
 	    FileUtils.write(file, str, "utf-8");
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -114,11 +116,12 @@ public class HelperUtils {
     }
 
     public static ExtentTest getTestLogger(Method caller) {
-	System.out.println("Executing: " + caller.getName());
-	ExtentTest test = ComplexReportFactory.getInstance().getTest(caller.getName());
-	test.setDescription(caller.getAnnotationsByType(Test.class)[0].description());
+	Test anno = caller.getAnnotation(Test.class);
+	ExtentTest test = ComplexReportFactory.getInstance().getTest(anno.testName());
+	test.setDescription(anno.description());
 	test.setStartedTime(getTestCaseTime(System.currentTimeMillis()));
-	test.assignCategory(caller.getAnnotationsByType(Test.class)[0].groups());
+	test.assignCategory(anno.groups());
+	System.out.println("Executing: " + anno.testName());
 	return test;
     }
 
@@ -155,10 +158,49 @@ public class HelperUtils {
 	    }
 	}
 	for (int score : result) {
-	    if (score < SEOConfig.PAGE_SPEED_PASS_POINTS) {
+	    if (score < CrawlerConstants.PAGE_SPEED_PASS_POINTS) {
 		return LogStatus.FAIL;
 	    }
 	}
 	return LogStatus.PASS;
+    }
+
+    public static Set<String> getTestCasesNames() {
+	Set<String> set = new HashSet<>();
+	try {
+	    Set<ClassInfo> classes = ClassPath.from(Thread.currentThread().getContextClassLoader())
+		    .getTopLevelClasses("sachin.seobox.seo");
+	    for (ClassInfo info : classes) {
+		Method[] methods = Class.forName(info.getName()).getDeclaredMethods();
+		for (Method method : methods) {
+		    if (method.isAnnotationPresent(Test.class)) {
+			Test test = method.getAnnotation(Test.class);
+			if (test.enabled())
+			    set.add(method.getName());
+		    }
+		}
+	    }
+	} catch (Exception e) {
+
+	}
+	return set;
+    }
+
+    public static Response getFluentResponse(String... data) throws ClientProtocolException, IOException {
+	String add = URLCanonicalizer.getCanonicalURL(data[0]);
+	Request request = Request.Get(add)
+		.addHeader("user-agent",
+			CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+		.connectTimeout(
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+		.socketTimeout(
+			Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+	if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+	    String login = data[1] + ":" + data[2];
+	    String base64login = new String(Base64.encodeBase64(login.getBytes()));
+	    request.addHeader("Authorization", "Basic " + base64login);
+	}
+	return request.execute();
     }
 }

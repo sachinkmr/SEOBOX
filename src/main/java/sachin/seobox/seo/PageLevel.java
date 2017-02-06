@@ -22,11 +22,12 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import edu.uci.ics.crawler4j.url.WebURL;
-import sachin.seobox.common.SEOConfig;
+import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.exception.SEOException;
+import sachin.seobox.helpers.DBUtils;
 import sachin.seobox.helpers.HelperUtils;
-import sachin.seobox.helpers.HttpRequestUtils;
 import sachin.seobox.helpers.StreamUtils;
+import sachin.seobox.parameters.SEOPage;
 import sachin.seobox.reporter.ComplexReportFactory;
 
 public class PageLevel {
@@ -36,7 +37,7 @@ public class PageLevel {
 
     @BeforeClass
     public void getPages() {
-	pages = new File(SEOConfig.dataLocation).listFiles();
+	pages = new File(CrawlerConstants.DATA_LOCATION).listFiles();
 	streamUtils = new StreamUtils();
     }
 
@@ -46,8 +47,9 @@ public class PageLevel {
 	streamUtils = null;
     }
 
-    @Test(description = "Verify that site does have all og tags", groups = { "OG Tags" }, enabled = false)
-    public void verifyOGTags() {
+    @Test(testName = "OG Tags", description = "Verify that site does have all og tags", groups = {
+	    "OG Tags" }, enabled = true)
+    public void OGTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -77,39 +79,40 @@ public class PageLevel {
 
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify page based on Google PageSpeed Insights", groups = { "Page Speed" })
-    public void verifyPageSpeed() {
+    @Test(testName = "Google Page Speed", description = "Verify page based on Google PageSpeed Insights", groups = {
+	    "Page Speed" }, enabled = false)
+    public void pageSpeed() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
-	if (null != SEOConfig.user && !SEOConfig.user.trim().isEmpty()) {
+	if (null != CrawlerConstants.USERNAME && !CrawlerConstants.USERNAME.trim().isEmpty()) {
 	    test.log(LogStatus.SKIP, "Skipping test because site has authentication", "");
 	} else {
 	    for (File file : pages) {
 		SEOPage page = streamUtils.readFile(file);
-		try {
-		    if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
-			    && page.getPage().getContentType().contains("text/html")) {
-			// String key = HelperUtils.getUUID();
+		if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+			&& page.getPage().getContentType().contains("text/html")) {
+		    try {
 			String key = UUID.randomUUID().toString();
-			JSONObject mobile = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
-				"mobile");
-			JSONObject desktop = HttpRequestUtils.getPageSpeedData(page.getPage().getWebURL().getURL(),
-				"desktop");
+			JSONObject results = DBUtils.getPageSpeedRecord(page.getPage().getWebURL().getURL());
+			if (results.getString("hasError").equals("true"))
+			    throw new SEOException(results.getString("error"));
+			JSONObject mobile = results.getJSONObject("mobile");
+			JSONObject desktop = results.getJSONObject("desktop");
 			org.bson.Document arr = new org.bson.Document("mobile", mobile.toString());
 			arr.append("desktop", desktop.toString());
 			arr.append("key", key);
 			String id = test.getTest().getId().toString();
 			arr.append("test_id", id);
 			arr.append("test_name", test.getTest().getName());
-			ComplexReportFactory.getInstance().getMongoDB().getCollection(SEOConfig.REPORT_TIME_STAMP)
+			ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 				.insertOne(arr);
 			String d = desktop.getJSONObject("ruleGroups").toString();
 			String m = mobile.getJSONObject("ruleGroups").toString();
@@ -123,21 +126,22 @@ public class PageLevel {
 					+ key + "' data-test-id='" + id + "'><b>Mobile: </b></a>"
 					+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 						": "));
+		    } catch (SEOException e) {
+			logger.debug("SEOException: ", e);
+			test.log(LogStatus.SKIP, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
+				e.getMessage());
+		    } catch (Exception e) {
+			logger.debug("Error in " + test.getTest().getName(), e);
 		    }
-		} catch (SEOException e) {
-		    logger.debug("SEOException: ", e);
-		    test.log(LogStatus.SKIP, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(), e.getMessage());
-		} catch (Exception e) {
-		    logger.debug("Error ", e);
 		}
-		break;
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page has NOODP Robots meta tags", groups = { "Robots Tags" }, enabled = false)
-    public void verifyNOODPTags() {
+    @Test(testName = "NOODP Tags", description = "Verify that page has NOODP Robots meta tags", groups = {
+	    "Robots Tags" }, enabled = true)
+    public void NOODPTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -166,8 +170,9 @@ public class PageLevel {
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page has NOYDIR Robots meta tags", groups = { "Robots Tags" }, enabled = false)
-    public void verifyNOYDIRTags() {
+    @Test(testName = "NOYDIR Tags", description = "Verify that page has NOYDIR Robots meta tags", groups = {
+	    "Robots Tags" }, enabled = true)
+    public void NOYDIRTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -189,15 +194,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page has NOINDEX Robots meta tags", groups = { "Robots Tags" }, enabled = false)
-    public void verifyNOINDEXTags() {
+    @Test(testName = "NO INDEX Tags", description = "Verify that page has NOINDEX Robots meta tags", groups = {
+	    "Robots Tags" }, enabled = true)
+    public void NOINDEXTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -219,15 +225,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page has NOFOLLOW Robots meta tags", groups = { "Robots Tags" }, enabled = false)
-    public void verifyNOFOLLOWTags() {
+    @Test(testName = "NO FOLLOW Tags", description = "Verify that page has NO FOLLOW Robots meta tags", groups = {
+	    "Robots Tags" }, enabled = true)
+    public void NOFOLLOWTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -249,20 +256,20 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that multilingual site does have HREF Language Tag in head tag", groups = {
-	    "HREF Language Tags" }, enabled = false)
-    public void verifyHREFLanguageTags() {
+    @Test(testName = "HREF Language Tags", description = "Verify that multilingual site does have HREF Language Tag in head tag", groups = {
+	    "HREF Language Tags" }, enabled = true)
+    public void HREFLanguageTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
-	if (SEOConfig.MULTI_LINGUAL) {
+	if (CrawlerConstants.MULTI_LINGUAL) {
 	    for (File file : pages) {
 		SEOPage page = streamUtils.readFile(file);
 		try {
@@ -270,7 +277,7 @@ public class PageLevel {
 			    && page.getPage().getContentType().contains("text/html")) {
 			if (page.getPage().getStatusCode() == 200
 				&& page.getPage().getContentType().contains("text/html")) {
-			    Document document = Jsoup.parse(page.getHtml(), SEOConfig.site);
+			    Document document = Jsoup.parse(page.getHtml(), CrawlerConstants.SITE);
 			    Element head = document.getElementsByTag("head").first();
 			    List<Element> links = head.select("link[rel=alternate]");
 			    if (links.isEmpty()) {
@@ -294,7 +301,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error ", e);
+		    logger.debug("Error in " + test.getTest().getName(), e);
 
 		}
 	    }
@@ -304,8 +311,9 @@ public class PageLevel {
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page has only one H1 Tag", groups = { "H1 Tag" }, enabled = false)
-    public void verifyMultipleH1Tags() {
+    @Test(testName = "Multiple H1 Tags", description = "Verify that page has only one H1 Tag", groups = {
+	    "H1 Tag" }, enabled = true)
+    public void multipleH1Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -324,15 +332,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that page do not has missing H1 Tag", groups = { "H1 Tag" }, enabled = false)
-    public void verifyMissingH1Tags() {
+    @Test(testName = "Missing H1 Tags", description = "Verify that page do not has missing H1 Tag", groups = {
+	    "H1 Tag" }, enabled = true)
+    public void missingH1Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -349,15 +358,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that H1 Tag is not over character", groups = { "H1 Tag" }, enabled = false)
-    public void verifyOverCharacterH1Tags() {
+    @Test(testName = "Over Character H1 Tags", description = "Verify that H1 Tag is not over character", groups = {
+	    "H1 Tag" }, enabled = true)
+    public void overCharacterH1Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -369,32 +379,33 @@ public class PageLevel {
 		    List<Element> list = page.getH1Tags();
 		    if (!list.isEmpty()) {
 			for (Element e : list) {
-			    if (e.text().length() <= SEOConfig.H1_CHARACTERS_LIMIT) {
+			    if (e.text().length() <= CrawlerConstants.H1_CHARACTERS_LIMIT) {
 				test.log(LogStatus.PASS,
 					"H1 text is not over character.<br/><b>H1: </b>" + e.text()
 						+ "<br/><b>URl: </b>" + page.getPage().getWebURL().getURL(),
 					"<b>H1 Character Count: </b>" + e.text().length()
-						+ "<br/><b>H1 Character Limit: </b>" + SEOConfig.H1_CHARACTERS_LIMIT);
+						+ "<br/><b>H1 Character Limit: </b>" + CrawlerConstants.H1_CHARACTERS_LIMIT);
 			    } else {
 				test.log(LogStatus.FAIL,
 					"H1 text is over character.<br/><b>H1: </b>" + e.text() + "<br/><b>URl: </b>"
 						+ page.getPage().getWebURL().getURL(),
 					"<b>H1 Character Count: </b>" + e.text().length()
-						+ "<br/><b>H1 Character Limit: </b>" + SEOConfig.H1_CHARACTERS_LIMIT);
+						+ "<br/><b>H1 Character Limit: </b>" + CrawlerConstants.H1_CHARACTERS_LIMIT);
 			    }
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that H1 Tag is not blank", groups = { "H1 Tag" }, enabled = false)
-    public void verifyBlankH1Tags() {
+    @Test(testName = "Blank H1 Tags", description = "Verify that H1 Tag is not blank", groups = {
+	    "H1 Tag" }, enabled = true)
+    public void blankH1Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -417,15 +428,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that H2 Tag is not over character", groups = { "H2 Tag" }, enabled = false)
-    public void verifyOverCharacterH2Tags() {
+    @Test(testName = "Over Character H2 Tags", description = "Verify that H2 Tag is not over character", groups = {
+	    "H2 Tag" }, enabled = true)
+    public void overCharacterH2Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -437,32 +449,33 @@ public class PageLevel {
 		    List<Element> list = page.getH2Tags();
 		    if (!list.isEmpty()) {
 			for (Element e : list) {
-			    if (e.text().length() <= SEOConfig.H2_CHARACTERS_LIMIT) {
+			    if (e.text().length() <= CrawlerConstants.H2_CHARACTERS_LIMIT) {
 				test.log(LogStatus.PASS,
 					"H2 text is not over character.<br/><b>H2: </b>" + e.text()
 						+ "<br/><b>URL: </b>" + page.getPage().getWebURL().getURL(),
 					"<b>H2 Character Count: </b>" + e.text().length()
-						+ "<br/><b>H2 Character Limit: </b>" + SEOConfig.H2_CHARACTERS_LIMIT);
+						+ "<br/><b>H2 Character Limit: </b>" + CrawlerConstants.H2_CHARACTERS_LIMIT);
 			    } else {
 				test.log(LogStatus.FAIL,
 					"H2 text is over character.<br/><b>H2: </b>" + e.text() + "<br/><b>URL: </b>"
 						+ page.getPage().getWebURL().getURL(),
 					"<b>H2 Character Count: </b>" + e.text().length()
-						+ "<br/><b>H2 Character Limit: </b>" + SEOConfig.H2_CHARACTERS_LIMIT);
+						+ "<br/><b>H2 Character Limit: </b>" + CrawlerConstants.H2_CHARACTERS_LIMIT);
 			    }
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that H2 Tag is not blank", groups = { "H2 Tag" }, enabled = false)
-    public void verifyBlankH2Tags() {
+    @Test(testName = "Blank H2 Tags", description = "Verify that H2 Tag is not blank", groups = {
+	    "H2 Tag" }, enabled = true)
+    public void blankH2Tags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -485,15 +498,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that image alt text is not missing", groups = { "Image Alt Text" }, enabled = false)
-    public void verifyImageAltText() {
+    @Test(testName = "Image Alt Text", description = "Verify that image alt text is not missing", groups = {
+	    "Image" }, enabled = true)
+    public void imageAltText() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -521,15 +535,51 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that Content and HTML Ratio does not exceed on page", groups = {
-	    "Content-HTML" }, enabled = false)
+    @Test(testName = "Image Title Text", description = "Verify that image title text is not missing", groups = {
+	    "Image" }, enabled = true)
+    public void imageTitleText() {
+	Method caller = new Object() {
+	}.getClass().getEnclosingMethod();
+	ExtentTest test = HelperUtils.getTestLogger(caller);
+	for (File file : pages) {
+	    SEOPage page = streamUtils.readFile(file);
+	    try {
+		if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+			&& page.getPage().getContentType().contains("text/html")) {
+		    List<Element> list = page.getImages();
+		    if (!list.isEmpty()) {
+			for (Element e : list) {
+			    if (e.hasAttr("title") && !e.attr("title").isEmpty()) {
+				test.log(LogStatus.PASS,
+					"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
+						+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
+					"Image has title Text.<br/><b>Alt Text: </b>" + e.attr("title"));
+
+			    } else {
+				test.log(LogStatus.FAIL,
+					"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
+						+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
+					"Image does not has title Text.");
+			    }
+			}
+		    }
+		}
+	    } catch (Exception e) {
+		logger.debug("Error in " + test.getTest().getName(), e);
+	    }
+	}
+	ComplexReportFactory.getInstance().closeTest(test);
+    }
+
+    @Test(testName = "Content And HTML Ratio", description = "Verify that Content and HTML Ratio does not exceed on page", groups = {
+	    "Content-HTML" }, enabled = true)
     public void contentAndHTMLRatio() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
@@ -542,30 +592,31 @@ public class PageLevel {
 		    String html = page.getHtml();
 		    String content = Jsoup.parse(html).text();
 		    byte ratio = (byte) ((content.length() * 100) / html.length());
-		    if (ratio <= SEOConfig.CONTENT_HTML_RATIO) {
+		    if (ratio <= CrawlerConstants.CONTENT_HTML_RATIO) {
 			test.log(LogStatus.PASS,
 				"Content and HTML Ratio is within range. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Page Ratio: </b>" + ratio + "<br/><b>Recommended: </b>"
-					+ SEOConfig.CONTENT_HTML_RATIO);
+					+ CrawlerConstants.CONTENT_HTML_RATIO);
 		    } else {
 			test.log(LogStatus.FAIL,
 				"Content and HTML Ratio is not within range. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Page Ratio: </b>" + ratio + "<br/><b>Recommended: </b>"
-					+ SEOConfig.CONTENT_HTML_RATIO);
+					+ CrawlerConstants.CONTENT_HTML_RATIO);
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify Internal outgoing links count on the page", groups = { "Links" }, enabled = false)
-    public void verifyInternalOutgoingLinksCount() {
+    @Test(testName = "Internal Outgoing Links", description = "Verify Internal outgoing links count on the page", groups = {
+	    "Links" }, enabled = true)
+    public void internalOutgoingLinksCount() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -580,30 +631,31 @@ public class PageLevel {
 			if (url.isInternalLink())
 			    x++;
 		    }
-		    if (x > SEOConfig.MAXIMUM_LINKS_COUNTS) {
+		    if (x > CrawlerConstants.MAXIMUM_LINKS_COUNTS) {
 			test.log(LogStatus.FAIL,
 				"Internal outgoing links count is exceeding. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Links Count: </b>" + x + "<br/><b>Recommended: </b>"
-					+ SEOConfig.MAXIMUM_LINKS_COUNTS);
+					+ CrawlerConstants.MAXIMUM_LINKS_COUNTS);
 		    } else {
 			test.log(LogStatus.PASS,
 				"Internal outgoing links count is withing range. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Links Count: </b>" + x + "<br/><b>Recommended: </b>"
-					+ SEOConfig.MAXIMUM_LINKS_COUNTS);
+					+ CrawlerConstants.MAXIMUM_LINKS_COUNTS);
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify External outgoing links count on the page", groups = { "Links" }, enabled = false)
-    public void verifyExternalOutgoingLinksCount() {
+    @Test(testName = "External Outgoing Links", description = "Verify External outgoing links count on the page", groups = {
+	    "Links" }, enabled = true)
+    public void externalOutgoingLinksCount() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -618,22 +670,22 @@ public class PageLevel {
 			if (!url.isInternalLink())
 			    x++;
 		    }
-		    if (x > SEOConfig.MAXIMUM_EXTERNAL_LINKS_COUNTS) {
+		    if (x > CrawlerConstants.MAXIMUM_EXTERNAL_LINKS_COUNTS) {
 			test.log(LogStatus.FAIL,
 				"External outgoing links count is exceeding. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Links Count: </b>" + x + "<br/><b>Recommended: </b>"
-					+ SEOConfig.MAXIMUM_EXTERNAL_LINKS_COUNTS);
+					+ CrawlerConstants.MAXIMUM_EXTERNAL_LINKS_COUNTS);
 		    } else {
 			test.log(LogStatus.PASS,
 				"External outgoing links count is withing range. <br/><b>URL: </b>"
 					+ page.getPage().getWebURL().getURL(),
 				"<b>Links Count: </b>" + x + "<br/><b>Recommended: </b>"
-					+ SEOConfig.MAXIMUM_EXTERNAL_LINKS_COUNTS);
+					+ CrawlerConstants.MAXIMUM_EXTERNAL_LINKS_COUNTS);
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
@@ -641,8 +693,9 @@ public class PageLevel {
 
     }
 
-    @Test(description = "Verify missing title tag on page", groups = { "Title Tag" }, enabled = false)
-    public void verifyMissingTitle() {
+    @Test(testName = "Missing Title", description = "Verify missing title tag on page", groups = {
+	    "Title Tag" }, enabled = true)
+    public void missingTitle() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -662,16 +715,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify multiple title tag on page", groups = { "Title Tag" }, enabled = false)
-    public void verifyMultipleTitle() {
-
+    @Test(testName = "Multiple Title", description = "Verify multiple title tag on page", groups = {
+	    "Title Tag" }, enabled = true)
+    public void multipleTitle() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -692,15 +745,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify minimum length for title tag", groups = { "Title Tag" }, enabled = false)
-    public void verifyTitleMinimumLength() {
+    @Test(testName = "Title Minimum Length", description = "Verify minimum length for title tag", groups = {
+	    "Title Tag" }, enabled = true)
+    public void titleMinimumLength() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -711,31 +765,32 @@ public class PageLevel {
 			&& page.getPage().getContentType().contains("text/html")) {
 		    List<Element> links = page.getTitle();
 		    for (Element e : links) {
-			if (e.text().length() < SEOConfig.TITLE_CHARACTERS_LIMIT_MIN) {
+			if (e.text().length() < CrawlerConstants.TITLE_CHARACTERS_LIMIT_MIN) {
 			    test.log(LogStatus.FAIL,
 				    "Title Length is less than required length.<br/><b>Title: </b>" + e.text()
 					    + " <br/><b>URL: </b>" + page.getPage().getWebURL().getURL(),
 				    "<b>Title Length: </b>" + e.text().length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.TITLE_CHARACTERS_LIMIT_MIN);
+					    + CrawlerConstants.TITLE_CHARACTERS_LIMIT_MIN);
 			} else {
 			    test.log(LogStatus.PASS,
 				    "Title Length is as expected.<br/><b>Title: </b>" + e.text() + " <br/><b>URL: </b>"
 					    + page.getPage().getWebURL().getURL(),
 				    "<b>Title Length: </b>" + e.text().length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.TITLE_CHARACTERS_LIMIT_MIN);
+					    + CrawlerConstants.TITLE_CHARACTERS_LIMIT_MIN);
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify maximum length for title tag", groups = { "Title Tag" }, enabled = false)
-    public void verifyTitleMaximumLength() {
+    @Test(testName = "Title Maximum Length", description = "Verify maximum length for title tag", groups = {
+	    "Title Tag" }, enabled = true)
+    public void titleMaximumLength() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -746,31 +801,32 @@ public class PageLevel {
 			&& page.getPage().getContentType().contains("text/html")) {
 		    List<Element> links = page.getTitle();
 		    for (Element e : links) {
-			if (e.text().length() > SEOConfig.TITLE_CHARACTERS_LIMIT) {
+			if (e.text().length() > CrawlerConstants.TITLE_CHARACTERS_LIMIT) {
 			    test.log(LogStatus.FAIL,
 				    "Title Length is greater than required length.<br/><b>Title: </b>" + e.text()
 					    + " <br/><b>URL: </b>" + page.getPage().getWebURL().getURL(),
 				    "<b>Title Length: </b>" + e.text().length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.TITLE_CHARACTERS_LIMIT);
+					    + CrawlerConstants.TITLE_CHARACTERS_LIMIT);
 			} else {
 			    test.log(LogStatus.PASS,
 				    "Title Length is as expected.<br/><b>Title: </b>" + e.text() + " <br/><b>URL: </b>"
 					    + page.getPage().getWebURL().getURL(),
 				    "<b>Title Length: </b>" + e.text().length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.TITLE_CHARACTERS_LIMIT);
+					    + CrawlerConstants.TITLE_CHARACTERS_LIMIT);
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify length for description tag", groups = { "Meta Description" }, enabled = false)
-    public void verifyDescriptionLength() {
+    @Test(testName = "Meta Description Length", description = "Verify length for description tag", groups = {
+	    "Meta Description" }, enabled = true)
+    public void descriptionLength() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -781,33 +837,33 @@ public class PageLevel {
 			&& page.getPage().getContentType().contains("text/html")) {
 		    List<Element> links = page.getMetaDescription();
 		    for (Element e : links) {
-			if (e.attr("content").length() > SEOConfig.META_DESCRIPTION_CHARACTERS_LIMIT) {
+			if (e.attr("content").length() > CrawlerConstants.META_DESCRIPTION_CHARACTERS_LIMIT) {
 			    test.log(LogStatus.FAIL,
 				    "Meta Description Length is greater than required length.<br/><b>Description: </b>"
 					    + e.attr("content") + " <br/><b>URL: </b>"
 					    + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("content").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.META_DESCRIPTION_CHARACTERS_LIMIT);
+					    + CrawlerConstants.META_DESCRIPTION_CHARACTERS_LIMIT);
 			} else {
 			    test.log(LogStatus.PASS,
 				    "Meta Description is as expected.<br/><b>Description: </b>" + e.attr("content")
 					    + " <br/><b>URL: </b>" + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("content").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.META_DESCRIPTION_CHARACTERS_LIMIT);
+					    + CrawlerConstants.META_DESCRIPTION_CHARACTERS_LIMIT);
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that description tag content is not blank", groups = {
-	    "Meta Description" }, enabled = false)
-    public void verifyBlankDescription() {
+    @Test(testName = "Blank Meta Description", description = "Verify that description tag content is not blank", groups = {
+	    "Meta Description" }, enabled = true)
+    public void blankDescription() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -828,15 +884,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify for missing description for page", groups = { "Meta Description" }, enabled = false)
-    public void verifyMissingDescription() {
+    @Test(testName = "Missing Meta Description", description = "Verify for missing description for page", groups = {
+	    "Meta Description" }, enabled = true)
+    public void missingDescription() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -856,15 +913,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify for multiple description for page", groups = { "Meta Description" }, enabled = false)
-    public void verifyMultipleDescription() {
+    @Test(testName = "Multiple Meta Description", description = "Verify for multiple description for page", groups = {
+	    "Meta Description" }, enabled = true)
+    public void multipleDescription() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -884,15 +942,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify length for canonical tag", groups = { "Canonical Tag" }, enabled = false)
-    public void verifyCanonicalLength() {
+    @Test(testName = "Canonical URL Length", description = "Verify length for canonical tag", groups = {
+	    "Canonical Tag" }, enabled = true)
+    public void canonicalLength() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -903,32 +962,33 @@ public class PageLevel {
 			&& page.getPage().getContentType().contains("text/html")) {
 		    List<Element> links = page.getCanonical();
 		    for (Element e : links) {
-			if (e.attr("href").length() > SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT) {
+			if (e.attr("href").length() > CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT) {
 			    test.log(LogStatus.FAIL,
 				    "Canonical URL Length is greater than required length.<br/><b>Canonical URL: </b>"
 					    + e.attr("href") + " <br/><b>Page URL: </b>"
 					    + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT);
+					    + CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
 			} else {
 			    test.log(LogStatus.PASS,
 				    "Canonical URL Length is as expected.<br/><b>Canonical URL: </b>" + e.attr("href")
 					    + " <br/><b>Page URL: </b>" + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT);
+					    + CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify for blank canonical tag url", groups = { "Canonical Tag" }, enabled = false)
-    public void verifyBlankCanonicalURL() {
+    @Test(testName = "Blank Canonical URL", description = "Verify for blank canonical tag url", groups = {
+	    "Canonical Tag" }, enabled = true)
+    public void blankCanonicalURL() {
 
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
@@ -945,26 +1005,27 @@ public class PageLevel {
 				    "Canonical URL is empty. <br/><b>Page URL: </b>"
 					    + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT);
+					    + CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
 			} else {
 			    test.log(LogStatus.PASS,
 				    "Canonical URL is not empty.<br/><b>Canonical URL: </b>" + e.attr("href")
 					    + " <br/><b>Page URL: </b>" + page.getPage().getWebURL().getURL(),
 				    "<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-					    + SEOConfig.CANONICAL_URL_CHARACTERS_LIMIT);
+					    + CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
 			}
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify for missing canonical tags for page", groups = { "Canonical Tag" }, enabled = false)
-    public void verifyMissingCanonicalTags() {
+    @Test(testName = "Missing Canonical URL", description = "Verify for missing canonical tags for page", groups = {
+	    "Canonical Tag" }, enabled = true)
+    public void missingCanonicalTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -983,15 +1044,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify for multiple canonical tags for page", groups = { "Canonical Tag" }, enabled = false)
-    public void verifyMultipleCanonicalTags() {
+    @Test(testName = "Multiple Canonical Tags", description = "Verify for multiple canonical tags for page", groups = {
+	    "Canonical Tag" }, enabled = true)
+    public void multipleCanonicalTags() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1011,14 +1073,15 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that if page has tables", groups = { "Div instead of Table" }, enabled = false)
+    @Test(testName = "Div instead of Table", description = "Verify that if page has tables", groups = {
+	    "Div instead of Table" }, enabled = true)
     public void useDivInsteadOfTable() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
@@ -1039,14 +1102,15 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that if page has frames", groups = { "No Frames" }, enabled = false)
-    public void verifyFrames() {
+    @Test(testName = "No Frames", description = "Verify that if page has frames", groups = {
+	    "No Frames" }, enabled = true)
+    public void noFrames() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1066,15 +1130,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that if page has flash content", groups = { "No Flash" }, enabled = false)
-    public void verifyFlash() {
+    @Test(testName = "No Flash", description = "Verify that if page has flash content", groups = {
+	    "No Flash" }, enabled = true)
+    public void noFlash() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1103,16 +1168,16 @@ public class PageLevel {
 		    }
 		}
 	    } catch (Exception e) {
-		logger.debug("Error ", e);
+		logger.debug("Error in " + test.getTest().getName(), e);
 
 	    }
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that site does not have duplicate meta description values", groups = {
-	    "Meta Description" }, enabled = false)
-    public void verifyDuplicateDescription() {
+    @Test(testName = "Duplicate Meta Description", description = "Verify that site does not have duplicate meta description values", groups = {
+	    "Meta Description" }, enabled = true)
+    public void duplicateDescription() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1134,7 +1199,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error ", e);
+		    logger.debug("Error in " + test.getTest().getName(), e);
 
 		}
 	    }
@@ -1147,15 +1212,15 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate descriptions found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error ", e);
+	    logger.debug("Error in " + test.getTest().getName(), e);
 	    test.log(LogStatus.FAIL, "Test Step Failed");
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that site does not have duplicate title values", groups = {
-	    "Title Tag" }, enabled = false)
-    public void verifyDuplicateTitle() {
+    @Test(testName = "Duplicate Titles", description = "Verify that site does not have duplicate title values", groups = {
+	    "Title Tag" }, enabled = true)
+    public void duplicateTitle() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1177,7 +1242,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error ", e);
+		    logger.debug("Error in " + test.getTest().getName(), e);
 
 		}
 	    }
@@ -1191,14 +1256,15 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate titles found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error ", e);
+	    logger.debug("Error in " + test.getTest().getName(), e);
 	    test.log(LogStatus.FAIL, "Test Step Failed", e);
 	}
 	ComplexReportFactory.getInstance().closeTest(test);
     }
 
-    @Test(description = "Verify that pages do not have duplicate content", groups = { "Content-HTML" }, enabled = false)
-    public void verifyDuplicateBodyContent() {
+    @Test(testName = "Duplicate Body Content", description = "Verify that pages do not have duplicate content", groups = {
+	    "Content-HTML" }, enabled = true)
+    public void duplicateBodyContent() {
 	Method caller = new Object() {
 	}.getClass().getEnclosingMethod();
 	ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1211,7 +1277,7 @@ public class PageLevel {
 		    if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 			    && page.getPage().getContentType().contains("text/html")) {
 			String key = Integer
-				.toString(Jsoup.parse(page.getHtml(), SEOConfig.site).select("body").text().hashCode());
+				.toString(Jsoup.parse(page.getHtml(), CrawlerConstants.SITE).select("body").text().hashCode());
 			String value = page.getPage().getWebURL().getURL();
 			if (map.containsKey(key)) {
 			    map.put(key, map.get(key) + "<br/>" + value);
@@ -1221,7 +1287,7 @@ public class PageLevel {
 			}
 		    }
 		} catch (Exception e) {
-		    logger.debug("Error ", e);
+		    logger.debug("Error in " + test.getTest().getName(), e);
 		}
 	    }
 	    for (String key : map.keySet()) {
@@ -1234,7 +1300,7 @@ public class PageLevel {
 		test.log(LogStatus.PASS, "No duplicate body content found,");
 	    }
 	} catch (Exception e) {
-	    logger.debug("Error ", e);
+	    logger.debug("Error in " + test.getTest().getName(), e);
 	    test.log(LogStatus.FAIL, "Test Step Failed", e);
 	}
 	ComplexReportFactory.getInstance().closeTest(test);

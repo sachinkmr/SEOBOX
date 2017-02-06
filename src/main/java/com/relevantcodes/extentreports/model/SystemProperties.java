@@ -12,25 +12,25 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SystemProperties {
-	public void setSystemInfo(Map<String, String> info) {
-		// if (this.info.size() > 0)
-		// info.putAll(this.info);
+    public void setSystemInfo(Map<String, String> info) {
+	// if (this.info.size() > 0)
+	// info.putAll(this.info);
 
-		// this.info = info;
-		this.info.putAll(info);
-	}
+	// this.info = info;
+	this.info.putAll(info);
+    }
 
-	public void setSystemInfo(String k, String v) {
-		info.put(k, v);
-	}
+    public void setSystemInfo(String k, String v) {
+	info.put(k, v);
+    }
 
-	public Map<String, String> getSystemInfo() {
-		return info;
-	}
+    public Map<String, String> getSystemInfo() {
+	return info;
+    }
 
-	public SystemProperties() {
-		info = new LinkedHashMap<String, String>();
-	}
+    public SystemProperties() {
+	info = new LinkedHashMap<String, String>();
+    }
 
-	private Map<String, String> info;
+    private Map<String, String> info;
 }
