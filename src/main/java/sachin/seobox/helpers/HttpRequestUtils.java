@@ -192,9 +192,8 @@ public class HttpRequestUtils {
 			httpget.releaseConnection();
 			client.close();
 			json = new JSONObject(str);
-			if (json.has("responseCode") && json.getInt("responseCode") != 200) {
-				throw new SEOException("Google Page Speed Insight API is throwing error, Response code: "
-						+ json.getInt("responseCode"));
+			if (json.has("error")) {
+				throw new SEOException("Google Page Speed Insight API is throwing error");
 			} else {
 				json.remove("version");
 				json.remove("title");

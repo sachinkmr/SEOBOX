@@ -65,7 +65,9 @@
 			}
 			h6.google-heading >a{
 				color:white !important;
-
+			}
+			h6.google-heading {
+				color:white;
 			}
 			.google-info{
 				padding: 5px 15px;

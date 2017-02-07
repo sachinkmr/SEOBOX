@@ -42,7 +42,7 @@ public class DBUtils {
 		} catch (SEOException e) {
 			logger.debug("Unable to fatch page speed data", e);
 			arr.append("hasError", "true");
-			arr.append("error", e.toString());
+			arr.append("error", e.getMessage());
 		}
 		ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 				.insertOne(arr);
