@@ -39,8 +39,8 @@ import edu.uci.ics.crawler4j.parser.ParseData;
 import edu.uci.ics.crawler4j.parser.Parser;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
+import edu.uci.ics.crawler4j.util.Net;
 import sachin.seobox.crawler.CrawlerConstants;
-import sachin.seobox.helpers.HttpRequestUtils;
 import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jext.Logger;
 import uk.org.lidalia.slf4jext.LoggerFactory;
@@ -302,6 +302,7 @@ public class WebCrawler implements Runnable {
 					}
 					if (curURL != null) {
 						curURL = handleUrlBeforeProcess(curURL);
+						curURL.setInternalLink(Net.getWebUrlType(curURL, myController.getConfig().getSiteHost()));
 						processPage(curURL);
 						frontier.setProcessed(curURL);
 					}
@@ -354,7 +355,6 @@ public class WebCrawler implements Runnable {
 			// Finds the status reason for all known statuses
 			handlePageStatusCode(curURL, statusCode,
 					EnglishReasonPhraseCatalog.INSTANCE.getReason(statusCode, Locale.ENGLISH));
-
 			page = new Page(curURL);
 			page.setFetchResponseHeaders(fetchResult.getResponseHeaders());
 			page.setStatusCode(statusCode);
@@ -397,10 +397,6 @@ public class WebCrawler implements Runnable {
 						webURL.setDepth(curURL.getDepth());
 						webURL.setDocid(-1);
 						webURL.setAnchor(curURL.getAnchor());
-						// webURL.setInternalLink(
-						// Util.getUrlHost(webURL.getURL()).contains(myController.getConfig().getSiteHost()));
-						webURL.setInternalLink(
-								HttpRequestUtils.getWebUrlType(curURL, myController.getConfig().getSiteHost()));
 						if (shouldVisit(page, webURL)) {
 							if (robotstxtServer.allows(webURL)) {
 								webURL.setDocid(docIdServer.getNewDocID(movedToUrl));
@@ -433,7 +429,6 @@ public class WebCrawler implements Runnable {
 					curURL.setURL(fetchResult.getFetchedUrl());
 					curURL.setDocid(docIdServer.getNewDocID(fetchResult.getFetchedUrl()));
 				}
-
 				if (!fetchResult.fetchContent(page)) {
 					throw new ContentFetchException();
 				}
@@ -508,25 +503,4 @@ public class WebCrawler implements Runnable {
 	public boolean isNotWaitingForNewURLs() {
 		return !isWaitingForNewURLs;
 	}
-
-	// private boolean getLinkType(Matcher m, String prop, WebURL curURL) throws
-	// ExternalLinkException {
-	// if (null == prop || prop.isEmpty() || prop.equals(".")) {
-	// if (!CrawlerConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() &&
-	// !curURL.isInternalLink()) {
-	// throw new ExternalLinkException(Level.WARN, "Skipping parsing of external
-	// link: " + curURL);
-	// }
-	// } else {
-	// if (!CrawlerConstants.ASSETS_PATTERN.matcher(curURL.getURL()).find() &&
-	// !m.find()) {
-	// throw new ExternalLinkException(Level.WARN, "Skipping parsing of link
-	// based on user regex: " + curURL);
-	// } else {
-	// if (m.find())
-	// curURL.setInternalLink(true);
-	// }
-	// }
-	// return isWaitingForNewURLs;
-	// }
 }

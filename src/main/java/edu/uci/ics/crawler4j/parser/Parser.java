@@ -39,7 +39,6 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import edu.uci.ics.crawler4j.url.WebURL;
 import edu.uci.ics.crawler4j.util.Net;
 import edu.uci.ics.crawler4j.util.Util;
-import sachin.seobox.helpers.HttpRequestUtils;
 
 /**
  * @author Yasser Ganjisaffar
@@ -137,8 +136,6 @@ public class Parser extends Configurable {
 						webURL.setURL(url);
 						webURL.setTag(urlAnchorPair.getTag());
 						webURL.setAnchor(urlAnchorPair.getAnchor());
-						// webURL.setInternalLink(Util.getUrlHost(webURL.getURL()).contains(config.getSiteHost()));
-						webURL.setInternalLink(HttpRequestUtils.getWebUrlType(webURL, config.getSiteHost()));
 						outgoingUrls.add(webURL);
 						urlCount++;
 						if (urlCount > config.getMaxOutgoingLinksToFollow()) {

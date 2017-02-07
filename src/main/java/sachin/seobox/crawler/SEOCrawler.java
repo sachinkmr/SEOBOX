@@ -20,7 +20,6 @@ public class SEOCrawler extends WebCrawler {
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		// return url.getURL().equals("http://www.liptontea.com");
 		Matcher m = CrawlerConstants.SHOULD_VISIT_PATTERN.matcher(url.getURL());
 		return !CrawlerConstants.SKIPPED_URLS.contains(url.getModifiedHost())
 				&& (m.find() || CrawlerConstants.ASSETS_PATTERN.matcher(url.getURL()).find());

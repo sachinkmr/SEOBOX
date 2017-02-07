@@ -36,7 +36,6 @@ import edu.uci.ics.crawler4j.fetcher.PageFetchResult;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.url.WebURL;
 import edu.uci.ics.crawler4j.util.Util;
-import sachin.seobox.helpers.HttpRequestUtils;
 
 /**
  * @author Yasser Ganjisaffar
@@ -126,10 +125,6 @@ public class RobotstxtServer {
 				logger.debug("Can't read this robots.txt: {}  as it's status code is {}", robotsTxtUrl.getURL(),
 						fetchResult.getStatusCode());
 			}
-			// robotsTxtUrl.setInternalLink(
-			// Util.getUrlHost(robotsTxtUrl.getURL()).contains(pageFetcher.getConfig().getSiteHost()));
-			robotsTxtUrl.setInternalLink(
-					HttpRequestUtils.getWebUrlType(robotsTxtUrl, pageFetcher.getConfig().getSiteHost()));
 		} catch (SocketException | UnknownHostException | SocketTimeoutException | NoHttpResponseException se) {
 			// No logging here, as it just means that robots.txt doesn't exist
 			// on this server which is perfectly ok

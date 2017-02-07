@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 
 import javax.net.ssl.SSLContext;
 
@@ -46,8 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.crawler4j.url.URLCanonicalizer;
-import edu.uci.ics.crawler4j.url.WebURL;
-import edu.uci.ics.crawler4j.util.Util;
 import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.exception.SEOException;
 
@@ -213,17 +210,4 @@ public class HttpRequestUtils {
 		return json;
 	}
 
-	public static boolean getWebUrlType(WebURL curURL, String host) {
-		Matcher m = CrawlerConstants.PATTERN.matcher(curURL.getURL());
-		String prop = CrawlerConstants.PROPERTIES.getProperty("crawler.domainRegex");
-		if (null == prop || prop.isEmpty() || prop.equals(".")) {
-			return Util.getUrlHost(curURL.getURL()).contains(host);
-		} else {
-			if (!m.find()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}
 }

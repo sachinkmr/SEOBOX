@@ -131,8 +131,8 @@ public class CrawlerConstants {
 
 		ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css)))", Pattern.CASE_INSENSITIVE);
 		IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp)))", Pattern.CASE_INSENSITIVE);
-		PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.domainRegex", "."), Pattern.CASE_INSENSITIVE);
-		SHOULD_VISIT_PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", "."),
+		PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.domainRegex", ".").trim(), Pattern.CASE_INSENSITIVE);
+		SHOULD_VISIT_PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", ".").trim(),
 				Pattern.CASE_INSENSITIVE);
 		USER_AGENT = CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
 				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
