@@ -104,26 +104,27 @@ public class PageLevel {
 						JSONObject results = DBUtils.getPageSpeedRecord(page.getPage().getWebURL().getURL());
 						if (results.getString("hasError").equals("true"))
 							throw new SEOException(results.getString("error"));
-						JSONObject mobile = results.getJSONObject("mobile");
-						JSONObject desktop = results.getJSONObject("desktop");
-						org.bson.Document arr = new org.bson.Document("mobile", mobile.toString());
-						arr.append("desktop", desktop.toString());
+						String mobile = results.getString("mobile");
+						String desktop = results.getString("desktop");
+						org.bson.Document arr = new org.bson.Document("mobile", mobile);
+						arr.append("desktop", desktop);
 						arr.append("key", key);
 						String id = test.getTest().getId().toString();
 						arr.append("test_id", id);
 						arr.append("test_name", test.getTest().getName());
 						ComplexReportFactory.getInstance().getMongoDB()
 								.getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
-						String d = desktop.getJSONObject("ruleGroups").toString();
-						String m = mobile.getJSONObject("ruleGroups").toString();
+						String d = new JSONObject(desktop).getJSONObject("ruleGroups").toString();
+						String m = new JSONObject(mobile).getJSONObject("ruleGroups").toString();
 						LogStatus logStatus = HelperUtils.getPageSpeedTestStatus(m, d);
 						test.log(logStatus, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
 								"<a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
-										+ key + "' data-test-id='" + id + "' data-type='desktop'><b>Desktop: </b></a>"
+										+ key + "' data-test-id='" + id
+										+ "' data-type='desktop'><b>Desktop: &nbsp;</b></a>"
 										+ d.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 												": ")
 										+ "<br/><a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-type='mobile' data-key='"
-										+ key + "' data-test-id='" + id + "'><b>Mobile: </b></a>"
+										+ key + "' data-test-id='" + id + "'><b>Mobile: &nbsp;</b></a>"
 										+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 												": "));
 					} catch (SEOException e) {

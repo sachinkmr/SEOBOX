@@ -23,14 +23,21 @@ public class DBUtils {
 		try {
 			int i = 0;
 			do {
-				desktop = HttpRequestUtils.getPageSpeedData(url, "desktop");
 				mobile = HttpRequestUtils.getPageSpeedData(url, "mobile");
-			} while ((desktop == null || mobile == null) && ++i < 3);
-			if (desktop != null) {
+			} while ((mobile == null || mobile.has("error")) && ++i < 3);
+			i = 0;
+			do {
+				desktop = HttpRequestUtils.getPageSpeedData(url, "desktop");
+			} while ((desktop == null || desktop.has("error")) && ++i < 3);
+			if (desktop != null && !desktop.has("error")) {
 				arr.append("desktop", desktop.toString());
+			} else {
+				throw new SEOException("Unable to fatch page speed desktop data");
 			}
-			if (mobile != null) {
+			if (mobile != null && !mobile.has("error")) {
 				arr.append("mobile", mobile.toString());
+			} else {
+				throw new SEOException("Unable to fatch page speed mobile data");
 			}
 		} catch (SEOException e) {
 			logger.debug("Unable to fatch page speed data", e);
@@ -44,7 +51,12 @@ public class DBUtils {
 	public static JSONObject getPageSpeedRecord(String url) {
 		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 				.findOneAndDelete(Filters.and(Filters.exists("page_speed_results"), Filters.eq("url", url)));
-		return new JSONObject(doc.toString());
+		JSONObject json = new JSONObject();
+		json.put("hasError", doc.getString("hasError"));
+		json.put("error", doc.getString("error"));
+		json.put("mobile", doc.getString("mobile"));
+		json.put("desktop", doc.getString("desktop"));
+		return json;
 	}
 
 	public static void insertStructuredDataRecord(String url, String html) {
@@ -72,6 +84,10 @@ public class DBUtils {
 	public static JSONObject getStructuredDataRecord(String url) {
 		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 				.findOneAndDelete(Filters.and(Filters.exists("structured_data_results"), Filters.eq("url", url)));
-		return new JSONObject(doc.toJson());
+		JSONObject json = new JSONObject();
+		json.put("hasError", doc.getString("hasError"));
+		json.put("error", doc.getString("error"));
+		json.put("data", doc.getString("data"));
+		return json;
 	}
 }
