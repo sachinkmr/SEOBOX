@@ -17,6 +17,7 @@ public class ExtentReporterNG {
 		System.out.println("\nGenerating Report, Please Wait.....");
 		System.out.println("----------------------------------------------------------");
 		ComplexReportFactory.getInstance().closeReport();
+		String report = CrawlerConstants.REPORT_PATH;
 		if (CrawlerConstants.ERROR && !CrawlerConstants.ERROR_TEXT.isEmpty()) {
 			try {
 				File file = new File(CrawlerConstants.REPORT_PATH);
@@ -35,8 +36,9 @@ public class ExtentReporterNG {
 			String path = CrawlerConstants.REPORT_PATH.substring(0,
 					CrawlerConstants.REPORT_PATH.indexOf("webapps\\") + 8);
 			try {
-				System.out.println("Report Generated: " + CrawlerConstants.REPORT_PATH.replace(path,
-						"http://" + InetAddress.getLocalHost().getHostAddress()));
+				report = CrawlerConstants.REPORT_PATH.replace(path,
+						"http://" + InetAddress.getLocalHost().getHostAddress());
+				System.out.println("Report Generated: " + report);
 			} catch (UnknownHostException e) {
 
 			}
@@ -45,6 +47,6 @@ public class ExtentReporterNG {
 		} else {
 			System.out.println("Report Generated: " + CrawlerConstants.REPORT_PATH);
 		}
-
+		System.setProperty("Report", report);
 	}
 }
