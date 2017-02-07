@@ -1,6 +1,7 @@
 package sachin.seobox.crawler;
 
 import java.io.File;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,10 @@ public class SEOCrawler extends WebCrawler {
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		return url.getURL().equals("http://www.liptontea.com");
-		// Matcher m =
-		// CrawlerConstants.SHOULD_VISIT_PATTERN.matcher(url.getURL());
-		// return !CrawlerConstants.SKIPPED_URLS.contains(url.getModifiedHost())
-		// && (m.find() ||
-		// CrawlerConstants.ASSETS_PATTERN.matcher(url.getURL()).find());
+		// return url.getURL().equals("http://www.liptontea.com");
+		Matcher m = CrawlerConstants.SHOULD_VISIT_PATTERN.matcher(url.getURL());
+		return !CrawlerConstants.SKIPPED_URLS.contains(url.getModifiedHost())
+				&& (m.find() || CrawlerConstants.ASSETS_PATTERN.matcher(url.getURL()).find());
 	}
 
 	@Override
