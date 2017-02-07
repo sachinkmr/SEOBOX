@@ -17,7 +17,8 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		System.setProperty("SiteAddress", "http://www.dove.com/in/home.html");
+		// System.setProperty("SiteAddress",
+		// "http://www.dove.com/in/home.html");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		try {
