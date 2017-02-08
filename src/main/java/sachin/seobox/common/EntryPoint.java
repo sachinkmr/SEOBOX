@@ -20,10 +20,15 @@ public class EntryPoint {
 	// System.setProperty("SiteAddress", "http://www.liptontea.com/");
 	// System.setProperty("Username", "d2showcase");
 	// System.setProperty("Password", "D2$0wca$3");
-	try {
-	    if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
+	if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
+	    try {
 		throw new SEOException("Site url is missing");
+	    } catch (SEOException e) {
+		logger.error("Error in application: ", e);
+		return;
 	    }
+	}
+	try {
 	    if (HelperUtils
 		    .getFluentResponse(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD)
 		    .returnResponse().getStatusLine().getStatusCode() != 200) {
@@ -39,7 +44,6 @@ public class EntryPoint {
 	    testng.setPreserveOrder(true);
 	    testng.setVerbose(0);
 	    testng.run();
-
 	} catch (Exception e) {
 	    logger.error("Error in application: ", e);
 	    CrawlerConstants.ERROR = true;
