@@ -10,10 +10,10 @@
 			Copyright (c) 2015, Anshoo Arora (Relevant Codes) | Copyrights licensed under the New BSD License | http://opensource.org/licenses/BSD-3-Clause
 			Documentation: http://extentreports.relevantcodes.com 
 		-->
+		<meta name='robots' content='noodp, noydir,nofollow' />
 		<meta name='editor' content='Sachin Kumar'>
 		<meta charset='UTF-8' /> 
 		<meta name='description' content='ExtentReports (by Anshoo Arora) is a reporting library for automation testing for .NET and Java. It creates detailed and beautiful HTML reports for modern browsers. ExtentReports shows test and step summary along with dashboards, system and environment details for quick analysis of your tests.' />
-		<meta name='robots' content='noodp, noydir' />
 		<meta name='viewport' content='width=device-width, initial-scale=1' />
 		<title>SEOBOX Report</title>
 		<link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">

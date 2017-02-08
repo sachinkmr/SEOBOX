@@ -155,25 +155,17 @@ public class LinkLevel {
 		if (!webUrl.isInternalLink()) {
 		    int statusCode = page.getPage().getStatusCode();
 		    if (statusCode >= 200 && statusCode < 300) {
-			test.log(
-				LogStatus.PASS, "Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL()
-					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.PASS, "Status code is 2xx.<br/>URL: " + webUrl.getURL() + "<br/>Parent: "
+				+ webUrl.getParentUrl(), "Status Code: " + statusCode);
 		    } else if (statusCode >= 300 && statusCode < 400) {
-			test.log(
-				LogStatus.WARNING, "Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL()
-					+ "<br/><b>Parent: </b>" + webUrl.getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.WARNING, "Status code is 3xx.<br/>URL: <b/>" + webUrl.getURL()
+				+ "<br/>Parent: " + webUrl.getParentUrl(), "Status Code: " + statusCode);
 		    } else if (statusCode >= 400 && statusCode < 500) {
-			test.log(LogStatus.FAIL,
-				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-					+ page.getPage().getWebURL().getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL() + "<br/>Parent: "
+				+ page.getPage().getWebURL().getParentUrl(), "Status Code: " + statusCode);
 		    } else if (statusCode >= 500) {
-			test.log(LogStatus.FATAL,
-				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-					+ page.getPage().getWebURL().getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.FATAL, "URL: " + page.getPage().getWebURL().getURL() + "<br/>Parent: "
+				+ page.getPage().getWebURL().getParentUrl(), "Status Code: " + statusCode);
 		    }
 		}
 	    } catch (Exception e) {
@@ -196,26 +188,19 @@ public class LinkLevel {
 		if (webUrl.isInternalLink()) {
 		    int statusCode = page.getPage().getStatusCode();
 		    if (statusCode >= 200 && statusCode < 300) {
-			test.log(LogStatus.PASS,
-				"Status code is 2xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Parent: </b>"
-					+ page.getPage().getWebURL().getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.PASS, "Status code is 2xx.<br/>URL: <b/>" + webUrl.getURL() + "<br/>Parent: "
+				+ page.getPage().getWebURL().getParentUrl(), "Status Code: " + statusCode);
 		    } else if (statusCode >= 300 && statusCode < 400) {
 			test.log(LogStatus.WARNING,
-				"Status code is 3xx.<br/><b>URL: <b/>" + webUrl.getURL() + "<br/><b>Redireted To: <b/>"
-					+ page.getPage().getRedirectedToUrl() + "<br/><b>Parent: </b>"
-					+ webUrl.getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+				"Status code is 3xx.<br/>URL: <b/>" + webUrl.getURL() + "<br/>Redireted To: <b/>"
+					+ page.getPage().getRedirectedToUrl() + "<br/>Parent: " + webUrl.getParentUrl(),
+				"Status Code: " + statusCode);
 		    } else if (statusCode >= 400 && statusCode < 500) {
-			test.log(LogStatus.FAIL,
-				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-					+ page.getPage().getWebURL().getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.FAIL, "URL: " + page.getPage().getWebURL().getURL() + "<br/>Parent: "
+				+ page.getPage().getWebURL().getParentUrl(), "Status Code: " + statusCode);
 		    } else if (statusCode >= 500) {
-			test.log(LogStatus.FATAL,
-				"<b>URL:</b> " + page.getPage().getWebURL().getURL() + "<br/><b>Parent: </b>"
-					+ page.getPage().getWebURL().getParentUrl(),
-				"<b>Status Code: </b>" + statusCode);
+			test.log(LogStatus.FATAL, "URL: " + page.getPage().getWebURL().getURL() + "<br/>Parent: "
+				+ page.getPage().getWebURL().getParentUrl(), "Status Code: " + statusCode);
 		    }
 		}
 	    } catch (Exception e) {
