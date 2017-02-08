@@ -210,11 +210,16 @@ public class HelperUtils {
     }
 
     public static String getStructuredDataMicros(JSONArray json) {
-	String str = "";
+	Set<String> set = new HashSet<>();
 	for (int i = 0; i < json.length(); i++) {
-	    str += "<li>" + json.getJSONObject(i).getString("type") + "</li>";
+	    set.add(json.getJSONObject(i).getString("type"));
 	}
-	return str;
+	if (set.isEmpty()) {
+	    return "";
+	} else {
+	    return set.toString().substring(1, set.toString().length() - 1);
+	}
+
     }
 
 }

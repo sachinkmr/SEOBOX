@@ -55,7 +55,7 @@ public class SiteLevel {
 		    && !CrawlerConstants.PROPERTIES.getProperty("seo.robotFile").isEmpty()) {
 		add = CrawlerConstants.PROPERTIES.getProperty("seo.robotFile");
 	    }
-	    test.log(LogStatus.INFO, "Robot.txt Location:", add);
+	    // test.log(LogStatus.INFO, "Robot.txt Location: "+ add);
 	    Response response = HelperUtils.getLinkResponse(add, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 	    HttpResponse res = response.returnResponse();
 	    int code = res.getStatusLine().getStatusCode();
@@ -63,9 +63,9 @@ public class SiteLevel {
 	    boolean head = res.containsHeader("Content-Encoding");
 	    String str = EntityUtils.toString(res.getEntity()).toLowerCase();
 	    if (code == 200 && null != str && str.contains("user-agent")) {
-		test.log(LogStatus.PASS, "Robots.txt file found.", "");
+		test.log(LogStatus.PASS, "Robots.txt file found.", "Robot.txt Location: " + add);
 	    } else {
-		test.log(LogStatus.FAIL, "Robots.txt file not found.", "");
+		test.log(LogStatus.FAIL, "Robots.txt file not found.", "Robot.txt Location: " + add);
 	    }
 	    // Content-Encoding
 	    if (head) {
@@ -111,15 +111,15 @@ public class SiteLevel {
 		    && !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 		add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 	    }
-	    test.log(LogStatus.INFO, "Sitemap Location", add);
+	    // test.log(LogStatus.INFO, "Sitemap Location", add);
 	    Response response = HelperUtils.getLinkResponse(add, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 	    HttpResponse res = response.returnResponse();
 	    int code = res.getStatusLine().getStatusCode();
 	    String str = EntityUtils.toString(res.getEntity());
 	    if (code == 200 && null != str && str.contains("<urlset")) {
-		test.log(LogStatus.PASS, "Sitemap.xml file found.", "");
+		test.log(LogStatus.PASS, "Sitemap.xml file found.", "Sitemap Location: " + add);
 	    } else {
-		test.log(LogStatus.FAIL, "Sitemap.xml file not found.", "");
+		test.log(LogStatus.FAIL, "Sitemap.xml file not found.", "Sitemap Location: " + add);
 	    }
 	    // // Content-Encoding
 	    // if (response.containsHeader("Content-Encoding")) {

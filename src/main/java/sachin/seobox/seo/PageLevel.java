@@ -168,12 +168,12 @@ public class PageLevel {
 		    String snippets = HelperUtils.getStructuredDataMicros(data.getJSONArray("tripleGroups"));
 		    LogStatus logStatus = HelperUtils.getstructuredDataStatus(errors, warnings);
 		    String str = (logStatus == LogStatus.FAIL || logStatus == LogStatus.WARNING)
-			    ? "<br/><a href='#structureDataModal' class='structureData waves-effect waves-light modal-trigger' data-key='"
-				    + key + "' data-test-id='" + id + "'><b>View Details: &nbsp;</b></a>"
+			    ? "<br/><a href='#pageStructureModal' class='structureData waves-effect waves-light modal-trigger' data-key='"
+				    + key + "' data-test-id='" + id + "'>View Details: &nbsp;</a>"
 			    : "";
-		    test.log(
-			    logStatus, "<b>URL: </b>" + page.getPage().getWebURL().getURL()
-				    + "<br/>Micros used on page: <br/>" + snippets,
+		    test.log(logStatus,
+			    "Markup(s) used on page: <br/>" + snippets + "<br/><b>URL: </b>"
+				    + page.getPage().getWebURL().getURL(),
 			    "Errors: " + errors + "<br/>Warnings :" + warnings + str);
 		} catch (SEOException e) {
 		    logger.debug("SEOException: ", e);
