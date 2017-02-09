@@ -41,6 +41,8 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -208,6 +210,27 @@ public class HttpRequestUtils {
 			throw new SEOException("Unable to fatch page speed data. url: " + url);
 		}
 		return json;
+	}
+
+	public static String getRedirectedURL(String... data) {
+		try {
+			Connection con = Jsoup.connect(data[0])
+					.header("user-agent",
+							CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
+									"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
+					.timeout(Integer
+							.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
+					.followRedirects(true);
+			if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
+				String login = data[1] + ":" + data[2];
+				String base64login = new String(Base64.encodeBase64(login.getBytes()));
+				con.header("Authorization", "Basic " + base64login);
+			}
+			return con.execute().url().toExternalForm();
+		} catch (IOException e) {
+			logger.error("Error fetching response.\n", e);
+		}
+		return null;
 	}
 
 }
