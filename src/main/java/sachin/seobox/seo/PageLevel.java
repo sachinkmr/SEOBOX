@@ -3,10 +3,10 @@ package sachin.seobox.seo;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -100,22 +100,22 @@ public class PageLevel {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 						&& page.getPage().getContentType().contains("text/html")) {
 					try {
-						String key = UUID.randomUUID().toString();
+						// String key = UUID.randomUUID().toString();
+						String key = HelperUtils.getUUID();
 						JSONObject results = DBUtils.getPageSpeedRecord(page.getPage().getWebURL().getURL());
 						if (results.getString("hasError").equals("true"))
 							throw new SEOException(results.getString("error"));
-						String mobile = results.getString("mobile");
-						String desktop = results.getString("desktop");
+						JSONObject mobile = results.getJSONObject("mobile");
+						JSONObject desktop = results.getJSONObject("desktop");
+						String d = results.getString("d");
+						String m = results.getString("m");
+						results = null;
 						org.bson.Document arr = new org.bson.Document("mobile", mobile);
 						arr.append("desktop", desktop);
 						arr.append("key", key);
 						String id = test.getTest().getId().toString();
 						arr.append("test_id", id);
 						arr.append("test_name", test.getTest().getName());
-						ComplexReportFactory.getInstance().getMongoDB()
-								.getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
-						String d = new JSONObject(desktop).getJSONObject("ruleGroups").toString();
-						String m = new JSONObject(mobile).getJSONObject("ruleGroups").toString();
 						LogStatus logStatus = HelperUtils.getPageSpeedTestStatus(m, d);
 						test.log(logStatus, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
 								"<a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
@@ -127,6 +127,8 @@ public class PageLevel {
 										+ key + "' data-test-id='" + id + "'><b>Mobile: &nbsp;</b></a>"
 										+ m.replaceAll("[\\{\\}\\\"]|score", "").replaceAll(",", ", ").replaceAll("::",
 												": "));
+						ComplexReportFactory.getInstance().getMongoDB()
+								.getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
 					} catch (SEOException e) {
 						logger.debug("SEOException: ", e);
 						test.log(LogStatus.SKIP, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
@@ -151,7 +153,8 @@ public class PageLevel {
 			if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
 					&& page.getPage().getContentType().contains("text/html")) {
 				try {
-					String key = UUID.randomUUID().toString();
+					// String key = UUID.randomUUID().toString();
+					String key = HelperUtils.getUUID();
 					JSONObject results = DBUtils.getStructuredDataRecord(page.getPage().getWebURL().getURL());
 					if (results.getString("hasError").equals("true"))
 						throw new SEOException(results.getString("error"));
@@ -161,11 +164,13 @@ public class PageLevel {
 					String id = test.getTest().getId().toString();
 					arr.append("test_id", id);
 					arr.append("test_name", test.getTest().getName());
+
 					ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 							.insertOne(arr);
 					int errors = data.getInt("totalNumErrors");
 					int warnings = data.getInt("totalNumWarnings");
 					String snippets = HelperUtils.getStructuredDataMicros(data.getJSONArray("tripleGroups"));
+					data = null;
 					LogStatus logStatus = HelperUtils.getstructuredDataStatus(errors, warnings);
 					String str = (logStatus == LogStatus.FAIL || logStatus == LogStatus.WARNING)
 							? "<br/><a href='#pageStructureModal' class='structureData waves-effect waves-light modal-trigger' data-key='"
@@ -1415,6 +1420,125 @@ public class PageLevel {
 		} catch (Exception e) {
 			logger.debug("Error in " + test.getTest().getName(), e);
 			test.log(LogStatus.FAIL, "Test Step Failed", e);
+		}
+		ComplexReportFactory.getInstance().closeTest(test);
+	}
+
+	@Test(testName = "Duplicate H1 Tags", description = "Verify that site does not have duplicate h1 tag content", groups = {
+			"H1 Tag" }, enabled = true)
+	public void duplicateH1Tag() {
+		Method caller = new Object() {
+		}.getClass().getEnclosingMethod();
+		ExtentTest test = HelperUtils.getTestLogger(caller);
+		try {
+			Map<String, String> map = new HashMap<>();
+			boolean flag = true;
+			for (File file : pages) {
+				SEOPage page = streamUtils.readFile(file);
+				try {
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+							&& page.getPage().getContentType().contains("text/html")) {
+						String key = page.getH1Tags().get(0).text();
+						String value = page.getPage().getWebURL().getURL();
+						if (map.containsKey(key)) {
+							map.put(key, map.get(key) + "<br/>" + value);
+							flag = false;
+						} else {
+							map.put(key, value);
+						}
+					}
+				} catch (Exception e) {
+					logger.debug("Error in " + test.getTest().getName(), e);
+
+				}
+			}
+			for (String key : map.keySet()) {
+				if (map.get(key).split("<br/>").length > 2) {
+					test.log(LogStatus.FAIL, map.get(key), "<b>H1 Tag: </b>" + key);
+				}
+			}
+
+			if (flag) {
+				test.log(LogStatus.PASS, "No duplicate H1 Tag found,");
+			}
+		} catch (Exception e) {
+			logger.debug("Error in " + test.getTest().getName(), e);
+			test.log(LogStatus.FAIL, "Test Step Failed", e);
+		}
+		ComplexReportFactory.getInstance().closeTest(test);
+	}
+
+	@Test(testName = "Anchor Link Text", description = "Verify that anchor link should have text in it.", groups = {
+			"Anchor Link" }, enabled = true)
+	public void anchorLinkText() {
+		Method caller = new Object() {
+		}.getClass().getEnclosingMethod();
+		ExtentTest test = HelperUtils.getTestLogger(caller);
+		for (File file : pages) {
+			SEOPage page = streamUtils.readFile(file);
+			try {
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+						&& page.getPage().getContentType().contains("text/html")) {
+					List<Element> links = Jsoup.parse(page.getHtml()).getElementsByTag("a");
+					if (links.size() > 0) {
+						for (Element e : links) {
+							if (!e.text().isEmpty()) {
+								test.log(LogStatus.PASS, "<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+										+ page.getPage().getWebURL().getURL(), "Anchor has text.");
+							} else if (e.select("img").size() <= 0 && e.html().isEmpty()) {
+								test.log(LogStatus.FAIL, "<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+										+ page.getPage().getWebURL().getURL(), "Anchor does not have text");
+							}
+						}
+					} else {
+						test.log(LogStatus.PASS, "<b>URL: </b>" + page.getPage().getWebURL().getURL(),
+								"There is anchor tag on page.");
+					}
+				}
+			} catch (Exception e) {
+				logger.debug("Error in " + test.getTest().getName(), e);
+
+			}
+		}
+		ComplexReportFactory.getInstance().closeTest(test);
+	}
+
+	@Test(testName = "Anchor External Link", description = "Verify that external anchor link should have no-follow", groups = {
+			"Anchor Link" }, enabled = true)
+	public void anchorExtenalLink() {
+		Method caller = new Object() {
+		}.getClass().getEnclosingMethod();
+		ExtentTest test = HelperUtils.getTestLogger(caller);
+		for (File file : pages) {
+			SEOPage page = streamUtils.readFile(file);
+			try {
+				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
+						&& page.getPage().getContentType().contains("text/html")) {
+					Set<String> urls = new HashSet<>();
+					for (WebURL url : page.getPage().getParseData().getOutgoingUrls()) {
+						if (!url.isInternalLink())
+							urls.add(url.getURL());
+					}
+					List<Element> links = Jsoup.parse(page.getHtml()).getElementsByTag("a");
+					for (Element e : links) {
+						if (urls.contains(e.absUrl("href"))) {
+							if (e.attr("rel").toLowerCase().contains("nofollow")) {
+								test.log(LogStatus.PASS,
+										"<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+												+ page.getPage().getWebURL().getURL(),
+										"External Anchor Links have nofollow attribute value.");
+							} else if (e.select("img").size() <= 0 && e.html().isEmpty()) {
+								test.log(LogStatus.FAIL,
+										"<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+												+ page.getPage().getWebURL().getURL(),
+										"External Anchor Link does not have nofollow attribute value.");
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				logger.debug("Error in " + test.getTest().getName(), e);
+			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
 	}

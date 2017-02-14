@@ -47,7 +47,7 @@ public class CrawlerConstants {
 	public static final String DATA_LOCATION;
 	public static final Pattern PATTERN;
 	public static final Pattern SHOULD_VISIT_PATTERN;
-	public static final boolean CASE_SENSITIVE;
+	public static final boolean CASE_SENSITIVE, HAS_JENKINS, HAS_WEBAPP;
 	public static final String REPORT_PATH;
 	public static final Pattern IMAGE_PATTERN;
 	public static final Pattern ASSETS_PATTERN;
@@ -60,9 +60,9 @@ public class CrawlerConstants {
 	public static final String REPORT_TIME_STAMP;
 	public static final int PAGE_SPEED_PASS_POINTS;
 	public static final String DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME = "SEOBOX";
-	public static final int DB_PORT;
+	public static final int DB_PORT, SERVICE_PORT;
 	public static final Set<String> TESTS;
-
+	public static final String SERVICE_HOST, SERVICE_NAME;
 	static {
 		SITE = System.getProperty("SiteAddress");
 		USERNAME = System.getProperty("Username");
@@ -75,7 +75,7 @@ public class CrawlerConstants {
 			LoggerFactory.getLogger(CrawlerConstants.class).debug("Error in loading config file", e);
 		}
 		REPORT_TIME_STAMP = HelperUtils.generateUniqueString();
-		// REPORT_TIME_STAMP = "08-February-2017_11-28-10-119AM";
+		// REPORT_TIME_STAMP = "14-February-2017_03-02-31-884PM";
 		String OUTPUT_DIRECTORY = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator
 				+ host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
 		if ((null != System.getProperty("JENKINS_URL") && !System.getProperty("JENKINS_URL").isEmpty())
@@ -94,17 +94,16 @@ public class CrawlerConstants {
 		SKIPPED_URLS = new ArrayList<>();
 		String PROPERTIES_LOC = "";
 		boolean deletePropFile = false;
-		if (System.getProperty("CrawlerConfigFileWeb") != null
-				&& !System.getProperty("CrawlerConfigFileWeb").isEmpty()) {
+		if (System.getProperty("CrawlerConfigFileLocation") != null
+				&& !System.getProperty("CrawlerConfigFileLocation").isEmpty()) {
 			LoggerFactory.getLogger(CrawlerConstants.class)
 					.info("Loading user's config file provided from web interface");
-			PROPERTIES_LOC = System.getProperty("CrawlerConfigFileWeb");
+			PROPERTIES_LOC = System.getProperty("CrawlerConfigFileLocation");
 			deletePropFile = true;
-		} else if (System.getProperty("CrawlerConfigFile") != null
-				&& !System.getProperty("CrawlerConfigFile").isEmpty()) {
+		} else if (System.getProperty("CrawlerConfig") != null && !System.getProperty("CrawlerConfig").isEmpty()) {
 			LoggerFactory.getLogger(CrawlerConstants.class)
 					.info("Loading user's config file provided from jenkins interface");
-			PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties", "CrawlerConfigFile");
+			PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties", "CrawlerConfig");
 		} else {
 			LoggerFactory.getLogger(CrawlerConstants.class).info("Loading default config file");
 			PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties");
@@ -169,7 +168,11 @@ public class CrawlerConstants {
 		DB_PORT = Integer.parseInt(PROPERTIES.getProperty("mongo.db.port", "27017"));
 		DB_USERNAME = PROPERTIES.getProperty("mongo.db.username", "");
 		DB_PASSWORD = PROPERTIES.getProperty("mongo.db.password", "");
-
+		SERVICE_NAME = PROPERTIES.getProperty("web.app.name", "SEOBOX");
+		SERVICE_HOST = PROPERTIES.getProperty("web.app.host", "10.207.16.9");
+		SERVICE_PORT = Integer.parseInt(PROPERTIES.getProperty("web.app.port", "80"));
+		HAS_JENKINS = Boolean.parseBoolean(PROPERTIES.getProperty("seobox.jenkins", "false"));
+		HAS_WEBAPP = Boolean.parseBoolean(PROPERTIES.getProperty("web.app", "false"));
 		// Test Cases
 		TESTS = HelperUtils.getTestCasesNames();
 		if (System.getProperty("TestCases") != null && !System.getProperty("TestCases").isEmpty()) {

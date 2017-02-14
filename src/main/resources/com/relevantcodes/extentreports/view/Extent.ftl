@@ -536,6 +536,14 @@
 			<input type='hidden' id='otherSteps' name='otherSteps' value='${dashboard.otherSteps}'>
 			<input type='hidden' id='pageNo' name='pageNo' value='0'>
 			<input type='hidden' id='report' name='report' value='${dashboard.reportName}'>
+			<input type='hidden' id='dbName' name='dbName' value='${dashboard.dbName}'>
+			<input type='hidden' id='dbHost' name='dbHost' value='${dashboard.dbHost}'>
+			<input type='hidden' id='dbPort' name='dbPort' value='${dashboard.dbPort}'>
+			<input type='hidden' id='webAppName' name='webAppName' value='${dashboard.webAppName}'>
+			<input type='hidden' id='webAppHost' name='webAppHost' value='${dashboard.webAppHost}'>
+			<input type='hidden' id='webAppPort' name='webAppPort' value='${dashboard.webAppPort}'>
+			<input type='hidden' id='webApp' name='webApp' value='${dashboard.webApp}'>			
+			
 		</div>
 		<div id="pageSpeedModal" class="modal modal-fixed-footer">
             <div class="modal-content">

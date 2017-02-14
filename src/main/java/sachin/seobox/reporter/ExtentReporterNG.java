@@ -31,8 +31,7 @@ public class ExtentReporterNG {
 			} catch (IOException e) {
 			}
 		}
-		if ((null != System.getProperty("JENKINS_URL") && !System.getProperty("JENKINS_URL").isEmpty())
-				|| (null != System.getProperty("WEB") && !System.getProperty("WEB").isEmpty())) {
+		if (CrawlerConstants.HAS_WEBAPP) {
 			String path = CrawlerConstants.REPORT_PATH.substring(0,
 					CrawlerConstants.REPORT_PATH.indexOf("webapps\\") + 8);
 			try {

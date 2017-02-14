@@ -60,8 +60,6 @@ public class SiteLevel {
 			Response response = HelperUtils.getLinkResponse(add, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 			HttpResponse res = response.returnResponse();
 			int code = res.getStatusLine().getStatusCode();
-			Header[] headers = res.getAllHeaders();
-			boolean head = res.containsHeader("Content-Encoding");
 			String str = EntityUtils.toString(res.getEntity()).toLowerCase();
 			if (code == 200 && null != str && str.contains("user-agent")) {
 				test.log(LogStatus.PASS, "Robots.txt file found.", "Robot.txt Location: " + add);
@@ -69,18 +67,25 @@ public class SiteLevel {
 				test.log(LogStatus.FAIL, "Robots.txt file not found.", "Robot.txt Location: " + add);
 			}
 			// Content-Encoding
-			if (head) {
-				test.log(LogStatus.PASS, "Content-Encoding header is present in response.", "");
-				try {
-					if (this.getFirstHeader(headers, "Content-Encoding").getValue().contains("gzip")) {
-						test.log(LogStatus.PASS, "Content-Encoding header value is gzip.", "");
-					}
-				} catch (Exception ex) {
-					test.log(LogStatus.FAIL, "Content-Encoding header value is not gzip.", "");
-				}
-			} else {
-				test.log(LogStatus.FAIL, "Content-Encoding header is not present in response.", "");
-			}
+			// Header[] headers = res.getAllHeaders();
+			// boolean head = res.containsHeader("Content-Encoding");
+			// if (head) {
+			// test.log(LogStatus.PASS, "Content-Encoding header is present in
+			// response.", "");
+			// try {
+			// if (this.getFirstHeader(headers,
+			// "Content-Encoding").getValue().contains("gzip")) {
+			// test.log(LogStatus.PASS, "Content-Encoding header value is
+			// gzip.", "");
+			// }
+			// } catch (Exception ex) {
+			// test.log(LogStatus.FAIL, "Content-Encoding header value is not
+			// gzip.", "");
+			// }
+			// } else {
+			// test.log(LogStatus.FAIL, "Content-Encoding header is not present
+			// in response.", "");
+			// }
 		} catch (ParseException | IOException e) {
 			logger.debug("Error in fatching response. " + e);
 			test.log(LogStatus.FAIL, "Unable to read robots.txt", "");
@@ -157,11 +162,17 @@ public class SiteLevel {
 		ExtentTest test = HelperUtils.getTestLogger(caller);
 		Set<String> urls = new HashSet<>();
 		try {
+			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "sitemap.xml";
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
+					&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+				add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
+			}
+			test.log(LogStatus.INFO, "<b>SiteMap Location: </b> " + add, "");
 			try {
-				urls = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConstants.SITE,
-						CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
+				urls = SiteMapUtils.getAllURLsWithAltAndImage(CrawlerConstants.SITE, CrawlerConstants.USERNAME,
+						CrawlerConstants.PASSWORD);
 			} catch (Exception e1) {
-				logger.debug("Error " + e1);
+				logger.debug("Error ", e1);
 				test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
 			}
 			for (String url : urls) {
@@ -210,7 +221,12 @@ public class SiteLevel {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
 		try {
-
+			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "sitemap.xml";
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
+					&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+				add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
+			}
+			test.log(LogStatus.INFO, "<b>SiteMap Location: </b> " + add, "");
 			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConstants.SITE,
 					CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 			for (File file : new File(CrawlerConstants.DATA_LOCATION).listFiles()) {
@@ -233,7 +249,7 @@ public class SiteLevel {
 				}
 			}
 		} catch (ParseException | IOException | JDOMException e) {
-			logger.error("error in reading URLs from sitemap xml", e);
+			logger.debug("error in reading URLs from sitemap xml", e);
 			test.log(LogStatus.FAIL, "Unable to read data from sitemap.xml", e.getMessage());
 		} catch (Exception e) {
 			logger.debug("Error " + e);

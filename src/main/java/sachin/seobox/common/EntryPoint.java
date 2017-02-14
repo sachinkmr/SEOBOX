@@ -18,7 +18,7 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.dove.com/");
+		System.setProperty("SiteAddress", "http://www.liptontea.com/");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
@@ -47,7 +47,6 @@ public class EntryPoint {
 			testng.setTestSuites(suites);
 			testng.setAnnotationTransformer(new SEOTransformer());
 			testng.setUseDefaultListeners(false);
-			testng.setPreserveOrder(true);
 			testng.setVerbose(0);
 			testng.run();
 		} catch (Exception e) {

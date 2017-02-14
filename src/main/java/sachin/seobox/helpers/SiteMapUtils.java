@@ -140,9 +140,12 @@ public class SiteMapUtils {
 					list.add(link.getAttributeValue("href"));
 				}
 			}
-			url.getChildren("");
+			try {
+				String imag = url.getChild("image", img).getChildText("loc", img);
+				list.add(imag);
+			} catch (Exception ex) {
+			}
 		}
-
 		return list;
 	}
 }
