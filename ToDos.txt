@@ -1,6 +1,3 @@
-Robots category:
-	- Take inputs from Ashish for different meta names like nofollow, noodir
-
 Link Text
 	- no follow
 
