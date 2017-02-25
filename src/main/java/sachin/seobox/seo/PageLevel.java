@@ -110,12 +110,13 @@ public class PageLevel {
 						String d = results.getString("d");
 						String m = results.getString("m");
 						results = null;
-						org.bson.Document arr = new org.bson.Document("mobile", mobile);
-						arr.append("desktop", desktop);
+						org.bson.Document arr = new org.bson.Document("mobile", mobile.toString());
+						arr.append("desktop", desktop.toString());
 						arr.append("key", key);
 						String id = test.getTest().getId().toString();
 						arr.append("test_id", id);
 						arr.append("test_name", test.getTest().getName());
+
 						LogStatus logStatus = HelperUtils.getPageSpeedTestStatus(m, d);
 						test.log(logStatus, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
 								"<a href='#pageSpeedModal' class='googlePageSpeed waves-effect waves-light modal-trigger' data-key='"
@@ -130,7 +131,7 @@ public class PageLevel {
 						ComplexReportFactory.getInstance().getMongoDB()
 								.getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
 					} catch (SEOException e) {
-						logger.debug("SEOException: ", e);
+						logger.debug("Error in " + test.getTest().getName(), e);
 						test.log(LogStatus.SKIP, "<b>URL: </b><br/>" + page.getPage().getWebURL().getURL(),
 								e.getMessage());
 					} catch (Exception e) {
@@ -215,7 +216,7 @@ public class PageLevel {
 					}
 				}
 			} catch (Exception e) {
-				logger.debug("Error occoured ", e);
+				logger.debug("Error in " + test.getTest().getName(), e);
 
 			}
 		}
@@ -299,7 +300,7 @@ public class PageLevel {
 							test.log(LogStatus.WARNING, "Meta Robots Tags NOFOLLOW is found.<br/><b>URL: </b>"
 									+ page.getPage().getWebURL().getURL(), "");
 						} else {
-							test.log(LogStatus.FAIL, "Meta Robots Tags NOFOLLOW is found.<br/><b>URL: </b>"
+							test.log(LogStatus.PASS, "Meta Robots Tags NOFOLLOW is not found.<br/><b>URL: </b>"
 									+ page.getPage().getWebURL().getURL(), "");
 						}
 					}

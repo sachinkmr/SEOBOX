@@ -50,8 +50,8 @@ import edu.uci.ics.crawler4j.url.URLCanonicalizer;
 import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.exception.SEOException;
 
-public class HttpRequestUtils {
-	protected static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
+public class NetUtils {
+	protected static final Logger logger = LoggerFactory.getLogger(NetUtils.class);
 
 	/***
 	 * 

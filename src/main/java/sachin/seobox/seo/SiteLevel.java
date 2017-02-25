@@ -24,7 +24,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.helpers.HelperUtils;
-import sachin.seobox.helpers.HttpRequestUtils;
+import sachin.seobox.helpers.NetUtils;
 import sachin.seobox.helpers.SiteMapUtils;
 import sachin.seobox.helpers.StreamUtils;
 import sachin.seobox.parameters.SEOPage;
@@ -192,7 +192,7 @@ public class SiteLevel {
 					}
 				} else {
 					try {
-						CloseableHttpResponse res = HttpRequestUtils.getUrlResponse(url, CrawlerConstants.USERNAME,
+						CloseableHttpResponse res = NetUtils.getUrlResponse(url, CrawlerConstants.USERNAME,
 								CrawlerConstants.PASSWORD);
 						responseCode = res.getStatusLine().getStatusCode();
 						EntityUtils.consume(res.getEntity());

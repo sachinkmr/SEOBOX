@@ -23,11 +23,11 @@ public class DBUtils {
 		try {
 			int i = 0;
 			do {
-				mobile = HttpRequestUtils.getPageSpeedData(url, "mobile");
+				mobile = NetUtils.getPageSpeedData(url, "mobile");
 			} while ((mobile == null || mobile.has("error")) && ++i < 3);
 			i = 0;
 			do {
-				desktop = HttpRequestUtils.getPageSpeedData(url, "desktop");
+				desktop = NetUtils.getPageSpeedData(url, "desktop");
 			} while ((desktop == null || desktop.has("error")) && ++i < 3);
 			if (desktop != null && !desktop.has("error")) {
 				arr.append("desktop", desktop.toString());
@@ -74,7 +74,7 @@ public class DBUtils {
 		try {
 			int i = 0;
 			do {
-				json = HttpRequestUtils.getStructuredData(html, url);
+				json = NetUtils.getStructuredData(html, url);
 			} while ((json == null) && ++i < 3);
 		} catch (SEOException e) {
 			logger.debug("Unable to fatch google structured data", e);

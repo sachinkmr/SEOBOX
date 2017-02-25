@@ -13,7 +13,7 @@ public class SEOTransformer implements IAnnotationTransformer {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-		// if ("structuredData".equals(testMethod.getName())) {
+		// if ("pageSpeed".equals(testMethod.getName())) {
 		// annotation.setEnabled(true);
 		// } else {
 		// annotation.setEnabled(false);

@@ -75,7 +75,7 @@ public class CrawlerConstants {
 			LoggerFactory.getLogger(CrawlerConstants.class).debug("Error in loading config file", e);
 		}
 		REPORT_TIME_STAMP = HelperUtils.generateUniqueString();
-		// REPORT_TIME_STAMP = "14-February-2017_03-02-31-884PM";
+		// REPORT_TIME_STAMP = "25-February-2017_04-17-07-762PM";
 		String OUTPUT_DIRECTORY = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator
 				+ host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
 		if ((null != System.getProperty("JENKINS_URL") && !System.getProperty("JENKINS_URL").isEmpty())

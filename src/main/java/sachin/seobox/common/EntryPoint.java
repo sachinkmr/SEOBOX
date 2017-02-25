@@ -10,7 +10,7 @@ import org.testng.TestNG;
 import sachin.seobox.crawler.CrawlerConstants;
 import sachin.seobox.exception.SEOException;
 import sachin.seobox.helpers.HelperUtils;
-import sachin.seobox.helpers.HttpRequestUtils;
+import sachin.seobox.helpers.NetUtils;
 import sachin.seobox.reporter.ExtentReporterNG;
 import sachin.seobox.reporter.SEOTransformer;
 
@@ -18,7 +18,7 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		System.setProperty("SiteAddress", "http://www.liptontea.com/");
+		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
 		// System.setProperty("Username", "d2showcase");
 		// System.setProperty("Password", "D2$0wca$3");
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
@@ -29,8 +29,8 @@ public class EntryPoint {
 				return;
 			}
 		}
-		String red = HttpRequestUtils.getRedirectedURL(System.getProperty("SiteAddress"),
-				System.getProperty("Username"), System.getProperty("Password"));
+		String red = NetUtils.getRedirectedURL(System.getProperty("SiteAddress"), System.getProperty("Username"),
+				System.getProperty("Password"));
 		if (red != null) {
 			CrawlerConstants.SITE = red;
 		}
