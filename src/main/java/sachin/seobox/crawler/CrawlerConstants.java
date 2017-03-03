@@ -172,8 +172,8 @@ public class CrawlerConstants {
 		SERVICE_NAME = PROPERTIES.getProperty("web.app.name", "SEOBOX");
 		SERVICE_HOST = PROPERTIES.getProperty("web.app.host", "10.207.16.9");
 		SERVICE_PORT = Integer.parseInt(PROPERTIES.getProperty("web.app.port", "80"));
-		HAS_JENKINS = Boolean.parseBoolean(PROPERTIES.getProperty("seobox.jenkins", "false"));
-		HAS_WEBAPP = Boolean.parseBoolean(PROPERTIES.getProperty("seobox.web.app", "false"));
+		HAS_JENKINS = Boolean.parseBoolean(PROPERTIES.getProperty("seobox.jenkins", "true"));
+		HAS_WEBAPP = Boolean.parseBoolean(PROPERTIES.getProperty("seobox.web.app", "true"));
 		// Test Cases
 		TESTS = HelperUtils.getTestCasesNames();
 		if (System.getProperty("TestCases") != null && !System.getProperty("TestCases").isEmpty()) {
