@@ -1483,17 +1483,20 @@ public class PageLevel {
 					List<Element> links = Jsoup.parse(page.getHtml()).getElementsByTag("a");
 					if (links.size() > 0) {
 						for (Element e : links) {
-							if (!e.text().isEmpty()) {
+							if (e.select("img").size() <= 0 && e.text().isEmpty()) {
+								test.log(LogStatus.FAIL,
+										"<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+												+ page.getPage().getWebURL().getURL(),
+										"Anchor does not have text/image");
+							}
+							if (e.select("img").size() > 0) {
+								test.log(LogStatus.PASS, "<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
+										+ page.getPage().getWebURL().getURL(), "Anchor has image.");
+							} else {
 								test.log(LogStatus.PASS, "<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
 										+ page.getPage().getWebURL().getURL(), "Anchor has text.");
-							} else if (e.select("img").size() <= 0 && e.html().isEmpty()) {
-								test.log(LogStatus.FAIL, "<b>Anchor: </b>" + e.attr("href") + "<br/><b>URL: </b>"
-										+ page.getPage().getWebURL().getURL(), "Anchor does not have text");
 							}
 						}
-					} else {
-						test.log(LogStatus.PASS, "<b>URL: </b>" + page.getPage().getWebURL().getURL(),
-								"There is anchor tag on page.");
 					}
 				}
 			} catch (Exception e) {
