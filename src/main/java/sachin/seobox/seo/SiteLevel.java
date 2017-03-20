@@ -31,7 +31,7 @@ import sachin.seobox.parameters.SEOPage;
 import sachin.seobox.reporter.ComplexReportFactory;
 
 public class SiteLevel {
-	protected static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
+	static final Logger logger = LoggerFactory.getLogger(SiteLevel.class);
 	private StreamUtils streamUtils;
 
 	@BeforeClass

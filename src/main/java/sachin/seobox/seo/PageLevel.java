@@ -31,7 +31,7 @@ import sachin.seobox.parameters.SEOPage;
 import sachin.seobox.reporter.ComplexReportFactory;
 
 public class PageLevel {
-	protected static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
+	static final Logger logger = LoggerFactory.getLogger(PageLevel.class);
 	private File[] pages;
 	private StreamUtils streamUtils;
 
@@ -1323,7 +1323,7 @@ public class PageLevel {
 				}
 			}
 			for (String key : map.keySet()) {
-				if (map.get(key).split("<br/>").length > 2) {
+				if (map.get(key).contains("<br/>")) {
 					test.log(LogStatus.FAIL, map.get(key), "<b>Description: </b>" + key);
 				}
 			}
@@ -1366,7 +1366,7 @@ public class PageLevel {
 				}
 			}
 			for (String key : map.keySet()) {
-				if (map.get(key).split("<br/>").length > 2) {
+				if (map.get(key).contains("<br/>")) {
 					test.log(LogStatus.FAIL, map.get(key), "<b>Title: </b>" + key);
 				}
 			}
@@ -1410,7 +1410,7 @@ public class PageLevel {
 				}
 			}
 			for (String key : map.keySet()) {
-				if (map.get(key).split("<br/>").length > 2) {
+				if (map.get(key).contains("<br/>")) {
 					test.log(LogStatus.FAIL, "<b>Duplicate Body Content: </b>", map.get(key));
 				}
 			}
@@ -1454,7 +1454,7 @@ public class PageLevel {
 				}
 			}
 			for (String key : map.keySet()) {
-				if (map.get(key).split("<br/>").length > 2) {
+				if (map.get(key).contains("<br/>")) {
 					test.log(LogStatus.FAIL, map.get(key), "<b>H1 Tag: </b>" + key);
 				}
 			}

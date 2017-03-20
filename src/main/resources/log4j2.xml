@@ -17,14 +17,14 @@
 			<Policies>
 				<!--> <TimeBasedTriggeringPolicy interval="1" modulate="true" /> -->
 				<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
-				<SizeBasedTriggeringPolicy size="15 MB" /> <!-- Or every 5 MB -->
+				<SizeBasedTriggeringPolicy size="10 MB" /> <!-- Or every 5 MB -->
 			</Policies>
 		</RollingFile>
 	</appenders>
 
 	<loggers>
 		<root level="info">
-			<appender-ref ref="Console" level="warn" />
+			<appender-ref ref="Console" level="info" />
 			<appender-ref ref="RollingFile" level="info" />
 		</root>
 	</loggers>

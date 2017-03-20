@@ -21,7 +21,7 @@ import sachin.seobox.reporter.ComplexReportFactory;
 
 public class LinkLevel {
 
-	protected final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
+	final Logger logger = LoggerFactory.getLogger(LinkLevel.class);
 	private File[] pages;
 	private StreamUtils streamUtils;
 

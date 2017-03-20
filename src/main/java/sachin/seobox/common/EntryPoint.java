@@ -18,9 +18,9 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
-		// System.setProperty("Username", "d2showcase");
-		// System.setProperty("Password", "D2$0wca$3");
+		// System.setProperty("SiteAddress", "http://www.comfort.in/");
+		// System.setProperty("Username", "wlnonproduser");
+		// System.setProperty("Password", "Pass@word11");
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 			try {
 				throw new SEOException("Site url is missing");
