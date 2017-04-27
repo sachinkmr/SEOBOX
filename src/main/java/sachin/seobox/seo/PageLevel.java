@@ -577,13 +577,13 @@ public class PageLevel {
 								test.log(LogStatus.PASS,
 										"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
 												+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
-										"Image has alt Text.<br/><b>Alt Text: </b>" + e.attr("alt"));
+										"Image contains alt Text.<br/><b>Alt Text: </b>" + e.attr("alt"));
 
 							} else {
 								test.log(LogStatus.FAIL,
 										"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
 												+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
-										"Image does not has alt Text.");
+										"Image does not contain alt Text.");
 							}
 						}
 					}
@@ -614,13 +614,13 @@ public class PageLevel {
 								test.log(LogStatus.PASS,
 										"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
 												+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
-										"Image has title Text.<br/><b>Alt Text: </b>" + e.attr("title"));
+										"Image contains Title text.<br/><b>Alt Text: </b>" + e.attr("title"));
 
 							} else {
 								test.log(LogStatus.FAIL,
 										"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
 												+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
-										"Image does not has title Text.");
+										"Image does not contain Title Text.");
 							}
 						}
 					}
@@ -650,11 +650,11 @@ public class PageLevel {
 								test.log(LogStatus.PASS,
 										"<b>Parent URL: </b>" + page.getPage().getWebURL().getURL()
 												+ "<br/><b>Image URL: </b>" + e.attr("abs:src"),
-										"Image has source.<br/>");
+										"Image contains source.<br/>");
 
 							} else {
 								test.log(LogStatus.FAIL, "<b>Parent URL: </b>" + page.getPage().getWebURL().getURL(),
-										"Image does not has source.");
+										"Image does not contain source.");
 							}
 						}
 					}

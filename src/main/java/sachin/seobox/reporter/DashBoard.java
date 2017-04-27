@@ -129,7 +129,7 @@ public class DashBoard {
 		return totalSteps;
 	}
 
-	void addTest(ExtentTest test) {
+	public synchronized void addTest(ExtentTest test) {
 		TestCase tc = new TestCase();
 		tc.setId(test.getTest().getId().toString());
 		tc.setName(test.getTest().getName());
