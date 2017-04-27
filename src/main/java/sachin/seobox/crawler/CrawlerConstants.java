@@ -158,7 +158,7 @@ public class CrawlerConstants {
 				.parseInt(PROPERTIES.getProperty("page.image.alt.text.word.count", "100"));
 		CANONICAL_URL_CHARACTERS_LIMIT = Integer
 				.parseInt(PROPERTIES.getProperty("page.canonical.url.word.count", "115"));
-		MAXIMUM_LINKS_COUNTS = Integer.parseInt(PROPERTIES.getProperty("page.maximum.links.count", "1000"));
+		MAXIMUM_LINKS_COUNTS = Integer.parseInt(PROPERTIES.getProperty("page.maximum.links.count", "100"));
 		MAXIMUM_EXTERNAL_LINKS_COUNTS = Integer
 				.parseInt(PROPERTIES.getProperty("page.maximum.externalLink.count", "100"));
 		MAXIMUM_RESPONSE_TIME = Integer.parseInt(PROPERTIES.getProperty("link.maximumLoadTime", "2000"));

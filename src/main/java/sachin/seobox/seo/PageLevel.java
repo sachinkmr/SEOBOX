@@ -1077,7 +1077,6 @@ public class PageLevel {
 	@Test(testName = "Blank Canonical URL", description = "Verify for blank canonical tag url", groups = {
 			"Canonical Tag" }, enabled = true)
 	public void blankCanonicalURL() {
-
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
@@ -1089,17 +1088,12 @@ public class PageLevel {
 					List<Element> links = page.getCanonical();
 					for (Element e : links) {
 						if (e.attr("href").isEmpty()) {
-							test.log(LogStatus.FAIL,
-									"Canonical URL is empty. <br/><b>Page URL: </b>"
-											+ page.getPage().getWebURL().getURL(),
-									"<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-											+ CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
+							test.log(LogStatus.FAIL, "Canonical URL is empty. <br/><b>Page URL: </b>"
+									+ page.getPage().getWebURL().getURL(), "");
 						} else {
-							test.log(LogStatus.PASS,
-									"Canonical URL is not empty.<br/><b>Canonical URL: </b>" + e.attr("href")
-											+ " <br/><b>Page URL: </b>" + page.getPage().getWebURL().getURL(),
-									"<b>Length: </b>" + e.attr("href").length() + "<br/><b>Recommended: </b>"
-											+ CrawlerConstants.CANONICAL_URL_CHARACTERS_LIMIT);
+							test.log(LogStatus.PASS, "Canonical URL is not empty.<br/><b>Canonical URL: </b>"
+									+ e.attr("href") + " <br/><b>Page URL: </b>" + page.getPage().getWebURL().getURL(),
+									"");
 						}
 					}
 				}
