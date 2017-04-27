@@ -101,6 +101,9 @@
 			    padding: 0 0 17px 0;
 			    border-bottom: white dotted;
 			}
+			.test-steps{
+				overflow-x: scroll;
+			}
           </style>
 	</head>
 	
