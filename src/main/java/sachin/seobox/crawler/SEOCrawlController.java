@@ -7,8 +7,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class SEOCrawlController extends CrawlController {
 
-	public SEOCrawlController(CrawlConfig config, PageFetcher pageFetcher, RobotstxtServer robotstxtServer)
-			throws Exception {
+	public SEOCrawlController(CrawlConfig config, PageFetcher pageFetcher, RobotstxtServer robotstxtServer) throws Exception {
 		super(config, pageFetcher, robotstxtServer);
 
 	}

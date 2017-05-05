@@ -118,19 +118,16 @@ public class RobotstxtServer {
 					String content = new String(page.getContentData());
 					directives = RobotstxtParser.parse(content, config.getUserAgentName());
 				} else {
-					logger.warn("Can't read this robots.txt: {}  as it is not written in plain text, contentType: {}",
-							robotsTxtUrl.getURL(), contentType);
+					logger.warn("Can't read this robots.txt: {}  as it is not written in plain text, contentType: {}", robotsTxtUrl.getURL(), contentType);
 				}
 			} else {
-				logger.debug("Can't read this robots.txt: {}  as it's status code is {}", robotsTxtUrl.getURL(),
-						fetchResult.getStatusCode());
+				logger.debug("Can't read this robots.txt: {}  as it's status code is {}", robotsTxtUrl.getURL(), fetchResult.getStatusCode());
 			}
 		} catch (SocketException | UnknownHostException | SocketTimeoutException | NoHttpResponseException se) {
 			// No logging here, as it just means that robots.txt doesn't exist
 			// on this server which is perfectly ok
 		} catch (PageBiggerThanMaxSizeException pbtms) {
-			logger.error("Error occurred while fetching (robots) url: {}, {}", robotsTxtUrl.getURL(),
-					pbtms.getMessage());
+			logger.error("Error occurred while fetching (robots) url: {}, {}", robotsTxtUrl.getURL(), pbtms.getMessage());
 		} catch (Exception e) {
 			logger.error("Error occurred while fetching (robots) url: " + robotsTxtUrl.getURL(), e);
 		} finally {

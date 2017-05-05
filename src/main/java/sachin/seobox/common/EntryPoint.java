@@ -18,9 +18,9 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.comfort.in/");
-		// System.setProperty("Username", "wlnonproduser");
-		// System.setProperty("Password", "Pass@word11");
+		System.setProperty("SiteAddress", "http://www.comfort.in/");
+		System.setProperty("Username", "wlnonproduser");
+		System.setProperty("Password", "Pass@word11");
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 			try {
 				throw new SEOException("Site url is missing");
@@ -29,17 +29,13 @@ public class EntryPoint {
 				return;
 			}
 		}
-		String red = NetUtils.getRedirectedURL(System.getProperty("SiteAddress"), System.getProperty("Username"),
-				System.getProperty("Password"));
+		String red = NetUtils.getRedirectedURL(System.getProperty("SiteAddress"), System.getProperty("Username"), System.getProperty("Password"));
 		if (red != null) {
 			CrawlerConstants.SITE = red;
 		}
 		try {
-			if (HelperUtils
-					.getFluentResponse(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD)
-					.returnResponse().getStatusLine().getStatusCode() != 200) {
-				throw new Exception(
-						"URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail.");
+			if (HelperUtils.getFluentResponse(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD).returnResponse().getStatusLine().getStatusCode() != 200) {
+				throw new Exception("URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail.");
 			}
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));
@@ -52,8 +48,7 @@ public class EntryPoint {
 		} catch (Exception e) {
 			logger.error("Error in application: ", e);
 			CrawlerConstants.ERROR = true;
-			CrawlerConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
-					+ e.getMessage();
+			CrawlerConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: " + e.getMessage();
 		}
 		CrawlerConstants.SITE = System.getProperty("SiteAddress");
 		ExtentReporterNG.generateReport();

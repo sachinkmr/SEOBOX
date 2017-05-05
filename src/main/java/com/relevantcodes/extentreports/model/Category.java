@@ -10,9 +10,9 @@ package com.relevantcodes.extentreports.model;
 
 public class Category extends TestAttribute {
 
-    private static final long serialVersionUID = 4400959780453902345L;
+	private static final long serialVersionUID = 4400959780453902345L;
 
-    public Category(String name) {
-	super(name.trim());
-    }
+	public Category(String name) {
+		super(name.trim());
+	}
 }

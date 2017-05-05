@@ -23,68 +23,68 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Configuration {
-    private Map<String, String> configurationMap;
-    private InputStream stream;
-    protected static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
+	private Map<String, String> configurationMap;
+	private InputStream stream;
+	protected static final Logger logger = Logger.getLogger(ExtentReports.class.getName());
 
-    public Map<String, String> getConfigurationMap() {
-	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder dBuilder;
-	String value = null;
+	public Map<String, String> getConfigurationMap() {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder;
+		String value = null;
 
-	try {
-	    dBuilder = dbFactory.newDocumentBuilder();
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
 
-	    Document doc = dBuilder.parse(stream);
-	    doc.getDocumentElement().normalize();
+			Document doc = dBuilder.parse(stream);
+			doc.getDocumentElement().normalize();
 
-	    NodeList nodeList = doc.getElementsByTagName("configuration").item(0).getChildNodes();
+			NodeList nodeList = doc.getElementsByTagName("configuration").item(0).getChildNodes();
 
-	    for (int ix = 0; ix < nodeList.getLength(); ix++) {
-		Node node = nodeList.item(ix);
+			for (int ix = 0; ix < nodeList.getLength(); ix++) {
+				Node node = nodeList.item(ix);
 
-		Element el = node.getNodeType() == Node.ELEMENT_NODE ? (Element) node : null;
+				Element el = node.getNodeType() == Node.ELEMENT_NODE ? (Element) node : null;
 
-		if (el != null) {
-		    value = el.getTextContent();
+				if (el != null) {
+					value = el.getTextContent();
 
-		    if (el instanceof CharacterData) {
-			value = ((CharacterData) el).getData();
-		    }
+					if (el instanceof CharacterData) {
+						value = ((CharacterData) el).getData();
+					}
 
-		    configurationMap.put(el.getNodeName(), value);
+					configurationMap.put(el.getNodeName(), value);
+				}
+			}
+
+			return configurationMap;
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "The configuration file or URL was not found", e);
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
 		}
-	    }
 
-	    return configurationMap;
-	} catch (IOException e) {
-	    logger.log(Level.SEVERE, "The configuration file or URL was not found", e);
-	} catch (SAXException e) {
-	    e.printStackTrace();
-	} catch (ParserConfigurationException e) {
-	    e.printStackTrace();
+		return null;
 	}
 
-	return null;
-    }
+	public Configuration(URL url) {
+		try {
+			stream = url.openStream();
 
-    public Configuration(URL url) {
-	try {
-	    stream = url.openStream();
-
-	    configurationMap = new HashMap<String, String>();
-	} catch (IOException e) {
-	    e.printStackTrace();
+			configurationMap = new HashMap<String, String>();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-    }
 
-    public Configuration(File file) {
-	try {
-	    stream = new FileInputStream(file);
+	public Configuration(File file) {
+		try {
+			stream = new FileInputStream(file);
 
-	    configurationMap = new HashMap<String, String>();
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
+			configurationMap = new HashMap<String, String>();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
-    }
 }

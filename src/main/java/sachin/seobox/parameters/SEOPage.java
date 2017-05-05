@@ -44,8 +44,7 @@ public class SEOPage implements Serializable {
 		// ogTags = new ArrayList<>();
 		// images = new ArrayList<>();
 		// linkDirectives = new ArrayList<>();
-		if (!page.getWebURL().isInternalLink()
-				&& !CrawlerConstants.ASSETS_PATTERN.matcher(page.getWebURL().getURL()).find()) {
+		if (!page.getWebURL().isInternalLink() && !CrawlerConstants.ASSETS_PATTERN.matcher(page.getWebURL().getURL()).find()) {
 			page.setContentData(null);
 			page.setParseData(null);
 		}

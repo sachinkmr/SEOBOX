@@ -14,31 +14,31 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileReaderEx {
-    public static String readAllText(String filePath) {
-	File file = new File(filePath);
+	public static String readAllText(String filePath) {
+		File file = new File(filePath);
 
-	if (file.exists()) {
-	    FileInputStream fis;
-	    byte[] data;
+		if (file.exists()) {
+			FileInputStream fis;
+			byte[] data;
 
-	    try {
-		fis = new FileInputStream(file);
-		data = new byte[(int) file.length()];
-		fis.read(data);
-		fis.close();
+			try {
+				fis = new FileInputStream(file);
+				data = new byte[(int) file.length()];
+				fis.read(data);
+				fis.close();
 
-		return new String(data, "UTF-8");
-	    } catch (FileNotFoundException e) {
-		e.printStackTrace();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
+				return new String(data, "UTF-8");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
-	return null;
-    }
-
-    public static String readAllText(File file) {
-	return readAllText(file.getAbsolutePath());
-    }
+	public static String readAllText(File file) {
+		return readAllText(file.getAbsolutePath());
+	}
 }

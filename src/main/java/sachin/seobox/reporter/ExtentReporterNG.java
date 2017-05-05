@@ -24,19 +24,16 @@ public class ExtentReporterNG {
 				Document doc = Jsoup.parse(file, "UTF-8");
 				Element e = doc.select("div.loading").first();
 				e.attr("style", "display:block");
-				String errorText = "URL: <a href='" + CrawlerConstants.SITE + "'>" + CrawlerConstants.SITE + "</a><br/>"
-						+ CrawlerConstants.ERROR_TEXT;
+				String errorText = "URL: <a href='" + CrawlerConstants.SITE + "'>" + CrawlerConstants.SITE + "</a><br/>" + CrawlerConstants.ERROR_TEXT;
 				e.select("#error").first().html(errorText);
 				FileUtils.writeStringToFile(file, doc.outerHtml(), "UTF-8");
 			} catch (IOException e) {
 			}
 		}
 		if (CrawlerConstants.HAS_WEBAPP) {
-			String path = CrawlerConstants.REPORT_PATH.substring(0,
-					CrawlerConstants.REPORT_PATH.indexOf("webapps\\") + 8);
+			String path = CrawlerConstants.REPORT_PATH.substring(0, CrawlerConstants.REPORT_PATH.indexOf("webapps\\") + 8);
 			try {
-				report = CrawlerConstants.REPORT_PATH.replace(path,
-						"http://" + InetAddress.getLocalHost().getHostAddress());
+				report = CrawlerConstants.REPORT_PATH.replace(path, "http://" + InetAddress.getLocalHost().getHostAddress());
 				System.out.println("Report Generated: " + report);
 			} catch (UnknownHostException e) {
 

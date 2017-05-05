@@ -10,8 +10,11 @@ import java.util.Set;
  * @author Bithazard
  */
 interface ISitemapParser {
-    void parse();
-    Set<SitemapIndex> getSitemapIndexes();
-    Set<SitemapEntry> getSitemapEntries();
-    Sitemap.SitemapType getSitemapType();
+	void parse();
+
+	Set<SitemapIndex> getSitemapIndexes();
+
+	Set<SitemapEntry> getSitemapEntries();
+
+	Sitemap.SitemapType getSitemapType();
 }

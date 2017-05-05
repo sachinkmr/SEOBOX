@@ -145,9 +145,7 @@ public class DashBoard {
 			}
 			if (test.getRunStatus().name().equalsIgnoreCase("pass")) {
 				cat.setPassed(cat.getPassed() + 1);
-			} else if (test.getRunStatus().name().equalsIgnoreCase("fail")
-					|| test.getRunStatus().name().equalsIgnoreCase("fatal")
-					|| test.getRunStatus().name().equalsIgnoreCase("error")) {
+			} else if (test.getRunStatus().name().equalsIgnoreCase("fail") || test.getRunStatus().name().equalsIgnoreCase("fatal") || test.getRunStatus().name().equalsIgnoreCase("error")) {
 				cat.setFailed(cat.getFailed() + 1);
 			}
 			tc.setCats(attr.getName());
@@ -193,8 +191,7 @@ public class DashBoard {
 		}
 
 		LogStatus status = test.getRunStatus();
-		if (status == LogStatus.FATAL || status == LogStatus.ERROR || status == LogStatus.WARNING
-				|| status == LogStatus.UNKNOWN) {
+		if (status == LogStatus.FATAL || status == LogStatus.ERROR || status == LogStatus.WARNING || status == LogStatus.UNKNOWN) {
 			if (!logStatusList.contains(status)) {
 				logStatusList.add(status);
 			}

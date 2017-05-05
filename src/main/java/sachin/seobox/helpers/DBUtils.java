@@ -45,13 +45,11 @@ public class DBUtils {
 			arr.append("hasError", "true");
 			arr.append("error", e.getMessage());
 		}
-		ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
-				.insertOne(arr);
+		ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
 	}
 
 	public static JSONObject getPageSpeedRecord(String url) {
-		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
-				.findOneAndDelete(Filters.and(Filters.exists("page_speed_results"), Filters.eq("url", url)));
+		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP).findOneAndDelete(Filters.and(Filters.exists("page_speed_results"), Filters.eq("url", url)));
 		// Document doc =
 		// ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 		// .find(Filters.and(Filters.exists("page_speed_results"),
@@ -84,13 +82,11 @@ public class DBUtils {
 		if (json != null) {
 			arr.append("data", json.toString());
 		}
-		ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
-				.insertOne(arr);
+		ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP).insertOne(arr);
 	}
 
 	public static JSONObject getStructuredDataRecord(String url) {
-		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
-				.findOneAndDelete(Filters.and(Filters.exists("structured_data_results"), Filters.eq("url", url)));
+		Document doc = ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP).findOneAndDelete(Filters.and(Filters.exists("structured_data_results"), Filters.eq("url", url)));
 		// Document doc =
 		// ComplexReportFactory.getInstance().getMongoDB().getCollection(CrawlerConstants.REPORT_TIME_STAMP)
 		// .find(Filters.and(Filters.exists("structured_data_results"),

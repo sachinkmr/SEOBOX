@@ -35,217 +35,217 @@ import edu.uci.ics.crawler4j.url.WebURL;
  */
 public class Page implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -7415595710483746953L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7415595710483746953L;
 
-    /**
-     * The URL of this page.
-     */
-    protected WebURL url;
+	/**
+	 * The URL of this page.
+	 */
+	protected WebURL url;
 
-    /**
-     * Redirection flag
-     */
-    protected boolean redirect;
+	/**
+	 * Redirection flag
+	 */
+	protected boolean redirect;
 
-    /**
-     * The URL to which this page will be redirected to
-     */
-    protected String redirectedToUrl;
+	/**
+	 * The URL to which this page will be redirected to
+	 */
+	protected String redirectedToUrl;
 
-    /**
-     * Status of the page
-     */
-    protected int statusCode;
+	/**
+	 * Status of the page
+	 */
+	protected int statusCode;
 
-    /**
-     * The content of this page in binary format.
-     */
-    volatile protected byte[] contentData;
+	/**
+	 * The content of this page in binary format.
+	 */
+	volatile protected byte[] contentData;
 
-    /**
-     * The ContentType of this page. For example: "text/html; charset=UTF-8"
-     */
-    protected String contentType;
+	/**
+	 * The ContentType of this page. For example: "text/html; charset=UTF-8"
+	 */
+	protected String contentType;
 
-    /**
-     * The encoding of the content. For example: "gzip"
-     */
-    protected String contentEncoding;
+	/**
+	 * The encoding of the content. For example: "gzip"
+	 */
+	protected String contentEncoding;
 
-    /**
-     * The charset of the content. For example: "UTF-8"
-     */
-    protected String contentCharset;
+	/**
+	 * The charset of the content. For example: "UTF-8"
+	 */
+	protected String contentCharset;
 
-    /**
-     * Language of the Content.
-     */
-    private String language;
+	/**
+	 * Language of the Content.
+	 */
+	private String language;
 
-    /**
-     * Headers which were present in the response of the fetch request
-     */
-    protected Header[] fetchResponseHeaders;
+	/**
+	 * Headers which were present in the response of the fetch request
+	 */
+	protected Header[] fetchResponseHeaders;
 
-    /**
-     * The parsed data populated by parsers
-     */
-    volatile protected ParseData parseData;
-    private int responseTime;
+	/**
+	 * The parsed data populated by parsers
+	 */
+	volatile protected ParseData parseData;
+	private int responseTime;
 
-    public int getResponseTime() {
-	return this.responseTime;
-    }
-
-    public void setResponseTime(int responseTime) {
-	this.responseTime = responseTime;
-    }
-
-    public Page(WebURL url) {
-	this.url = url;
-    }
-
-    /**
-     * Loads the content of this page from a fetched HttpEntity.
-     *
-     * @param entity
-     *            HttpEntity
-     * @throws Exception
-     *             when load fails
-     */
-    public void load(HttpEntity entity) throws Exception {
-
-	contentType = null;
-	Header type = entity.getContentType();
-	if (type != null) {
-	    contentType = type.getValue();
+	public int getResponseTime() {
+		return this.responseTime;
 	}
 
-	contentEncoding = null;
-	Header encoding = entity.getContentEncoding();
-	if (encoding != null) {
-	    contentEncoding = encoding.getValue();
+	public void setResponseTime(int responseTime) {
+		this.responseTime = responseTime;
 	}
 
-	Charset charset = ContentType.getOrDefault(entity).getCharset();
-	if (charset != null) {
-	    contentCharset = charset.displayName();
+	public Page(WebURL url) {
+		this.url = url;
 	}
 
-	contentData = EntityUtils.toByteArray(entity);
-    }
+	/**
+	 * Loads the content of this page from a fetched HttpEntity.
+	 *
+	 * @param entity
+	 *            HttpEntity
+	 * @throws Exception
+	 *             when load fails
+	 */
+	public void load(HttpEntity entity) throws Exception {
 
-    public WebURL getWebURL() {
-	return url;
-    }
+		contentType = null;
+		Header type = entity.getContentType();
+		if (type != null) {
+			contentType = type.getValue();
+		}
 
-    public void setWebURL(WebURL url) {
-	this.url = url;
-    }
+		contentEncoding = null;
+		Header encoding = entity.getContentEncoding();
+		if (encoding != null) {
+			contentEncoding = encoding.getValue();
+		}
 
-    public boolean isRedirect() {
-	return redirect;
-    }
+		Charset charset = ContentType.getOrDefault(entity).getCharset();
+		if (charset != null) {
+			contentCharset = charset.displayName();
+		}
 
-    public void setRedirect(boolean redirect) {
-	this.redirect = redirect;
-    }
+		contentData = EntityUtils.toByteArray(entity);
+	}
 
-    public String getRedirectedToUrl() {
-	return redirectedToUrl;
-    }
+	public WebURL getWebURL() {
+		return url;
+	}
 
-    public void setRedirectedToUrl(String redirectedToUrl) {
-	this.redirectedToUrl = redirectedToUrl;
-    }
+	public void setWebURL(WebURL url) {
+		this.url = url;
+	}
 
-    public int getStatusCode() {
-	return statusCode;
-    }
+	public boolean isRedirect() {
+		return redirect;
+	}
 
-    public void setStatusCode(int statusCode) {
-	this.statusCode = statusCode;
-    }
+	public void setRedirect(boolean redirect) {
+		this.redirect = redirect;
+	}
 
-    /**
-     * Returns headers which were present in the response of the fetch request
-     *
-     * @return Header Array, the response headers
-     */
-    public Header[] getFetchResponseHeaders() {
-	return fetchResponseHeaders;
-    }
+	public String getRedirectedToUrl() {
+		return redirectedToUrl;
+	}
 
-    public void setFetchResponseHeaders(Header[] headers) {
-	fetchResponseHeaders = headers;
-    }
+	public void setRedirectedToUrl(String redirectedToUrl) {
+		this.redirectedToUrl = redirectedToUrl;
+	}
 
-    /**
-     * @return parsed data generated for this page by parsers
-     */
-    public ParseData getParseData() {
-	return parseData;
-    }
+	public int getStatusCode() {
+		return statusCode;
+	}
 
-    public void setParseData(ParseData parseData) {
-	this.parseData = parseData;
-    }
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
 
-    /**
-     * @return content of this page in binary format.
-     */
-    public byte[] getContentData() {
-	return contentData;
-    }
+	/**
+	 * Returns headers which were present in the response of the fetch request
+	 *
+	 * @return Header Array, the response headers
+	 */
+	public Header[] getFetchResponseHeaders() {
+		return fetchResponseHeaders;
+	}
 
-    public void setContentData(byte[] contentData) {
-	this.contentData = contentData;
-    }
+	public void setFetchResponseHeaders(Header[] headers) {
+		fetchResponseHeaders = headers;
+	}
 
-    /**
-     * @return ContentType of this page. For example: "text/html; charset=UTF-8"
-     */
-    public String getContentType() {
-	return contentType;
-    }
+	/**
+	 * @return parsed data generated for this page by parsers
+	 */
+	public ParseData getParseData() {
+		return parseData;
+	}
 
-    public void setContentType(String contentType) {
-	this.contentType = contentType;
-    }
+	public void setParseData(ParseData parseData) {
+		this.parseData = parseData;
+	}
 
-    /**
-     * @return encoding of the content. For example: "gzip"
-     */
-    public String getContentEncoding() {
-	return contentEncoding;
-    }
+	/**
+	 * @return content of this page in binary format.
+	 */
+	public byte[] getContentData() {
+		return contentData;
+	}
 
-    public void setContentEncoding(String contentEncoding) {
-	this.contentEncoding = contentEncoding;
-    }
+	public void setContentData(byte[] contentData) {
+		this.contentData = contentData;
+	}
 
-    /**
-     * @return charset of the content. For example: "UTF-8"
-     */
-    public String getContentCharset() {
-	return contentCharset;
-    }
+	/**
+	 * @return ContentType of this page. For example: "text/html; charset=UTF-8"
+	 */
+	public String getContentType() {
+		return contentType;
+	}
 
-    public void setContentCharset(String contentCharset) {
-	this.contentCharset = contentCharset;
-    }
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
 
-    /**
-     * @return Language
-     */
-    public String getLanguage() {
-	return language;
-    }
+	/**
+	 * @return encoding of the content. For example: "gzip"
+	 */
+	public String getContentEncoding() {
+		return contentEncoding;
+	}
 
-    public void setLanguage(String language) {
-	this.language = language;
-    }
+	public void setContentEncoding(String contentEncoding) {
+		this.contentEncoding = contentEncoding;
+	}
+
+	/**
+	 * @return charset of the content. For example: "UTF-8"
+	 */
+	public String getContentCharset() {
+		return contentCharset;
+	}
+
+	public void setContentCharset(String contentCharset) {
+		this.contentCharset = contentCharset;
+	}
+
+	/**
+	 * @return Language
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 }

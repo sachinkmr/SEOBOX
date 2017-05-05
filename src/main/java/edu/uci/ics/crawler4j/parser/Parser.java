@@ -128,8 +128,7 @@ public class Parser extends Configurable {
 				}
 
 				String hrefLoweredCase = href.trim().toLowerCase();
-				if (!hrefLoweredCase.contains("javascript:") && !hrefLoweredCase.contains("mailto:")
-						&& !hrefLoweredCase.contains("@")) {
+				if (!hrefLoweredCase.contains("javascript:") && !hrefLoweredCase.contains("mailto:") && !hrefLoweredCase.contains("@")) {
 					String url = URLCanonicalizer.getCanonicalURL(href, contextURL);
 					if (url != null) {
 						WebURL webURL = new WebURL();

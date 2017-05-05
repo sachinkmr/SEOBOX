@@ -76,13 +76,9 @@ public class CrawlerConstants {
 		}
 		REPORT_TIME_STAMP = HelperUtils.generateUniqueString();
 		// REPORT_TIME_STAMP = "25-February-2017_04-17-07-762PM";
-		String OUTPUT_DIRECTORY = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator
-				+ host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
-		if ((null != System.getProperty("JENKINS_URL") && !System.getProperty("JENKINS_URL").isEmpty())
-				|| (null != System.getProperty("WEB") && !System.getProperty("WEB").isEmpty())) {
-			OUTPUT_DIRECTORY = OUTPUT_DIRECTORY.substring(0, OUTPUT_DIRECTORY.indexOf("jenkins")) + File.separator
-					+ "SEOBOX" + File.separator + "Reports" + File.separator + host + File.separator
-					+ REPORT_TIME_STAMP;
+		String OUTPUT_DIRECTORY = new File(System.getProperty("user.dir") + File.separator + "Reports" + File.separator + host + File.separator + REPORT_TIME_STAMP).getAbsolutePath();
+		if ((null != System.getProperty("JENKINS_URL") && !System.getProperty("JENKINS_URL").isEmpty()) || (null != System.getProperty("WEB") && !System.getProperty("WEB").isEmpty())) {
+			OUTPUT_DIRECTORY = OUTPUT_DIRECTORY.substring(0, OUTPUT_DIRECTORY.indexOf("jenkins")) + File.separator + "SEOBOX" + File.separator + "Reports" + File.separator + host + File.separator + REPORT_TIME_STAMP;
 		}
 		REPORT_PATH = OUTPUT_DIRECTORY + File.separator + "Report.html";
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp" + File.separator + host);
@@ -94,15 +90,12 @@ public class CrawlerConstants {
 		SKIPPED_URLS = new ArrayList<>();
 		String PROPERTIES_LOC = "";
 		boolean deletePropFile = false;
-		if (System.getProperty("CrawlerConfigFileLocation") != null
-				&& !System.getProperty("CrawlerConfigFileLocation").isEmpty()) {
-			LoggerFactory.getLogger(CrawlerConstants.class)
-					.info("Loading user's config file provided from web interface");
+		if (System.getProperty("CrawlerConfigFileLocation") != null && !System.getProperty("CrawlerConfigFileLocation").isEmpty()) {
+			LoggerFactory.getLogger(CrawlerConstants.class).info("Loading user's config file provided from web interface");
 			PROPERTIES_LOC = System.getProperty("CrawlerConfigFileLocation");
 			deletePropFile = true;
 		} else if (System.getProperty("CrawlerConfig") != null && !System.getProperty("CrawlerConfig").isEmpty()) {
-			LoggerFactory.getLogger(CrawlerConstants.class)
-					.info("Loading user's config file provided from jenkins interface");
+			LoggerFactory.getLogger(CrawlerConstants.class).info("Loading user's config file provided from jenkins interface");
 			PROPERTIES_LOC = HelperUtils.getResourceFile("Config.properties", "CrawlerConfig");
 		} else {
 			LoggerFactory.getLogger(CrawlerConstants.class).info("Loading default config file");
@@ -129,19 +122,14 @@ public class CrawlerConstants {
 			LoggerFactory.getLogger(CrawlerConstants.class).error("Error in loading config file", e);
 		}
 
-		ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css|svg)))",
-				Pattern.CASE_INSENSITIVE);
+		ASSETS_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|js|css|svg)))", Pattern.CASE_INSENSITIVE);
 		IMAGE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|svg)))", Pattern.CASE_INSENSITIVE);
 		PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.domainRegex", ".").trim(), Pattern.CASE_INSENSITIVE);
-		SHOULD_VISIT_PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", ".").trim(),
-				Pattern.CASE_INSENSITIVE);
-		USER_AGENT = CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
+		SHOULD_VISIT_PATTERN = Pattern.compile(PROPERTIES.getProperty("crawler.linksToVisit", ".").trim(), Pattern.CASE_INSENSITIVE);
+		USER_AGENT = CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
 		PAGE_SPEED_KEY = PROPERTIES.getProperty("page.speed.key", "AIzaSyAwlPiPJIkTejgqqH01v9DmtPoPeOPXDUQ");
-		PAGE_STRUCTURE_URL = PROPERTIES.getProperty("page.structure.validation.url",
-				"https://search.google.com/structured-data/testing-tool/validate");
-		PAGE_SPEED_URL = PROPERTIES.getProperty("page.speed.url",
-				"https://www.googleapis.com/pagespeedonline/v3beta1/runPagespeed");
+		PAGE_STRUCTURE_URL = PROPERTIES.getProperty("page.structure.validation.url", "https://search.google.com/structured-data/testing-tool/validate");
+		PAGE_SPEED_URL = PROPERTIES.getProperty("page.speed.url", "https://www.googleapis.com/pagespeedonline/v3beta1/runPagespeed");
 		PAGE_SPEED_PASS_POINTS = Integer.parseInt(PROPERTIES.getProperty("page.speed.pass.points", "80"));
 
 		CASE_SENSITIVE = Boolean.parseBoolean(PROPERTIES.getProperty("crawler.caseSensitiveUrl", "false"));
@@ -150,17 +138,12 @@ public class CrawlerConstants {
 		H2_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.h2.word.count", "70"));
 		TITLE_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.title.word.count", "65"));
 		TITLE_CHARACTERS_LIMIT_MIN = Integer.parseInt(PROPERTIES.getProperty("page.title.word.countMin", "65"));
-		META_DESCRIPTION_CHARACTERS_LIMIT = Integer
-				.parseInt(PROPERTIES.getProperty("page.meta.description.word.count", "156"));
-		META_KEYWORDS_CHARACTERS_LIMIT = Integer
-				.parseInt(PROPERTIES.getProperty("page.meta.keywords.word.count", "156"));
-		IMAGE_ALT_TEXT_CHARACTERS_LIMIT = Integer
-				.parseInt(PROPERTIES.getProperty("page.image.alt.text.word.count", "100"));
-		CANONICAL_URL_CHARACTERS_LIMIT = Integer
-				.parseInt(PROPERTIES.getProperty("page.canonical.url.word.count", "115"));
+		META_DESCRIPTION_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.meta.description.word.count", "156"));
+		META_KEYWORDS_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.meta.keywords.word.count", "156"));
+		IMAGE_ALT_TEXT_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.image.alt.text.word.count", "100"));
+		CANONICAL_URL_CHARACTERS_LIMIT = Integer.parseInt(PROPERTIES.getProperty("page.canonical.url.word.count", "115"));
 		MAXIMUM_LINKS_COUNTS = Integer.parseInt(PROPERTIES.getProperty("page.maximum.links.count", "100"));
-		MAXIMUM_EXTERNAL_LINKS_COUNTS = Integer
-				.parseInt(PROPERTIES.getProperty("page.maximum.externalLink.count", "100"));
+		MAXIMUM_EXTERNAL_LINKS_COUNTS = Integer.parseInt(PROPERTIES.getProperty("page.maximum.externalLink.count", "100"));
 		MAXIMUM_RESPONSE_TIME = Integer.parseInt(PROPERTIES.getProperty("link.maximumLoadTime", "2000"));
 		MAXIMUM_IMAGE_SIZE = Integer.parseInt(PROPERTIES.getProperty("link.image.maxSize", "2000"));
 		CONTENT_HTML_RATIO = Byte.parseByte(PROPERTIES.getProperty("page.contentAndHTML.ratio", "80"));

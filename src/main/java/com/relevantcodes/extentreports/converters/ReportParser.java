@@ -9,20 +9,20 @@ import org.jsoup.select.Elements;
 import com.relevantcodes.extentreports.utils.FileReaderEx;
 
 public class ReportParser {
-    private Document doc;
+	private Document doc;
 
-    public String getMongoDBObjectID() {
-	Elements extentxMeta = doc.select("meta#extentx");
+	public String getMongoDBObjectID() {
+		Elements extentxMeta = doc.select("meta#extentx");
 
-	if (extentxMeta != null && extentxMeta.size() > 0) {
-	    return extentxMeta.first().attr("content");
+		if (extentxMeta != null && extentxMeta.size() > 0) {
+			return extentxMeta.first().attr("content");
+		}
+
+		return null;
 	}
 
-	return null;
-    }
-
-    public ReportParser(File file) {
-	String source = FileReaderEx.readAllText(file);
-	doc = Jsoup.parse(source);
-    }
+	public ReportParser(File file) {
+		String source = FileReaderEx.readAllText(file);
+		doc = Jsoup.parse(source);
+	}
 }

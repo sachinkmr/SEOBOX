@@ -67,13 +67,7 @@ public class NetUtils {
 	public static CloseableHttpResponse getUrlResponse(String... data) throws ClientProtocolException, IOException {
 		String add = URLCanonicalizer.getCanonicalURL(data[0]);
 
-		RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(false)
-				.setCookieSpec(CookieSpecs.IGNORE_COOKIES).setRedirectsEnabled(false)
-				.setSocketTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-				.setConnectTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-				.build();
+		RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(false).setCookieSpec(CookieSpecs.IGNORE_COOKIES).setRedirectsEnabled(false).setSocketTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).setConnectTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).build();
 
 		RegistryBuilder<ConnectionSocketFactory> connRegistryBuilder = RegistryBuilder.create();
 		connRegistryBuilder.register("http", PlainConnectionSocketFactory.INSTANCE);
@@ -85,8 +79,7 @@ public class NetUtils {
 						return true;
 					}
 				}).build();
-				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-						SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 				connRegistryBuilder.register("https", sslsf);
 			} catch (Exception e) {
 				logger.warn("Exception thrown while trying to register https");
@@ -101,8 +94,7 @@ public class NetUtils {
 		HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 		clientBuilder.setDefaultRequestConfig(requestConfig);
 		clientBuilder.setConnectionManager(connectionManager);
-		clientBuilder.setUserAgent(CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
+		clientBuilder.setUserAgent(CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"));
 
 		CloseableHttpClient httpClient = clientBuilder.setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
 
@@ -121,17 +113,9 @@ public class NetUtils {
 		return response;
 	}
 
-	public static HttpResponse getUrlFluentResponse(String... data)
-			throws ParseException, ClientProtocolException, IOException {
+	public static HttpResponse getUrlFluentResponse(String... data) throws ParseException, ClientProtocolException, IOException {
 		String add = URLCanonicalizer.getCanonicalURL(data[0]);
-		Request request = Request.Get(add)
-				.addHeader("user-agent",
-						CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
-								"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-				.connectTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-				.socketTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+		Request request = Request.Get(add).addHeader("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).connectTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).socketTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 			String login = data[1] + ":" + data[2];
 			String base64login = new String(Base64.encodeBase64(login.getBytes()));
@@ -214,13 +198,7 @@ public class NetUtils {
 
 	public static String getRedirectedURL(String... data) {
 		try {
-			Connection con = Jsoup.connect(data[0])
-					.header("user-agent",
-							CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
-									"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-					.timeout(Integer
-							.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-					.followRedirects(true);
+			Connection con = Jsoup.connect(data[0]).header("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).timeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).followRedirects(true);
 			if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 				String login = data[1] + ":" + data[2];
 				String base64login = new String(Base64.encodeBase64(login.getBytes()));

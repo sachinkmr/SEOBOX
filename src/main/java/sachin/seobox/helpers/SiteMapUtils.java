@@ -23,21 +23,12 @@ import sachin.seobox.crawler.CrawlerConstants;
 
 public class SiteMapUtils {
 
-	public static Response getSiteMapXMLResponse(String... data)
-			throws ParseException, ClientProtocolException, IOException {
+	public static Response getSiteMapXMLResponse(String... data) throws ParseException, ClientProtocolException, IOException {
 		String add = HelperUtils.getSiteAddress(data[0]) + "sitemap.xml";
-		if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
-				&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+		if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null && !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 			add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 		}
-		Request request = Request.Get(add)
-				.addHeader("user-agent",
-						CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString",
-								"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0"))
-				.connectTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")))
-				.socketTimeout(Integer
-						.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
+		Request request = Request.Get(add).addHeader("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).connectTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).socketTimeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000")));
 		if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 			String login = data[1] + ":" + data[2];
 			String base64login = new String(Base64.encodeBase64(login.getBytes()));
@@ -51,8 +42,7 @@ public class SiteMapUtils {
 	 * 
 	 * @return set containing links from sitemap
 	 */
-	public static Set<String> getURLFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
+	public static Set<String> getURLFromSitemapXML(String... data) throws ParseException, ClientProtocolException, IOException, JDOMException {
 		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
 		String str1 = xml.substring(xml.indexOf(">") + 1, xml.length());
 		String str2 = str1.substring(str1.indexOf(">") + 1, str1.length());
@@ -79,8 +69,7 @@ public class SiteMapUtils {
 	 * SAX Parsing
 	 * 
 	 */
-	public static Set<String> getLocURLsFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
+	public static Set<String> getLocURLsFromSitemapXML(String... data) throws ParseException, ClientProtocolException, IOException, JDOMException {
 		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
 		StringReader sr = new StringReader(xml);
 		SAXBuilder saxReader = new SAXBuilder();
@@ -98,8 +87,7 @@ public class SiteMapUtils {
 	 * urls from sitemap XML suing SAX Parsing
 	 * 
 	 */
-	public static Set<String> getLocURLsWithAltUrlsFromSitemapXML(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
+	public static Set<String> getLocURLsWithAltUrlsFromSitemapXML(String... data) throws ParseException, ClientProtocolException, IOException, JDOMException {
 		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
 		StringReader sr = new StringReader(xml);
 		SAXBuilder saxReader = new SAXBuilder();
@@ -123,8 +111,7 @@ public class SiteMapUtils {
 	 * and image location urls from sitemap XML using SAX Parsing
 	 * 
 	 */
-	public static Set<String> getAllURLsWithAltAndImage(String... data)
-			throws ParseException, ClientProtocolException, IOException, JDOMException {
+	public static Set<String> getAllURLsWithAltAndImage(String... data) throws ParseException, ClientProtocolException, IOException, JDOMException {
 		String xml = EntityUtils.toString(getSiteMapXMLResponse(data).returnResponse().getEntity());
 		StringReader sr = new StringReader(xml);
 		SAXBuilder saxReader = new SAXBuilder();

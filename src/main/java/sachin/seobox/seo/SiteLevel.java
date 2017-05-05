@@ -44,16 +44,14 @@ public class SiteLevel {
 		streamUtils = null;
 	}
 
-	@Test(testName = "Verify Robot.txt", description = "Verify that site does have robot.txt file and its encoding is gzip", groups = {
-			"Robots.txt" }, enabled = true)
+	@Test(testName = "Verify Robot.txt", description = "Verify that site does have robot.txt file and its encoding is gzip", groups = { "Robots.txt" }, enabled = true)
 	public void verifyRobotsTXT() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
 		try {
 			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "robots.txt";
-			if (CrawlerConstants.PROPERTIES.getProperty("seo.robotFile") != null
-					&& !CrawlerConstants.PROPERTIES.getProperty("seo.robotFile").isEmpty()) {
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.robotFile") != null && !CrawlerConstants.PROPERTIES.getProperty("seo.robotFile").isEmpty()) {
 				add = CrawlerConstants.PROPERTIES.getProperty("seo.robotFile");
 			}
 			// test.log(LogStatus.INFO, "Robot.txt Location: "+ add);
@@ -105,16 +103,14 @@ public class SiteLevel {
 		return null;
 	}
 
-	@Test(priority = 0, testName = "Verify Sitemap.xml", description = "Verify that site does have Sitemap.xml file", groups = {
-			"SiteMap.xml" }, enabled = true)
+	@Test(priority = 0, testName = "Verify Sitemap.xml", description = "Verify that site does have Sitemap.xml file", groups = { "SiteMap.xml" }, enabled = true)
 	public void verifySitemapXML() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
 		try {
 			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "sitemap.xml";
-			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
-					&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null && !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 				add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 			}
 			// test.log(LogStatus.INFO, "Sitemap Location", add);
@@ -154,8 +150,7 @@ public class SiteLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Broken Links in SiteMap.xml", description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
+	@Test(testName = "Broken Links in SiteMap.xml", description = "Verify that Sitemap.xml file does not have broken links. This method depends on <b>'verifySitemapXML'</b> method.", groups = { "SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" }, enabled = true)
 	public void brokenLinksSitemapXML() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -163,14 +158,12 @@ public class SiteLevel {
 		Set<String> urls = new HashSet<>();
 		try {
 			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "sitemap.xml";
-			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
-					&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null && !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 				add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 			}
 			test.log(LogStatus.INFO, "<b>SiteMap Location: </b> " + add, "");
 			try {
-				urls = SiteMapUtils.getAllURLsWithAltAndImage(CrawlerConstants.SITE, CrawlerConstants.USERNAME,
-						CrawlerConstants.PASSWORD);
+				urls = SiteMapUtils.getAllURLsWithAltAndImage(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 			} catch (Exception e1) {
 				logger.debug("Error ", e1);
 				test.log(LogStatus.FAIL, "Error in fatching urls from sitemap.xml", e1.getMessage());
@@ -183,27 +176,26 @@ public class SiteLevel {
 						SEOPage page = streamUtils.readFile(file);
 						responseCode = page.getPage().getStatusCode();
 						if (responseCode == 200) {
-							test.log(LogStatus.PASS, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+							test.log(LogStatus.PASS, "<b>URL: </b> <a href='" + url + "' target='_blank' >" + url + "</a>", "StatusCode: " + responseCode);
 						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+							test.log(LogStatus.FAIL, "<b>URL: </b> <a href='" + url + "' target='_blank' >" + url + "</a>", "StatusCode: " + responseCode);
 						}
 					} catch (Exception e) {
 						logger.debug("Error " + e);
 					}
 				} else {
 					try {
-						CloseableHttpResponse res = NetUtils.getUrlResponse(url, CrawlerConstants.USERNAME,
-								CrawlerConstants.PASSWORD);
+						CloseableHttpResponse res = NetUtils.getUrlResponse(url, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 						responseCode = res.getStatusLine().getStatusCode();
 						EntityUtils.consume(res.getEntity());
 						res.close();
 						if (responseCode == 200) {
-							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "StatusCode: " + responseCode);
+							test.log(LogStatus.PASS, "<b>URL: </b><a href='" + url + "' target='_blank' >" + url + "</a>", "StatusCode: " + responseCode);
 						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "StatusCode: " + responseCode);
+							test.log(LogStatus.FAIL, "<b>URL: </b> <a href='" + url + "' target='_blank' >" + url + "</a>", "StatusCode: " + responseCode);
 						}
 					} catch (Exception e) {
-						test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "Unable to fetch response");
+						test.log(LogStatus.FAIL, "<b>URL: </b> <a href='" + url + "' target='_blank' >" + url + "</a>", "Unable to fetch response");
 					}
 				}
 			}
@@ -214,33 +206,29 @@ public class SiteLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Missing Links in Sitemap.xml", description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = {
-			"SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" })
+	@Test(testName = "Missing Links in Sitemap.xml", description = "Verify that Sitemap.xml file does not miss any link. This method depends on <b>'verifySitemapXML'</b> method.", groups = { "SiteMap.xml" }, dependsOnMethods = { "verifySitemapXML" })
 	public void missingLinksInSitemapXML() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
 		ExtentTest test = HelperUtils.getTestLogger(caller);
 		try {
 			String add = HelperUtils.getSiteAddress(CrawlerConstants.SITE) + "sitemap.xml";
-			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null
-					&& !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
+			if (CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile") != null && !CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile").isEmpty()) {
 				add = CrawlerConstants.PROPERTIES.getProperty("seo.sitemapFile");
 			}
 			test.log(LogStatus.INFO, "<b>SiteMap Location: </b> " + add, "");
-			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConstants.SITE,
-					CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
+			Set<String> urlsInSiteMap = SiteMapUtils.getLocURLsWithAltUrlsFromSitemapXML(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD);
 			for (File file : new File(CrawlerConstants.DATA_LOCATION).listFiles()) {
 				SEOPage page = streamUtils.readFile(file);
 				try {
 					// logger.debug("Verifying for: ",
 					// page.getPage().getWebURL());
-					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200
-							&& page.getPage().getContentType().contains("text/html")) {
+					if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 						String url = page.getPage().getWebURL().getURL();
 						if (urlsInSiteMap.contains(url)) {
-							test.log(LogStatus.PASS, "<b>URL: </b>" + url, "URL found in sitemap.xml");
+							test.log(LogStatus.PASS, "<b>URL: </b><a href='" + url + "' target='_blank' >" + url + "</a>", "URL found in sitemap.xml");
 						} else {
-							test.log(LogStatus.FAIL, "<b>URL: </b> " + url, "URL not found in sitemap.xml");
+							test.log(LogStatus.FAIL, "<b>URL: </b> <a href='" + url + "' target='_blank' >" + url + "</a>", "URL not found in sitemap.xml");
 						}
 					}
 				} catch (Exception e) {
@@ -258,8 +246,7 @@ public class SiteLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Custom Error Pages", description = "Verify that site has custom error pages enabled", groups = {
-			"Custom Error Pages" }, enabled = false)
+	@Test(testName = "Custom Error Pages", description = "Verify that site has custom error pages enabled", groups = { "Custom Error Pages" }, enabled = false)
 	public void verifyCutomErrorPages() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();

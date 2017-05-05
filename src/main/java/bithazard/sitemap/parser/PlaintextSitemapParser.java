@@ -19,63 +19,63 @@ import java.util.regex.Pattern;
  * @author Bithazard
  */
 class PlaintextSitemapParser implements ISitemapParser {
-    private static final Pattern URL_PATTERN = Pattern.compile("https?://[A-Za-z0-9\\-\\._~:/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=%]+");
-    private static final int INVALID_LINES_ALLOWED = 3;
-    private final String urlPrefix;
-    private final InputStream inputStream;
-    private Set<SitemapEntry> sitemapEntries;
-    private boolean validUrlFound = false;
+	private static final Pattern URL_PATTERN = Pattern.compile("https?://[A-Za-z0-9\\-\\._~:/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=%]+");
+	private static final int INVALID_LINES_ALLOWED = 3;
+	private final String urlPrefix;
+	private final InputStream inputStream;
+	private Set<SitemapEntry> sitemapEntries;
+	private boolean validUrlFound = false;
 
-    public PlaintextSitemapParser(String urlPrefix, InputStream inputStream) {
-        this.urlPrefix = urlPrefix;
-        this.inputStream = inputStream;
-    }
+	public PlaintextSitemapParser(String urlPrefix, InputStream inputStream) {
+		this.urlPrefix = urlPrefix;
+		this.inputStream = inputStream;
+	}
 
-    @Override
-    public void parse() {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        sitemapEntries = new LinkedHashSet<>();
-        String line;
-        int lineCount = 0;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                lineCount++;
-                line = line.trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
-                if (!validUrlFound) {
-                    if (isUrl(line)) {
-                        validUrlFound = true;
-                    } else if (lineCount >= INVALID_LINES_ALLOWED) {
-                        throw new SitemapParseException("Sitemap seems to be invalid. Please make sure that this is a valid sitemap.");
-                    }
-                }
-                if (line.startsWith(urlPrefix)) {
-                    sitemapEntries.add(new SitemapEntry(line));
-                }
-            }
-        } catch (IOException e) {
-            throw new UrlConnectionException(e.getMessage());
-        }
-    }
+	@Override
+	public void parse() {
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+		sitemapEntries = new LinkedHashSet<>();
+		String line;
+		int lineCount = 0;
+		try {
+			while ((line = bufferedReader.readLine()) != null) {
+				lineCount++;
+				line = line.trim();
+				if (line.isEmpty()) {
+					continue;
+				}
+				if (!validUrlFound) {
+					if (isUrl(line)) {
+						validUrlFound = true;
+					} else if (lineCount >= INVALID_LINES_ALLOWED) {
+						throw new SitemapParseException("Sitemap seems to be invalid. Please make sure that this is a valid sitemap.");
+					}
+				}
+				if (line.startsWith(urlPrefix)) {
+					sitemapEntries.add(new SitemapEntry(line));
+				}
+			}
+		} catch (IOException e) {
+			throw new UrlConnectionException(e.getMessage());
+		}
+	}
 
-    private boolean isUrl(String text) {
-        return URL_PATTERN.matcher(text).matches();
-    }
+	private boolean isUrl(String text) {
+		return URL_PATTERN.matcher(text).matches();
+	}
 
-    @Override
-    public Set<SitemapIndex> getSitemapIndexes() {
-        return new LinkedHashSet<>(0);
-    }
+	@Override
+	public Set<SitemapIndex> getSitemapIndexes() {
+		return new LinkedHashSet<>(0);
+	}
 
-    @Override
-    public Set<SitemapEntry> getSitemapEntries() {
-        return sitemapEntries;
-    }
+	@Override
+	public Set<SitemapEntry> getSitemapEntries() {
+		return sitemapEntries;
+	}
 
-    @Override
-    public Sitemap.SitemapType getSitemapType() {
-        return Sitemap.SitemapType.TEXT;
-    }
+	@Override
+	public Sitemap.SitemapType getSitemapType() {
+		return Sitemap.SitemapType.TEXT;
+	}
 }

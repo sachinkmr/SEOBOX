@@ -7,49 +7,49 @@ import java.util.UUID;
 import com.relevantcodes.extentreports.LogStatus;
 
 public interface ITest {
-    void setStartedTime(Date startedTime);
+	void setStartedTime(Date startedTime);
 
-    Date getStartedTime();
+	Date getStartedTime();
 
-    String getRunDuration();
+	String getRunDuration();
 
-    void setEndedTime(Date endedTime);
+	void setEndedTime(Date endedTime);
 
-    Date getEndedTime();
+	Date getEndedTime();
 
-    LogStatus getStatus();
+	LogStatus getStatus();
 
-    void setStatus(LogStatus logStatus);
+	void setStatus(LogStatus logStatus);
 
-    void setDescription(String description);
+	void setDescription(String description);
 
-    String getDescription();
+	String getDescription();
 
-    void setName(String name);
+	void setName(String name);
 
-    String getName();
+	String getName();
 
-    UUID getId();
+	UUID getId();
 
-    void setCategory(TestAttribute category);
+	void setCategory(TestAttribute category);
 
-    List<TestAttribute> getCategoryList();
+	List<TestAttribute> getCategoryList();
 
-    void setAuthor(TestAttribute author);
+	void setAuthor(TestAttribute author);
 
-    List<TestAttribute> getAuthorsList();
+	List<TestAttribute> getAuthorsList();
 
-    List<Log> getLogList();
+	List<Log> getLogList();
 
-    void setLog(List<Log> logList);
+	void setLog(List<Log> logList);
 
-    void hasChildNodes(boolean val);
+	void hasChildNodes(boolean val);
 
-    List<Test> getNodeList();
+	List<Test> getNodeList();
 
-    void setNodeList(List<Test> nodeList);
+	void setNodeList(List<Test> nodeList);
 
-    void setException(ExceptionInfo exceptionInfo);
+	void setException(ExceptionInfo exceptionInfo);
 
-    void setUUID(UUID id);
+	void setUUID(UUID id);
 }

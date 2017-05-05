@@ -22,8 +22,7 @@ public class TestInitializer {
 
 	@BeforeSuite(enabled = true)
 	public void init() throws SEOException {
-		int numberOfCrawlers = Integer
-				.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
+		int numberOfCrawlers = Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.numberOfCrawlers", "30"));
 		SEOCrawlerConfig config = new SEOCrawlerConfig().getConfig();
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -44,8 +43,7 @@ public class TestInitializer {
 			logger.debug("Error in controller", e);
 			System.out.println("Error in application: " + e);
 			CrawlerConstants.ERROR = true;
-			CrawlerConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: "
-					+ e.getMessage();
+			CrawlerConstants.ERROR_TEXT = "URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail. <br/> Error: " + e.getMessage();
 		}
 		System.out.println("\nExecuting Test Cases");
 		System.out.println("---------------------------------------");

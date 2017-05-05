@@ -9,5 +9,5 @@
 package com.relevantcodes.extentreports;
 
 public enum NetworkMode {
-    ONLINE, OFFLINE
+	ONLINE, OFFLINE
 }
