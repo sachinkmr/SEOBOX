@@ -18,7 +18,7 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.comfort.in/");
+		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
 		// System.setProperty("Username", "wlnonproduser");
 		// System.setProperty("Password", "Pass@word11");
 

@@ -104,6 +104,12 @@
 			.test-steps{
 				overflow-x: scroll;
 			}
+			td.step-name {
+			    word-break: break-all;
+			}
+			td.step-details{
+				
+			}
           </style>
 	</head>
 	

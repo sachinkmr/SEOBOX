@@ -63,13 +63,13 @@ public class PageLevel {
 							flag = false;
 						}
 						if (null == element.attr("content") || element.attr("content").isEmpty()) {
-							test.log(LogStatus.FAIL, "OG Tag content missing.<br/>" + element.attr("property"), "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+							test.log(LogStatus.FAIL, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "OG Tag content missing.<br/>" + element.attr("property"));
 						}
 					}
 					if (flag) {
-						test.log(LogStatus.FAIL, "Mendatory OG TAG Missing", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+						test.log(LogStatus.FAIL, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Mendatory OG TAG Missing");
 					} else {
-						test.log(LogStatus.PASS, "All OG Tags are found.", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+						test.log(LogStatus.PASS, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "All OG Tags are found.");
 					}
 
 				}
@@ -321,9 +321,9 @@ public class PageLevel {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
 						if (list.size() == 1) {
-							test.log(LogStatus.PASS, "Only one H1 Tags found", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+							test.log(LogStatus.PASS, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Only one H1 Tags found");
 						} else {
-							test.log(LogStatus.FAIL, "Multiple H1 Tags on page", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+							test.log(LogStatus.FAIL, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Multiple H1 Tags on page");
 						}
 					}
 				}
@@ -346,9 +346,9 @@ public class PageLevel {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getH1Tags();
 					if (!list.isEmpty()) {
-						test.log(LogStatus.PASS, "Page has H1 Tag(s).", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+						test.log(LogStatus.PASS, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Page has H1 Tag(s).");
 					} else {
-						test.log(LogStatus.FAIL, "H1 tags is missing from page", "<a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>");
+						test.log(LogStatus.FAIL, "<b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "H1 tags is missing from page");
 					}
 				}
 			} catch (Exception e) {

@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.fluent.Response;
@@ -94,14 +93,14 @@ public class SiteLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	private Header getFirstHeader(Header[] headers, String string) {
-		for (Header header : headers) {
-			if (header.getName().equals(string)) {
-				return header;
-			}
-		}
-		return null;
-	}
+	// private Header getFirstHeader(Header[] headers, String string) {
+	// for (Header header : headers) {
+	// if (header.getName().equals(string)) {
+	// return header;
+	// }
+	// }
+	// return null;
+	// }
 
 	@Test(priority = 0, testName = "Verify Sitemap.xml", description = "Verify that site does have Sitemap.xml file", groups = { "SiteMap.xml" }, enabled = true)
 	public void verifySitemapXML() {

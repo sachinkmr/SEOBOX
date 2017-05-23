@@ -77,7 +77,7 @@ public class DBUtils {
 		} catch (SEOException e) {
 			logger.debug("Unable to fatch google structured data", e);
 			arr.append("hasError", "true");
-			arr.append("error", e.toString());
+			arr.append("error", e.getMessage());
 		}
 		if (json != null) {
 			arr.append("data", json.toString());

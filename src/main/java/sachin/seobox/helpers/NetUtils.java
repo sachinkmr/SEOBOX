@@ -1,7 +1,6 @@
 package sachin.seobox.helpers;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +128,7 @@ public class NetUtils {
 	public static JSONObject getStructuredData(String html, String url) throws SEOException {
 		CloseableHttpClient client = HttpClients.createDefault();
 		JSONObject json = null;
+		String str = null;
 		try {
 			HttpClientContext localContext = HttpClientContext.create();
 			HttpPost httpPost = new HttpPost(CrawlerConstants.PAGE_STRUCTURE_URL);
@@ -143,18 +143,16 @@ public class NetUtils {
 			params.add(new BasicNameValuePair("html", html));
 			httpPost.setEntity(new UrlEncodedFormEntity(params));
 			CloseableHttpResponse response = client.execute(httpPost, localContext);
-			String str = EntityUtils.toString(response.getEntity(), "UTF-8");
+			str = EntityUtils.toString(response.getEntity(), "UTF-8");
 			EntityUtils.consumeQuietly(response.getEntity());
 			httpPost.releaseConnection();
 			client.close();
 			json = new JSONObject(str.substring(4, str.length()));
+			str = null;
 			json.remove("html");
 			json.remove("cse");
-		} catch (IOException e) {
-			logger.debug("Unable to fatch structured data", e);
-		}
-		if (json == null) {
-			throw new SEOException("Unable to fatch page structured data. url: " + url);
+		} catch (Exception e) {
+			throw new SEOException("Unable to fatch page structured data for: " + url, e);
 		}
 		return json;
 	}
@@ -188,12 +186,8 @@ public class NetUtils {
 				json.remove("captchaResult");
 				json.remove("id");
 			}
-
-		} catch (URISyntaxException | IOException e) {
-			logger.debug("Unable to fatch page speed data", e);
-		}
-		if (json == null) {
-			throw new SEOException("Unable to fatch page speed data. url: " + url);
+		} catch (Exception e) {
+			throw new SEOException("Unable to fatch page speed data. url: " + url, e);
 		}
 		return json;
 	}
