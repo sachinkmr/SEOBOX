@@ -87,6 +87,7 @@ public class Frontier extends Configurable {
 			int newScheduledPage = 0;
 			for (WebURL url : urls) {
 				if ((maxPagesToFetch > 0) && ((scheduledPages + newScheduledPage) >= maxPagesToFetch)) {
+					logger.warn("Maximum links limit (" + maxPagesToFetch + ") exceeded so skipping link: " + url.getURL());
 					break;
 				}
 
@@ -115,6 +116,8 @@ public class Frontier extends Configurable {
 					workQueues.put(url);
 					scheduledPages++;
 					counters.increment(Counters.ReservedCounterNames.SCHEDULED_PAGES);
+				} else {
+					logger.warn("Maximum links limit (" + maxPagesToFetch + ") exceeded so skipping link: " + url.getURL());
 				}
 			} catch (DatabaseException e) {
 				logger.error("Error while putting the url in the work queue", e);

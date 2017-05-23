@@ -1081,7 +1081,7 @@ public class PageLevel {
 				}
 			}
 			if (flag) {
-				test.log(LogStatus.PASS, "No duplicate descriptions found,");
+				test.log(LogStatus.PASS, "No duplicate descriptions found", "");
 			}
 		} catch (Exception e) {
 			logger.debug("Error in " + test.getTest().getName(), e);
@@ -1123,7 +1123,7 @@ public class PageLevel {
 			}
 
 			if (flag) {
-				test.log(LogStatus.PASS, "No duplicate titles found,");
+				test.log(LogStatus.PASS, "No duplicate titles found", "");
 			}
 		} catch (Exception e) {
 			logger.debug("Error in " + test.getTest().getName(), e);
@@ -1164,7 +1164,7 @@ public class PageLevel {
 			}
 
 			if (flag) {
-				test.log(LogStatus.PASS, "No duplicate body content found,");
+				test.log(LogStatus.PASS, "No duplicate body content found", "");
 			}
 		} catch (Exception e) {
 			logger.debug("Error in " + test.getTest().getName(), e);
@@ -1206,7 +1206,7 @@ public class PageLevel {
 			}
 
 			if (flag) {
-				test.log(LogStatus.PASS, "No duplicate H1 Tag found,");
+				test.log(LogStatus.PASS, "No duplicate H1 Tag found", "");
 			}
 		} catch (Exception e) {
 			logger.debug("Error in " + test.getTest().getName(), e);
