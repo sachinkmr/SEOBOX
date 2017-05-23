@@ -40,6 +40,7 @@ public class SEOCrawlerConfig extends CrawlConfig {
 		headers.add(new BasicHeader("Accept-Encoding", "gzip, compress, deflate, br, identity, exi, pack200-gzip, bzip2, lzma, peerdist, sdch, xpress, xz"));
 		this.setDefaultHeaders(headers);
 		executor = Executors.newFixedThreadPool(50);
+		this.setMaxPagesToFetch(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.maxLinksToFetch", "-1")));
 		return this;
 	}
 

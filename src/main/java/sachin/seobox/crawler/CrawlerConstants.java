@@ -82,6 +82,16 @@ public class CrawlerConstants {
 		}
 		REPORT_PATH = OUTPUT_DIRECTORY + File.separator + "Report.html";
 		File storage = new File(System.getProperty("user.dir") + File.separator + "temp" + File.separator + host);
+		if (storage.exists()) {
+			try {
+				LoggerFactory.getLogger(CrawlerConstants.class).warn("Old data found. Cleaning up, Please wait...");
+				FileUtils.cleanDirectory(storage);
+			} catch (IOException e) {
+				if (!FileUtils.deleteQuietly(storage)) {
+					LoggerFactory.getLogger(CrawlerConstants.class).warn("Unable to clean data. Suite will over write content", e);
+				}
+			}
+		}
 		storage.mkdirs();
 		CRAWL_STORAGE_FOLDER = storage.getAbsolutePath();
 		DATA_LOCATION = CRAWL_STORAGE_FOLDER + File.separator + "urls";

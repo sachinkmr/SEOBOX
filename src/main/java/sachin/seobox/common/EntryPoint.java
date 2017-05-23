@@ -21,6 +21,7 @@ public class EntryPoint {
 		// System.setProperty("SiteAddress", "http://www.comfort.in/");
 		// System.setProperty("Username", "wlnonproduser");
 		// System.setProperty("Password", "Pass@word11");
+
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 			try {
 				throw new SEOException("Site url is missing");
@@ -29,13 +30,16 @@ public class EntryPoint {
 				return;
 			}
 		}
-		String red = NetUtils.getRedirectedURL(System.getProperty("SiteAddress"), System.getProperty("Username"), System.getProperty("Password"));
-		if (red != null) {
-			CrawlerConstants.SITE = red;
-		}
 		try {
-			if (HelperUtils.getFluentResponse(CrawlerConstants.SITE, CrawlerConstants.USERNAME, CrawlerConstants.PASSWORD).returnResponse().getStatusLine().getStatusCode() != 200) {
-				throw new Exception("URL is down, something went wrong or there is some error in faching URL data. Please review log for more detail.");
+			String[] red = NetUtils.getRedirectedURL(System.getProperty("SiteAddress"), System.getProperty("Username"), System.getProperty("Password"));
+			if (red.length == 2) {
+				if (Integer.parseInt(red[0]) < 400) {
+					CrawlerConstants.SITE = red[1];
+				} else {
+					throw new Exception("Status Code: " + red[0] + ", URL: " + red[1]);
+				}
+			} else {
+				throw new Exception("URL: " + red[1] + "\nException: " + red[2]);
 			}
 			List<String> suites = new ArrayList<>();
 			suites.add(HelperUtils.getResourceFile("testng.xml"));

@@ -42,6 +42,8 @@ import org.apache.http.ssl.TrustStrategy;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -196,7 +198,7 @@ public class NetUtils {
 		return json;
 	}
 
-	public static String getRedirectedURL(String... data) {
+	public static String[] getRedirectedURL(String... data) {
 		try {
 			Connection con = Jsoup.connect(data[0]).header("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).timeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).followRedirects(true);
 			if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
@@ -204,11 +206,17 @@ public class NetUtils {
 				String base64login = new String(Base64.encodeBase64(login.getBytes()));
 				con.header("Authorization", "Basic " + base64login);
 			}
-			return con.execute().url().toExternalForm();
-		} catch (IOException e) {
+			Response r = con.execute();
+			return new String[] { Integer.toString(r.statusCode()), r.url().toExternalForm() };
+		} catch (Exception e) {
 			logger.error("Error fetching response.\n", e);
+			if (e instanceof HttpStatusException) {
+				HttpStatusException ex = (HttpStatusException) e;
+				return new String[] { Integer.toString(ex.getStatusCode()), ex.getUrl() };
+			}
+			return new String[] { "", data[0], e.getMessage() };
 		}
-		return null;
+
 	}
 
 }
