@@ -129,6 +129,14 @@ public class DashBoard {
 		return totalSteps;
 	}
 
+	public boolean getLinksLimit() {
+		return CrawlerConstants.LINKS_LIMIT;
+	}
+
+	public int getLinksLimitCount() {
+		return Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.maxLinksToFetch"));
+	}
+
 	public synchronized void addTest(ExtentTest test) {
 		TestCase tc = new TestCase();
 		tc.setId(test.getTest().getId().toString());

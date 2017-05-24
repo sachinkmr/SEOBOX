@@ -28,6 +28,7 @@ import com.sleepycat.je.Environment;
 import edu.uci.ics.crawler4j.crawler.Configurable;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.url.WebURL;
+import sachin.seobox.crawler.CrawlerConstants;
 
 /**
  * @author Yasser Ganjisaffar
@@ -88,6 +89,7 @@ public class Frontier extends Configurable {
 			for (WebURL url : urls) {
 				if ((maxPagesToFetch > 0) && ((scheduledPages + newScheduledPage) >= maxPagesToFetch)) {
 					logger.warn("Maximum links limit (" + maxPagesToFetch + ") exceeded so skipping link: " + url.getURL());
+					CrawlerConstants.LINKS_LIMIT = true;
 					break;
 				}
 
@@ -118,6 +120,7 @@ public class Frontier extends Configurable {
 					counters.increment(Counters.ReservedCounterNames.SCHEDULED_PAGES);
 				} else {
 					logger.warn("Maximum links limit (" + maxPagesToFetch + ") exceeded so skipping link: " + url.getURL());
+					CrawlerConstants.LINKS_LIMIT = true;
 				}
 			} catch (DatabaseException e) {
 				logger.error("Error while putting the url in the work queue", e);

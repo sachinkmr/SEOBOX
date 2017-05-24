@@ -143,6 +143,19 @@
 			
 			<!-- dashboard -->
 			<div id='dashboard-view' class='row'>
+				<#if dashboard.linksLimit>
+					<div class="col 12 m12 s12 ">					
+						<div class="card amber lighten-4">
+							<div>
+								<i class="material-icons" style="vertical-align: text-bottom;">warning</i>	
+								<span class="card-title"> Warning</span>
+							</div>
+							<div style="padding-left: 30px;">
+								Suite crawled <b>${dashboard.linksLimitCount}</b> links but there are more links on site which are skipped. <br/>
+								Please modify <b>crawler.domainRegex</b> or <b>crawler.maxLinksToFetch</b> in <a href='http://10.207.16.9/SEOBOX/Config.properties' target='_blank'>Config.properties</a> file and run the suite again.</div>
+						</div>
+					</div>
+				</#if>
 				<div class='time-totals'>
 					<div class='col l2 m4 s6'>
 						<div class='card suite-total-tests'> 

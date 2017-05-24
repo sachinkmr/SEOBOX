@@ -56,7 +56,7 @@ public class CrawlerConstants {
 	public static final String PAGE_SPEED_KEY;
 	public static long CRAWLING_TIME;
 	public static String ERROR_TEXT;
-	public static boolean ERROR;
+	public static boolean ERROR, LINKS_LIMIT;
 	public static final String REPORT_TIME_STAMP;
 	public static final int PAGE_SPEED_PASS_POINTS;
 	public static final String DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME = "SEOBOX";
