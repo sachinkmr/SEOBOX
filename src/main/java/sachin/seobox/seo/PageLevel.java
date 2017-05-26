@@ -491,7 +491,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Image Alt Text", description = "Verify that image alt text is not missing", groups = { "Image" }, enabled = true)
+	@Test(testName = "Image Alt Text", description = "Verify that image alt text is not missing. To get position of the image in html, search with <b>img</b> tag", groups = { "Image" }, enabled = true)
 	public void imageAltText() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -502,25 +502,26 @@ public class PageLevel {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getImages();
 					if (!list.isEmpty()) {
+						int i = 1;
 						for (Element e : list) {
 							if (e.hasAttr("alt") && !e.attr("alt").isEmpty()) {
-								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a>", "Image contains alt Text.<br/><b>Alt Text: </b>" + e.attr("alt"));
+								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a><br/> Image Position in HTML: " + i, "Image contains alt Text.<br/><b>Alt Text: </b>" + e.attr("alt"));
 
 							} else {
-								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a>", "Image does not contain alt Text.");
+								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a><br/> Image Position in HTML: " + i, "Image does not contain alt Text.");
 							}
+							i++;
 						}
 					}
 				}
 			} catch (Exception e) {
 				logger.debug("Error in " + test.getTest().getName(), e);
-
 			}
 		}
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Image Title Text", description = "Verify that image title text is not missing", groups = { "Image" }, enabled = true)
+	@Test(testName = "Image Title Text", description = "Verify that image title text is not missing. To get position of the image in html, search with <b>img</b> tag", groups = { "Image" }, enabled = true)
 	public void imageTitleText() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -531,13 +532,15 @@ public class PageLevel {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getImages();
 					if (!list.isEmpty()) {
+						int i = 1;
 						for (Element e : list) {
 							if (e.hasAttr("title") && !e.attr("title").isEmpty()) {
-								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a>", "Image contains Title text.<br/><b>Alt Text: </b>" + e.attr("title"));
+								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a><br/> Image Position in HTML: " + i, "Image contains Title text.<br/><b>Alt Text: </b>" + e.attr("title"));
 
 							} else {
-								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a>", "Image does not contain Title Text.");
+								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank' >" + e.attr("abs:src") + "</a><br/> Image Position in HTML: " + i, "Image does not contain Title Text.");
 							}
+							i++;
 						}
 					}
 				}
@@ -548,7 +551,7 @@ public class PageLevel {
 		ComplexReportFactory.getInstance().closeTest(test);
 	}
 
-	@Test(testName = "Image Source", description = "Verify that image Source is not missing", groups = { "Image" }, enabled = true)
+	@Test(testName = "Image Source", description = "Verify that image Source is not missing. To get position of the image in html, search with <b>img</b> tag", groups = { "Image" }, enabled = true)
 	public void imageSRC() {
 		Method caller = new Object() {
 		}.getClass().getEnclosingMethod();
@@ -559,13 +562,15 @@ public class PageLevel {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getImages();
 					if (!list.isEmpty()) {
+						int i = 1;
 						for (Element e : list) {
 							if (e.hasAttr("src") && !e.attr("src").isEmpty()) {
-								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank'>" + e.attr("abs:src") + "</a>", "Image contains source.<br/>");
+								test.log(LogStatus.PASS, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>" + "<br/><b>Image URL: </b><a href='" + e.attr("abs:src") + "' target='_blank'>" + e.attr("abs:src") + "</a><br/> Image Position in HTML: " + i, "Image contains source.<br/>");
 
 							} else {
-								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Image does not contain source.");
+								test.log(LogStatus.FAIL, "<b>Parent URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a><br/> Image Position in HTML: " + i, "Image does not contain source.");
 							}
+							i++;
 						}
 					}
 				}

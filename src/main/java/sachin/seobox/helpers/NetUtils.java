@@ -133,11 +133,11 @@ public class NetUtils {
 			HttpClientContext localContext = HttpClientContext.create();
 			HttpPost httpPost = new HttpPost(CrawlerConstants.PAGE_STRUCTURE_URL);
 			httpPost.addHeader("user-agent", CrawlerConstants.USER_AGENT);
-			httpPost.addHeader("referer", CrawlerConstants.PAGE_STRUCTURE_URL);
+			httpPost.addHeader("referer", "https://search.google.com/structured-data/testing-tool");
 			httpPost.addHeader("accept-encoding", "gzip, deflate, br");
-			httpPost.addHeader("accept-language", "en-US,en;q=0.8");
-			httpPost.addHeader("x-client-data", "CIW2yQEIpLbJAQjBtskB");
+			httpPost.addHeader("accept-language", "en-US,en;q=0.5");
 			httpPost.addHeader("origin", "https://search.google.com");
+			httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
 			List<NameValuePair> params = new ArrayList<>();
 			params.add(new BasicNameValuePair("html", html));

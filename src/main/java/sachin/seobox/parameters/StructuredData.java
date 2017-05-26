@@ -23,7 +23,7 @@ public class StructuredData implements Runnable {
 	public void run() {
 		DBUtils.insertStructuredDataRecord(url, html);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 
 		}
