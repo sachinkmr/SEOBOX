@@ -18,9 +18,10 @@ public class EntryPoint {
 	protected static final Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 
 	public static void main(String[] args) {
-		// System.setProperty("SiteAddress", "http://www.liptontea.com/");
-		// System.setProperty("Username", "wlnonproduser");
-		// System.setProperty("Password", "Pass@word11");
+		// System.setProperty("SiteAddress",
+		// "https://luxd2-uat.unileversolutions.com/us/en/home.html");
+		// System.setProperty("Username", "unileverd2uat");
+		// System.setProperty("Password", "4nileverd@ua!");
 
 		if (null == System.getProperty("SiteAddress") || System.getProperty("SiteAddress").isEmpty()) {
 			try {

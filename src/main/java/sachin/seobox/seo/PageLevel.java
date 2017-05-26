@@ -176,12 +176,17 @@ public class PageLevel {
 			try {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
+					boolean found = false;
 					for (Element e : list) {
 						if (e.attr("content").toUpperCase().contains("NOODP")) {
-							test.log(LogStatus.PASS, "Meta Robots Tags NOODP is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
-						} else {
-							test.log(LogStatus.FAIL, "Meta Robots Tags NOODP is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+							found = true;
+							break;
 						}
+					}
+					if (found) {
+						test.log(LogStatus.PASS, "Meta Robots Tags NOODP is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+					} else {
+						test.log(LogStatus.FAIL, "Meta Robots Tags NOODP is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
 					}
 				}
 			} catch (Exception e) {
@@ -202,12 +207,17 @@ public class PageLevel {
 			try {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
+					boolean found = false;
 					for (Element e : list) {
 						if (e.attr("content").toUpperCase().contains("NOYDIR")) {
-							test.log(LogStatus.PASS, "Meta Robots Tags NOYDIR is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
-						} else {
-							test.log(LogStatus.WARNING, "Meta Robots Tags NOYDIR is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+							found = true;
+							break;
 						}
+					}
+					if (found) {
+						test.log(LogStatus.PASS, "Meta Robots Tags NOYDIR is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+					} else {
+						test.log(LogStatus.WARNING, "Meta Robots Tags NOYDIR is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
 					}
 				}
 			} catch (Exception e) {
@@ -228,12 +238,17 @@ public class PageLevel {
 			try {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
+					boolean found = false;
 					for (Element e : list) {
 						if (e.attr("content").toUpperCase().contains("NOINDEX")) {
-							test.log(LogStatus.WARNING, "Meta Robots Tags NOINDEX is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
-						} else {
-							test.log(LogStatus.PASS, "Meta Robots Tags NOINDEX is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+							found = true;
+							break;
 						}
+					}
+					if (found) {
+						test.log(LogStatus.WARNING, "Meta Robots Tags NOINDEX is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+					} else {
+						test.log(LogStatus.PASS, "Meta Robots Tags NOINDEX is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
 					}
 				}
 			} catch (Exception e) {
@@ -254,12 +269,17 @@ public class PageLevel {
 			try {
 				if (page.getPage().getWebURL().isInternalLink() && page.getPage().getStatusCode() == 200 && page.getPage().getContentType().contains("text/html")) {
 					List<Element> list = page.getRobotsTags();
+					boolean found = false;
 					for (Element e : list) {
 						if (e.attr("content").toUpperCase().contains("NOFOLLOW")) {
-							test.log(LogStatus.WARNING, "Meta Robots Tags NOFOLLOW is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
-						} else {
-							test.log(LogStatus.PASS, "Meta Robots Tags NOFOLLOW is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+							found = true;
+							break;
 						}
+					}
+					if (found) {
+						test.log(LogStatus.WARNING, "Meta Robots Tags NOFOLLOW is found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
+					} else {
+						test.log(LogStatus.PASS, "Meta Robots Tags NOFOLLOW is not found.<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "");
 					}
 				}
 			} catch (Exception e) {
