@@ -127,7 +127,7 @@ public class NetUtils {
 
 	public static JSONObject getStructuredData(String html, String url) throws SEOException {
 		CloseableHttpClient client = HttpClients.createDefault();
-		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(5000).setConnectTimeout(5000).setSocketTimeout(5000).build();
+		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(4000).setConnectTimeout(3000).setSocketTimeout(3000).build();
 		JSONObject json = null;
 		String str = null;
 		try {

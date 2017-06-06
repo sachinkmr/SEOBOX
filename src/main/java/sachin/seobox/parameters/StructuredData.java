@@ -23,7 +23,8 @@ public class StructuredData implements Runnable {
 	public void run() {
 		DBUtils.insertStructuredDataRecord(url, html);
 		try {
-			Thread.sleep(2000);
+			int r = (int) (Math.random() * (2000 - 1500)) + 1500;
+			Thread.sleep(r);
 		} catch (InterruptedException e) {
 
 		}

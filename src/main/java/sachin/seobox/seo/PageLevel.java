@@ -156,7 +156,7 @@ public class PageLevel {
 					test.log(logStatus, "Markup(s) used on page: <br/>" + snippets + "<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Errors: " + errors + "<br/>Warnings :" + warnings + str);
 				} catch (Exception e) {
 					logger.error("Exception: ", e);
-					test.log(LogStatus.SKIP, "<b>URL: </b><br/><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", e.getMessage());
+					test.log(LogStatus.SKIP, "<b>URL: </b><br/><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Unable to fatch page structured data");
 				}
 			}
 
