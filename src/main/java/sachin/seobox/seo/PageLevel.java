@@ -154,11 +154,9 @@ public class PageLevel {
 					LogStatus logStatus = HelperUtils.getstructuredDataStatus(errors, warnings);
 					String str = (logStatus == LogStatus.FAIL || logStatus == LogStatus.WARNING) ? "<br/><a href='#pageStructureModal' class='structureData waves-effect waves-light modal-trigger' data-key='" + key + "' data-test-id='" + id + "'>View Details: &nbsp;</a>" : "";
 					test.log(logStatus, "Markup(s) used on page: <br/>" + snippets + "<br/><b>URL: </b><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", "Errors: " + errors + "<br/>Warnings :" + warnings + str);
-				} catch (SEOException e) {
-					logger.debug("SEOException: ", e);
-					test.log(LogStatus.SKIP, "<b>URL: </b><br/><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", e.getMessage());
 				} catch (Exception e) {
-					logger.debug("Error in " + test.getTest().getName(), e);
+					logger.error("Exception: ", e);
+					test.log(LogStatus.SKIP, "<b>URL: </b><br/><a href='" + page.getPage().getWebURL().getURL() + "' target='_blank'>" + page.getPage().getWebURL().getURL() + "</a>", e.getMessage());
 				}
 			}
 

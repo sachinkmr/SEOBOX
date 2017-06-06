@@ -73,7 +73,7 @@ public class DBUtils {
 			int i = 0;
 			do {
 				json = NetUtils.getStructuredData(html, url);
-			} while ((json == null) && ++i < 3);
+			} while ((json == null) && ++i < 1);
 		} catch (SEOException e) {
 			logger.debug("Unable to fatch google structured data", e);
 			arr.append("hasError", "true");

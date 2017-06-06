@@ -127,6 +127,7 @@ public class NetUtils {
 
 	public static JSONObject getStructuredData(String html, String url) throws SEOException {
 		CloseableHttpClient client = HttpClients.createDefault();
+		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(5000).setConnectTimeout(5000).setSocketTimeout(5000).build();
 		JSONObject json = null;
 		String str = null;
 		try {
@@ -136,12 +137,13 @@ public class NetUtils {
 			httpPost.addHeader("referer", "https://search.google.com/structured-data/testing-tool");
 			httpPost.addHeader("accept-encoding", "gzip, deflate, br");
 			httpPost.addHeader("accept-language", "en-US,en;q=0.5");
-			httpPost.addHeader("origin", "https://search.google.com");
+			// httpPost.addHeader("origin", "https://search.google.com");
 			httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
 			List<NameValuePair> params = new ArrayList<>();
 			params.add(new BasicNameValuePair("html", html));
 			httpPost.setEntity(new UrlEncodedFormEntity(params));
+			httpPost.setConfig(requestConfig);
 			CloseableHttpResponse response = client.execute(httpPost, localContext);
 			str = EntityUtils.toString(response.getEntity(), "UTF-8");
 			EntityUtils.consumeQuietly(response.getEntity());
@@ -194,7 +196,7 @@ public class NetUtils {
 
 	public static String[] getRedirectedURL(String... data) {
 		try {
-			Connection con = Jsoup.connect(data[0]).header("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).timeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).followRedirects(true);
+			Connection con = Jsoup.connect(data[0]).header("user-agent", CrawlerConstants.PROPERTIES.getProperty("crawler.userAgentString", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")).timeout(Integer.parseInt(CrawlerConstants.PROPERTIES.getProperty("crawler.connectionTimeout", "120000"))).followRedirects(true).ignoreContentType(true).ignoreHttpErrors(true);
 			if (data.length > 1 && null != data[1] && !data[1].trim().isEmpty()) {
 				String login = data[1] + ":" + data[2];
 				String base64login = new String(Base64.encodeBase64(login.getBytes()));
